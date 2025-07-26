@@ -55,6 +55,27 @@
       "framework": "express",
       "dependencies": ["database-service", "cache-service"],
       "mockStrategy": "service-stubs"
+    },
+    {
+      "name": "pos-v3-mobile",
+      "type": "frontend",
+      "category": "pos",
+      "language": "javascript",
+      "framework": "react-native",
+      "mockStrategy": "pos-comprehensive",
+      "features": {
+        "restApi": true,
+        "websocket": true,
+        "hardware": true,
+        "stateful": true,
+        "realm": true
+      },
+      "targetDomains": [
+        "api.storehub.com",
+        "mrs.storehub.com",
+        "kds.storehub.com",
+        "payment.storehub.com"
+      ]
     }
   ],
   "mockStrategies": {
@@ -69,6 +90,10 @@
     "external-api-mocks": {
       "description": "Mock external third-party APIs",
       "tools": ["nock", "msw"]
+    },
+    "pos-comprehensive": {
+      "description": "Comprehensive mocking for POS applications including REST APIs, WebSocket, hardware, and stateful operations",
+      "tools": ["lokijs", "socket.io", "express-ws", "hardware-simulators"]
     }
   }
 }
