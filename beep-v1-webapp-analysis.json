@@ -1,0 +1,27 @@
+{
+  "repository": "beep-v1-webapp",
+  "type": "frontend",
+  "framework": "React",
+  "analysis": {
+    "storeHubDependencies": {
+      "@storehub/frontend-utils": "^0.0.7"
+    },
+    "dependencyCount": 1,
+    "apiEndpoints": [],
+    "apiEndpointCount": 0,
+    "mainDependencies": [
+      "React 17.0.2",
+      "Redux ^4.1.2",
+      "Axios undefined"
+    ]
+  },
+  "mockStrategy": "api-responses",
+  "suggestedMocks": {
+    "apiMocks": [],
+    "services": [
+      "AuthService",
+      "UserService",
+      "ProductService"
+    ]
+  }
+}

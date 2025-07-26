@@ -1,0 +1,261 @@
+{
+  "repository": "beep-v1-webapp",
+  "scanDate": "2025-07-26T04:18:39.101Z",
+  "type": "frontend",
+  "framework": "React",
+  "analysis": {
+    "apiEndpoints": [
+      "/api/cart",
+      "/api/cart/apply-cashback",
+      "/api/cart/applyPromoCode",
+      "/api/cart/applyVoucher",
+      "/api/cart/checkInventory",
+      "/api/cart/pax",
+      "/api/cart/removePromoCode",
+      "/api/cart/unApplyVoucher",
+      "/api/cart/unapply-cashback",
+      "/api/cashback",
+      "/api/cashback/",
+      "/api/cashback/business",
+      "/api/cashback/hash/${hash}/decode",
+      "/api/cashback/hash/*/decode",
+      "/api/cashback/history",
+      "/api/consumers/${consumerId}/address",
+      "/api/consumers/${consumerId}/address/${addressId}",
+      "/api/consumers/${consumerId}/address/${id}",
+      "/api/consumers/${consumerId}/favorites/stores/${storeId}/status",
+      "/api/consumers/${consumerId}/store/${storeId}/address",
+      "/api/consumers/${consumerId}/store/${storeId}/address/${savedAddressId}",
+      "/api/consumers/${consumerId}/transactions",
+      "/api/consumers/${consumerId}/vouchers",
+      "/api/consumers/${userId}/paymentMethods",
+      "/api/consumers/*/address",
+      "/api/consumers/*/address/*",
+      "/api/consumers/*/customer",
+      "/api/consumers/*/favorites/stores/*/status",
+      "/api/consumers/*/paymentMethods",
+      "/api/consumers/*/profile",
+      "/api/consumers/*/store/*/address",
+      "/api/consumers/*/store/*/address/*",
+      "/api/consumers/*/transactions",
+      "/api/consumers/*/vouchers",
+      "/api/feedback",
+      "/api/files/${fileType}",
+      "/api/gql/AddOrUpdateShoppingCartItem",
+      "/api/gql/CoreBusiness",
+      "/api/gql/CoreStores",
+      "/api/gql/CreateOrder",
+      "/api/gql/EmptyShoppingCart",
+      "/api/gql/OnlineCategory",
+      "/api/gql/OnlineStoreInfo",
+      "/api/gql/Order",
+      "/api/gql/ProductDetail",
+      "/api/gql/RemoveShoppingCartItem",
+      "/api/gql/Tables",
+      "/api/login",
+      "/api/login/guest",
+      "/api/logout",
+      "/api/ordering/stores/${foodCourtId}",
+      "/api/ordering/stores/${store.id}?a=redirectTo",
+      "/api/ordering/stores/${storeId}",
+      "/api/ordering/stores/${storeId}?a=redirectTo",
+      "/api/ordering/stores/*",
+      "/api/ordering/stores/selected?h=${h}",
+      "/api/ping",
+      "/api/products/vouchers",
+      "/api/s3-post-policy/${action}",
+      "/api/shrink",
+      "/api/storage/location-history",
+      "/api/stores/collection?countryCode=${countryCode}&urlPath=${urlPath}",
+      "/api/stores/collections",
+      "/api/stores/search${queryString}",
+      "/api/stores/search/options",
+      "/api/stores/search?lat=${coords.lat}&lng=${coords.lng}&page=${page}&pageSize=${pageSize}&shippingType=delivery&countryCode=${countryCode}",
+      "/api/transactions",
+      "/api/transactions/${orderId}/review",
+      "/api/transactions/${orderId}/status",
+      "/api/transactions/${receiptNumber}/status",
+      "/api/transactions/*/review",
+      "/api/transactions/*/status",
+      "/api/transactions/*/status/cancel",
+      "/api/transactions/timeslots?shippingType=${deliveryType}&fulfillDate=${selectedDay.toISOString()}&storeId=${storeId}",
+      "/api/transactions/timeslots?shippingType=${shippingType}&fulfillDate=${fulfillDate}&storeId=${storeId}",
+      "/api/v3/",
+      "/api/v3/alcohol/consent/acknowledge",
+      "/api/v3/cart",
+      "/api/v3/cart/items",
+      "/api/v3/cart/items/${itemId}",
+      "/api/v3/cart/items/*",
+      "/api/v3/cart/pax",
+      "/api/v3/cart/status",
+      "/api/v3/cart/submission",
+      "/api/v3/cart/submission/${submissionId}/status",
+      "/api/v3/cart/submission/*/status",
+      "/api/v3/cart:query",
+      "/api/v3/consumers/${consumerId}/customer",
+      "/api/v3/consumers/${consumerId}/customers",
+      "/api/v3/consumers/${consumerId}/memberships",
+      "/api/v3/consumers/${consumerId}/profile",
+      "/api/v3/consumers/${consumerId}/unique-promos",
+      "/api/v3/consumers/${consumerId}/unique-promos/${uniquePromotionCodeId}",
+      "/api/v3/consumers/${consumerId}/unique-promos/available-count",
+      "/api/v3/consumers/${consumerId}/unique-promos/banners",
+      "/api/v3/consumers/*/customer",
+      "/api/v3/consumers/*/customers",
+      "/api/v3/consumers/*/memberships",
+      "/api/v3/consumers/*/profile",
+      "/api/v3/consumers/*/unique-promos",
+      "/api/v3/consumers/*/unique-promos/available-count",
+      "/api/v3/consumers/*/unique-promos/banners",
+      "/api/v3/e-invoices",
+      "/api/v3/e-invoices/status",
+      "/api/v3/e-invoices/submission-details",
+      "/api/v3/food-courts/${foodCourtId}/stores",
+      "/api/v3/food-courts/*/stores",
+      "/api/v3/loyalty-change-logs",
+      "/api/v3/mae/login-code",
+      "/api/v3/memberships",
+      "/api/v3/merchants/${business}",
+      "/api/v3/merchants/${business}/campaigns/birthday-campaign",
+      "/api/v3/merchants/${business}/rewards-settings/customize",
+      "/api/v3/offers",
+      "/api/v3/offers/${id}",
+      "/api/v3/otp",
+      "/api/v3/otp/check-phone",
+      "/api/v3/points/history",
+      "/api/v3/points/rewards",
+      "/api/v3/points/rewards/${rewardSettingId}",
+      "/api/v3/rewards-sets/${id}/redeem",
+      "/api/v3/share-info-requests/${requestId}",
+      "/api/v3/share-info-requests/${requestId}/confirmation",
+      "/api/v3/share-info-requests/*",
+      "/api/v3/share-info-requests/*/confirmation",
+      "/api/v3/storage/selected-address",
+      "/api/v3/store-credits/history",
+      "/api/v3/transactions/${orderId}/change-shipping-type",
+      "/api/v3/transactions/${orderId}/status/cancel",
+      "/api/v3/transactions/${receiptNumber}/apply-cashback",
+      "/api/v3/transactions/${receiptNumber}/apply-promotions",
+      "/api/v3/transactions/${receiptNumber}/apply-voucher",
+      "/api/v3/transactions/${receiptNumber}/calculation",
+      "/api/v3/transactions/${receiptNumber}/remove-cashback",
+      "/api/v3/transactions/${receiptNumber}/remove-promotions",
+      "/api/v3/transactions/${receiptNumber}/remove-voucher",
+      "/api/v3/transactions/${receiptNumber}/rewards",
+      "/api/v3/transactions/${receiptNumber}/rewards-estimation",
+      "/api/v3/transactions/${receiptNumber}/status",
+      "/api/v3/transactions/${receiptNumber}/submission",
+      "/api/v3/transactions/*",
+      "/api/v3/transactions/*/apply-cashback",
+      "/api/v3/transactions/*/apply-promotions",
+      "/api/v3/transactions/*/apply-voucher",
+      "/api/v3/transactions/*/calculation",
+      "/api/v3/transactions/*/change-shipping-type",
+      "/api/v3/transactions/*/remove-cashback",
+      "/api/v3/transactions/*/remove-promotions",
+      "/api/v3/transactions/*/remove-voucher",
+      "/api/v3/transactions/*/rewards",
+      "/api/v3/transactions/*/status",
+      "/api/v3/transactions/*/status/cancel",
+      "/api/v3/transactions/*/submission",
+      "/api/v3/urls/validation"
+    ],
+    "services": [
+      "autocompleteService"
+    ],
+    "storeHubImports": [
+      "@storehub/frontend-utils"
+    ],
+    "statistics": {
+      "totalApiEndpoints": 154,
+      "totalServices": 1,
+      "totalStoreHubImports": 1
+    }
+  },
+  "mockRecommendations": {
+    "apiMocks": [
+      {
+        "endpoint": "/api/cashback/history",
+        "suggestedResponse": {
+          "success": true,
+          "data": {}
+        }
+      },
+      {
+        "endpoint": "/api/cashback/hash/${hash}/decode",
+        "suggestedResponse": {
+          "success": true,
+          "data": {}
+        }
+      },
+      {
+        "endpoint": "/api/cashback/",
+        "suggestedResponse": {
+          "success": true,
+          "data": {}
+        }
+      },
+      {
+        "endpoint": "/api/transactions",
+        "suggestedResponse": {
+          "success": true,
+          "data": {}
+        }
+      },
+      {
+        "endpoint": "/api/ping",
+        "suggestedResponse": {
+          "success": true,
+          "data": {}
+        }
+      },
+      {
+        "endpoint": "/api/v3/consumers/${consumerId}/profile",
+        "suggestedResponse": {
+          "success": true,
+          "data": {}
+        }
+      },
+      {
+        "endpoint": "/api/gql/CoreBusiness",
+        "suggestedResponse": {
+          "success": true,
+          "data": {}
+        }
+      },
+      {
+        "endpoint": "/api/login",
+        "suggestedResponse": {
+          "success": true,
+          "data": {}
+        }
+      },
+      {
+        "endpoint": "/api/v3/otp/check-phone",
+        "suggestedResponse": {
+          "success": true,
+          "data": {}
+        }
+      },
+      {
+        "endpoint": "/api/v3/otp",
+        "suggestedResponse": {
+          "success": true,
+          "data": {}
+        }
+      }
+    ],
+    "serviceMocks": [
+      {
+        "service": "autocompleteService",
+        "methods": [
+          "get",
+          "list",
+          "create",
+          "update",
+          "delete"
+        ]
+      }
+    ]
+  }
+}
