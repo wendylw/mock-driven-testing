@@ -1,90 +1,92 @@
-# Mock-Driven Testing Revolution
+# 🎯 Mock-Driven Testing
 
-An AI-powered solution to generate stubs and mocks for all 45 StoreHub repositories, making complex systems independently testable.
-
-## 🎯 Problem Statement
-
-StoreHub's 45 repositories are difficult to test due to complex interdependencies. Testing often requires the entire system to be running, making isolated unit and integration testing nearly impossible.
-
-## 💡 Solution
-
-This project provides:
-- **Automatic dependency analysis** across all StoreHub repos
-- **AI-generated mocks and stubs** that mimic real service behaviors
-- **Realistic test doubles** based on actual API patterns
-- **Zero-config mock generation** for immediate testing
-- **Isolated testing capabilities** for every repository
+A parameterized mock system that captures and replays real API responses with dynamic parameter-based data generation.
 
 ## 🚀 Quick Start
 
 ```bash
-# Clone the repository
-git clone https://github.com/wendylw/mock-driven-testing.git
+# Start the proxy server
+node proxy-final.js
 
-# Install dependencies
-npm install
-
-# Analyze a StoreHub repository
-npm run analyze -- --repo beep-v1-webapp
-
-# Generate mocks for a repository
-npm run generate-mocks -- --repo beep-v1-webapp
-
-# Generate mocks for all repositories
-npm run generate-all-mocks
+# Visit the application
+http://coffee.beep.local.shub.us:3001/
 ```
+
+## ✨ Key Features
+
+- **Real API Capture**: Automatically captures live API responses
+- **Parameterized Mocks**: Generates different data based on request parameters  
+- **GraphQL Support**: Full support for GraphQL queries with variables
+- **Zero Dependencies**: Works out of the box with no external packages
+- **Live Integration**: Seamlessly integrates with existing proxy-final.js
 
 ## 📁 Project Structure
 
 ```
 mock-driven-testing/
-├── README.md              # Project documentation
-├── package.json           # Node.js configuration
-├── config/
-│   └── repos.json         # StoreHub repositories configuration
-├── src/
-│   ├── analyzer/          # Dependency analysis engine
-│   ├── generator/         # Mock generation logic
-│   ├── templates/         # Mock templates
-│   └── utils/             # Utility functions
-├── generated/             # Generated mocks output
-│   └── [repo-name]/       # Mocks for each repository
-├── examples/              # Usage examples
-└── docs/                  # Additional documentation
+├── proxy-final.js              # Main proxy server (port 3001)
+├── parameterized-patch.js      # Parameterized mock enhancement
+├── docs/                       # Documentation
+│   ├── MOCK-DRIVEN-TESTING-DOCUMENTATION.md
+│   └── FINAL-STRUCTURE.md
+├── parameterized-mocks/        # Mock system components
+│   ├── entities/
+│   │   ├── DataGenerator.js    # Data generation engine
+│   │   ├── DynamicIDHandler.js # ID handling utilities
+│   │   └── TemplateEngine.js   # Template processing
+│   └── README.md
+├── generated/                  # Auto-generated mocks
+│   └── beep-v1-webapp/
+│       └── api-mocks-realtime.js
+└── captured-data/              # API capture history
 ```
 
-## 🔧 Core Features
+## 📖 Documentation
 
-### 1. Dependency Analysis
-- Scans package.json, import statements, and API calls
-- Maps inter-service dependencies
-- Identifies external service interfaces
+- **[Complete Documentation](docs/MOCK-DRIVEN-TESTING-DOCUMENTATION.md)** - Full feature guide and API reference
+- **[Project Structure](docs/FINAL-STRUCTURE.md)** - Detailed file organization and usage
 
-### 2. Mock Generation
-- Creates TypeScript/JavaScript mocks
-- Generates realistic response data
-- Supports async operations and promises
-- Handles error scenarios
+## 🎯 Usage Examples
 
-### 3. Integration Support
-- Jest mock modules
-- Sinon.js stubs
-- MSW (Mock Service Worker) handlers
-- Custom mock servers
+### Basic API Mocking
+```bash
+# Enable mock mode by adding ?_mock=1
+http://localhost:3001/api/users?_mock=1
+```
 
-## 📊 Supported StoreHub Repositories
+### GraphQL ProductDetail
+```bash
+curl -X POST "http://localhost:3001/api/gql/ProductDetail?_mock=1" \
+  -H "Content-Type: application/json" \
+  -d '{"variables":{"productId":"abc123","variationId":"var456"}}'
+```
 
-The system supports all 45 StoreHub repositories including:
-- beep-v1-webapp
-- backoffice-v1-web
-- backoffice-v2-webapp
-- core-backend services
-- And more...
+### Demo Mode
+```bash
+# View parameterized mock capabilities
+http://localhost:3001/api/demo?_demo=1
+```
 
-## Contributing
+## 🔍 Monitoring
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+- **Statistics**: `http://localhost:3001/__mock_stats`
+- **Patch Info**: `http://localhost:3001/__parameterized_info`
+- **Logs**: `proxy.log`
 
-## License
+## ✅ Core Functionality
 
-This project is licensed under the MIT License.
+1. **Live API Capture**: Automatically records real API responses
+2. **Parameter Detection**: Recognizes GraphQL variables, REST path params, and query parameters
+3. **Deterministic Generation**: Same input parameters always generate consistent data
+4. **Universal Support**: Works with any API endpoint pattern
+5. **Non-invasive**: Existing functionality remains completely unchanged
+
+## 🛠️ Technical Features
+
+- **Smart Parameter Recognition**: Automatically detects IDs in GraphQL variables, URL paths, and query strings
+- **Stable Data Generation**: Uses hash functions to ensure consistent responses for same parameters  
+- **Map-based Lookups**: Elegant parameter mapping instead of if-else chains
+- **Real-time Mock Updates**: Captured data automatically generates mock handlers
+- **Zero External Dependencies**: Self-contained with no npm package requirements
+
+The system seamlessly captures live API data during normal usage and makes it available as parameterized mocks, enabling comprehensive testing with realistic data patterns.

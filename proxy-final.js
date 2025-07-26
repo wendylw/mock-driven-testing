@@ -11,6 +11,9 @@ const fs = require('fs');
 const path = require('path');
 const net = require('net');
 
+// 添加参数化Mock补丁
+const mockPatch = require('./parameterized-patch');
+
 const PROXY_PORT = 3001;
 const TARGET_PORT = 3000;
 const API_HOST = 'coffee.beep.test17.shub.us';
@@ -42,7 +45,30 @@ const server = http.createServer((req, res) => {
       requestBody += chunk.toString();
     });
     
-    req.on('end', () => {
+    req.on('end', async () => {
+      // 检查是否使用参数化Mock
+      if (mockPatch.shouldUseMock(req.url)) {
+        console.log(`🎯 [${reqId}] 使用参数化Mock`);
+        
+        try {
+          const mockResponse = await mockPatch.generateMockResponse(parsedUrl, req.method, tryParseJSON(requestBody));
+          const responseTime = Date.now() - startTime;
+          
+          console.log(`✅ [${reqId}] Mock响应: 200 - ${responseTime}ms (参数化)`);
+          
+          res.writeHead(200, { 
+            'Content-Type': 'application/json',
+            'X-Mock-Source': 'parameterized',
+            'Access-Control-Allow-Origin': '*'
+          });
+          res.end(JSON.stringify(mockResponse, null, 2));
+          return;
+        } catch (error) {
+          console.error(`❌ [${reqId}] Mock生成失败:`, error);
+          // 继续执行原有代理逻辑
+        }
+      }
+      
       // 代理 API 请求到远程服务器
       const options = {
         hostname: API_HOST,
@@ -91,8 +117,61 @@ const server = http.createServer((req, res) => {
           
           capturedAPIs.push(apiCall);
           
-          // 更新模式
-          const pattern = `${req.method} ${parsedUrl.pathname}`;
+          // 更新模式 - 智能参数化模式识别
+          let pattern = `${req.method} ${parsedUrl.pathname}`;
+          let paramKey = null;
+          
+          try {
+            // 1. GraphQL请求 - 基于variables参数
+            if (parsedUrl.pathname.startsWith('/api/gql/')) {
+              const reqBody = apiCall.requestBody;
+              if (reqBody && reqBody.variables) {
+                // 提取关键参数（按优先级）
+                paramKey = reqBody.variables.productId || 
+                          reqBody.variables.orderId || 
+                          reqBody.variables.storeId || 
+                          reqBody.variables.consumerId ||
+                          reqBody.variables.id;
+              }
+              // 从响应数据中提取ID
+              if (!paramKey && apiCall.responseData && apiCall.responseData.data) {
+                const data = apiCall.responseData.data;
+                paramKey = data.product?.id || 
+                          data.order?.orderId || 
+                          data.store?.id ||
+                          data.consumer?.id;
+              }
+            }
+            
+            // 2. REST接口 - 基于路径参数  
+            else if (parsedUrl.pathname.includes('/')) {
+              const pathSegments = parsedUrl.pathname.split('/');
+              // 查找看起来像ID的路径段（长度>10或全数字）
+              for (const segment of pathSegments) {
+                if (segment.length > 10 || /^\d+$/.test(segment)) {
+                  paramKey = segment;
+                  break;
+                }
+              }
+            }
+            
+            // 3. Query参数 - 基于重要的查询参数
+            if (!paramKey && parsedUrl.query) {
+              const queryParams = new URLSearchParams(parsedUrl.query);
+              paramKey = queryParams.get('shippingType') || 
+                        queryParams.get('business') ||
+                        queryParams.get('storeId') ||
+                        queryParams.get('consumerId');
+            }
+            
+            // 如果找到参数，添加到pattern中
+            if (paramKey) {
+              pattern = `${req.method} ${parsedUrl.pathname}#${paramKey}`;
+            }
+          } catch (e) {
+            // 解析失败，使用原始pattern
+          }
+          
           if (!apiPatterns[pattern]) {
             apiPatterns[pattern] = {
               calls: 0,
@@ -144,6 +223,14 @@ const server = http.createServer((req, res) => {
       }
       proxyReq.end();
     });
+    
+  } else if (req.url === '/__parameterized_info') {
+    // 参数化Mock信息端点
+    res.writeHead(200, { 
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    });
+    res.end(JSON.stringify(mockPatch.getPatchInfo(), null, 2));
     
   } else if (req.url === '/__mock_stats') {
     // 统计端点
@@ -250,20 +337,119 @@ function tryParseJSON(str) {
   }
 }
 
+// 获取端点类型
+function getEndpointType(endpoint) {
+  if (endpoint.includes('/api/gql/')) return 'graphql';
+  if (endpoint.includes('/api/v3/')) return 'rest-v3';
+  if (endpoint.includes('/api/')) return 'rest';
+  return 'other';
+}
+
+// 生成参数提取代码
+function generateParameterExtractor(type, path) {
+  if (type === 'graphql') {
+    return `    const body = req.body;
+    const paramValue = body?.variables?.productId || 
+                      body?.variables?.orderId || 
+                      body?.variables?.storeId || 
+                      body?.variables?.consumerId ||
+                      body?.variables?.id;`;
+  } else {
+    // REST接口从URL路径或查询参数提取
+    const hasIdInPath = /\/[\w\d]{10,}/.test(path);
+    if (hasIdInPath) {
+      return `    const pathSegments = req.url.pathname.split('/');
+    const paramValue = pathSegments.find(segment => 
+      segment.length > 10 || /^\\d+$/.test(segment)
+    );`;
+    } else {
+      return `    const url = new URL(req.url.href);
+    const paramValue = url.searchParams.get('shippingType') ||
+                      url.searchParams.get('business') ||
+                      url.searchParams.get('storeId') ||
+                      url.searchParams.get('consumerId');`;
+    }
+  }
+}
+
 function updateMocks() {
   const mockFile = path.join(__dirname, 'generated/beep-v1-webapp/api-mocks-realtime.js');
   const handlers = [];
   
+  // 按参数化和非参数化分组处理
+  const parameterizedPatterns = {};
+  const staticPatterns = {};
+  
   for (const [pattern, data] of Object.entries(apiPatterns)) {
     if (data.examples.length > 0) {
-      const [method, endpoint] = pattern.split(' ');
-      const mockData = data.examples[data.examples.length - 1];
-      
-      handlers.push(`
+      if (pattern.includes('#')) {
+        // 参数化请求：POST /api/gql/ProductDetail#67287c47e097f800076d2c77
+        const [endpoint, paramValue] = pattern.split('#');
+        if (!parameterizedPatterns[endpoint]) {
+          parameterizedPatterns[endpoint] = {
+            type: getEndpointType(endpoint),
+            params: []
+          };
+        }
+        parameterizedPatterns[endpoint].params.push({
+          value: paramValue,
+          data: data.examples[data.examples.length - 1]
+        });
+      } else {
+        staticPatterns[pattern] = data;
+      }
+    }
+  }
+  
+  // 生成静态接口的handlers  
+  for (const [pattern, data] of Object.entries(staticPatterns)) {
+    const [method, endpoint] = pattern.split(' ');
+    const mockData = data.examples[data.examples.length - 1];
+    
+    handlers.push(`
   rest.${method.toLowerCase()}('${endpoint}', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json(${JSON.stringify(mockData, null, 4)})
+    );
+  })`);
+  }
+  
+  // 生成参数化接口的handlers
+  for (const [endpoint, info] of Object.entries(parameterizedPatterns)) {
+    const [method, path] = endpoint.split(' ');
+    
+    if (info.params.length === 1) {
+      // 只有一个参数值，直接返回
+      handlers.push(`
+  rest.${method.toLowerCase()}('${path}', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json(${JSON.stringify(info.params[0].data, null, 4)})
+    );
+  })`);
+    } else {
+      // 多个参数值，使用Map查找
+      const paramMap = info.params.reduce((acc, p) => {
+        acc[p.value] = p.data;
+        return acc;
+      }, {});
+      
+      const paramExtractor = generateParameterExtractor(info.type, path);
+      
+      handlers.push(`
+  rest.${method.toLowerCase()}('${path}', (req, res, ctx) => {
+    ${paramExtractor}
+    
+    // 参数数据映射表
+    const paramMap = ${JSON.stringify(paramMap, null, 4)};
+    
+    // 根据参数查找对应数据，找不到则返回默认数据
+    const responseData = paramMap[paramValue] || paramMap['${info.params[0].value}'];
+    
+    return res(
+      ctx.status(200),
+      ctx.json(responseData)
     );
   })`);
     }
