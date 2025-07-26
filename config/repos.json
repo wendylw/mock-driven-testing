@@ -1,0 +1,74 @@
+{
+  "repositories": [
+    {
+      "name": "beep-v1-webapp",
+      "type": "frontend",
+      "language": "javascript",
+      "framework": "react",
+      "dependencies": ["beep-v1-api", "core-services"],
+      "mockStrategy": "api-responses"
+    },
+    {
+      "name": "backoffice-v1-web",
+      "type": "frontend",
+      "language": "javascript",
+      "framework": "react",
+      "dependencies": ["backoffice-api", "core-services"],
+      "mockStrategy": "api-responses"
+    },
+    {
+      "name": "backoffice-v2-webapp",
+      "type": "frontend",
+      "language": "javascript",
+      "framework": "react",
+      "dependencies": ["backoffice-api-v2", "core-services"],
+      "mockStrategy": "api-responses"
+    },
+    {
+      "name": "beep-v1-api",
+      "type": "backend",
+      "language": "javascript",
+      "framework": "express",
+      "dependencies": ["database-service", "auth-service", "payment-service"],
+      "mockStrategy": "service-stubs"
+    },
+    {
+      "name": "core-services",
+      "type": "backend",
+      "language": "javascript",
+      "framework": "microservices",
+      "dependencies": ["database-service", "cache-service", "queue-service"],
+      "mockStrategy": "service-stubs"
+    },
+    {
+      "name": "payment-service",
+      "type": "backend",
+      "language": "javascript",
+      "framework": "express",
+      "dependencies": ["external-payment-gateways"],
+      "mockStrategy": "external-api-mocks"
+    },
+    {
+      "name": "auth-service",
+      "type": "backend",
+      "language": "javascript",
+      "framework": "express",
+      "dependencies": ["database-service", "cache-service"],
+      "mockStrategy": "service-stubs"
+    }
+  ],
+  "mockStrategies": {
+    "api-responses": {
+      "description": "Mock HTTP responses for REST APIs",
+      "tools": ["msw", "jest-fetch-mock"]
+    },
+    "service-stubs": {
+      "description": "Mock internal service calls",
+      "tools": ["sinon", "jest.mock"]
+    },
+    "external-api-mocks": {
+      "description": "Mock external third-party APIs",
+      "tools": ["nock", "msw"]
+    }
+  }
+}
