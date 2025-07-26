@@ -1,0 +1,728 @@
+{
+  "captureDate": "2025-07-26T06:55:44.077Z",
+  "totalCalls": 8,
+  "graphqlCalls": 7,
+  "patterns": {
+    "POST /api/gql/OnlineStoreInfo": {
+      "calls": 3,
+      "isGraphQL": true,
+      "domains": {},
+      "examples": [
+        {
+          "query": {},
+          "response": {
+            "data": {
+              "onlineStoreInfo": {
+                "id": "67220fa8a2b284a465794eaf",
+                "storeName": "Coffee Bean (Webstore)",
+                "beepBrandName": "Bean",
+                "logo": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/logo/logo_fcd4e7ea-6946-4f33-d2e0-ddd8e5e1f4cb",
+                "favicon": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/favicon/favicon_b9d856a6-e469-4c7d-dc8d-c14e7916c93a",
+                "locale": "MS-MY",
+                "currency": "MYR",
+                "currencySymbol": "RM",
+                "country": "MY",
+                "state": null,
+                "street": null,
+                "analyticTools": [],
+                "businessType": "cafe"
+              }
+            }
+          }
+        },
+        {
+          "query": {},
+          "response": {
+            "data": {
+              "onlineStoreInfo": {
+                "id": "67220fa8a2b284a465794eaf",
+                "storeName": "Coffee Bean (Webstore)",
+                "beepBrandName": "Bean",
+                "logo": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/logo/logo_fcd4e7ea-6946-4f33-d2e0-ddd8e5e1f4cb",
+                "favicon": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/favicon/favicon_b9d856a6-e469-4c7d-dc8d-c14e7916c93a",
+                "locale": "MS-MY",
+                "currency": "MYR",
+                "currencySymbol": "RM",
+                "country": "MY",
+                "state": null,
+                "street": null,
+                "analyticTools": [],
+                "businessType": "cafe"
+              }
+            }
+          }
+        },
+        {
+          "query": {},
+          "response": {
+            "data": {
+              "onlineStoreInfo": {
+                "id": "67220fa8a2b284a465794eaf",
+                "storeName": "Coffee Bean (Webstore)",
+                "beepBrandName": "Bean",
+                "logo": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/logo/logo_fcd4e7ea-6946-4f33-d2e0-ddd8e5e1f4cb",
+                "favicon": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/favicon/favicon_b9d856a6-e469-4c7d-dc8d-c14e7916c93a",
+                "locale": "MS-MY",
+                "currency": "MYR",
+                "currencySymbol": "RM",
+                "country": "MY",
+                "state": null,
+                "street": null,
+                "analyticTools": [],
+                "businessType": "cafe"
+              }
+            }
+          }
+        }
+      ],
+      "queries": {},
+      "structure": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "onlineStoreInfo": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "67220fa8a2b284a465794eaf"
+                  },
+                  "storeName": {
+                    "type": "string",
+                    "example": "Coffee Bean (Webstore)"
+                  },
+                  "beepBrandName": {
+                    "type": "string",
+                    "example": "Bean"
+                  },
+                  "logo": {
+                    "type": "string",
+                    "example": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/logo/logo_fcd4e7ea-6946-4f33-d2e0-ddd8e5e1f4cb"
+                  },
+                  "favicon": {
+                    "type": "string",
+                    "example": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/favicon/favicon_b9d856a6-e469-4c7d-dc8d-c14e7916c93a"
+                  },
+                  "locale": {
+                    "type": "string",
+                    "example": "MS-MY"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "example": "MYR"
+                  },
+                  "currencySymbol": {
+                    "type": "string",
+                    "example": "RM"
+                  },
+                  "country": {
+                    "type": "string",
+                    "example": "MY"
+                  },
+                  "state": {
+                    "type": "null"
+                  },
+                  "street": {
+                    "type": "null"
+                  },
+                  "analyticTools": {
+                    "type": "array",
+                    "length": 0,
+                    "itemType": {
+                      "type": "unknown"
+                    }
+                  },
+                  "businessType": {
+                    "type": "string",
+                    "example": "cafe"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "POST /api/gql/CoreStores": {
+      "calls": 3,
+      "isGraphQL": true,
+      "domains": {},
+      "examples": [
+        {
+          "query": {},
+          "response": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003�io�H\u0010�����hg%��}�\rȐa9\u0003��*Z5v\u001b\u001a|�ݝ����S��\u0010�d�ìF�\u0006!�~�(��x�<\"\u000f3���h�S\u001a�4͟#\u001c\u0012TEn��� \u00111\u001a�oq�k���?�\u001c\u0007��\u000e\u000f�<�m\u0012�I@\u0006x��,�DD���x$��tD\u0018���kH#\u001a�\u0011G)|��8BU�����d�����\u0013Oiʨ��\\���H@�I�=W;����恽d���AB��P5�A \"�����\u001eΎ��q@�3�A@)�*j�.\u001aw[݁�4�8���RU�Ё�Ġ*J�zۈ�أ<-}oD���=?\"ꁹa*��c�H��[�$��<1\f\u000b<lK�(J�[*4�O��\u0003�\tM���w0�����\u0014\u0012A\u0018�vg�f�N)�\u0001��8HI\u001eDB\b��yQV�,�Р,\u0013\u001a$�]�3R�\b\u0016.l\u001d�\u0017&��!^�\u0000gx&\fH��\u0005g\u001cG�\u001bs�����2�]\\��#<G\u0010\u001e���,�\u0015SVd���\u0006,JY�Ⱥ�h�\"�/\u0019\u0012����A\u0010B�����}׈h@�\u0005_����\fG.�\u0017k�${�ʹo��ܾ���w�+�IB���Ǒ�;��PY��\u0017�\u0018r֍=r��tF�KX8ٲ�����\u001e\b5�\u001f�\u001di�\u000e���!\u000f3���I&�F�茄8�on\u001d�$�|\u0014ĬCCʚqr�&�띖\u001e��C�\u0010��'�\u0003�rb�\u0004G���.��ζ�G���:\u001f��i��t\u0006;�J3�ί\u00167������4G7\u000b6]F�V�3�\u0002�Rwj\u001c�&<5�[U�\u0005��\u0017�9m�q�מ�������\u0004\u001a�0U�\t4�%\u0019�~\u00154E�\nhdQ�3��V8��P�\u000bʄ:�`,��\u00125�m��~�\u001aMQ-���\"�\t;���F�)cO\t���\b0������\u001f�\u0013�\u0000?p�\u001c} ���\u000b����\u000b�/���aU���\u0018e&�q���z��Ɩ$�\u0017�\u0004[�v�\u0016��5M���*j�\u0016[�\u0015,\u001f�E�#\u0017>_�Iq\r�)`1\u0000,0��0��\u0013�\u0003��9�$<�\t�\u001d�d�\u0003̅\u0001�J\f\u001d��֩ݎZ���!UTCWe�:ć^Qm�6m�޾�\u0019#\u001f�(�!���n\b�.)o\u0004!��zzCɾM��Ű����j+h�\u000f3X=��$�����ю\u00067c�A��3\f�g=�\u0019�����!�dj��\u00036<�\u0003�\u0018�-������ƄF>�\u0002�d���\u0010)�z|K�M��͏[��-��#��Q>a��,�\u0015eZ�[�i��Ҹg�n��Uo}u����`b�/\u0013�̬ۙ_uԯc\u000e���\fm�6��w�J\u0010(�\u0012\u0000\u0000"
+        },
+        {
+          "query": {},
+          "response": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003�mo�8\u0010ǿJdiu{Rԋ�\u001c��Pz�i�\u000b�BO��!\u000ex�8ibSҊ�N\u0002�B�w/��j�y\u0001�ߓa<��ix\u0004>b\b4\u001e��sBq���\u0014�\u00184�4\t\u0002��\f\u0018��CBK��\u0013��\u0019G\u0011���q�3��)�\"<@K�`\u0019�2�����3BgC̘���Ƅ������MF\u0012\n\u001aʑ!\u0003��!K2<瞛�H��4߸�}wpD\u00168+�����4\"e`/Y�h}��*>Р<�d����G�����\u0005���A�\b�/U�d]6d�v��D^�Y\u0012��@��(`G\u001f%BU�Z��\u0011}A>�y�{%���u��\u0011\u0010_����*\u0001���X��(�\u0005�g���>�vu$��R\u001b\u0005X�<@��%Y�~\u0017&$�Y��D`���^��!3�P\u0004\u001a\u0001�r\\\u0006�a̠p^\u001d�T\u001f��&��ژ�U�1R��x���=��\u0004�2�k\u0012�\u0002ͥ\u0001�r\u001cr�\u0011��L�\t\u0017~K\u001f�\u0013�\u0018%ST�ã��\"<�\u000bOP�G\u0016T�i��FXԲv\u0004\r[�mU�/(\u0012\u0019�( Q\u0014�p�Ue�I\u0005۪���LC����\u0019�S�=��Q\u0017o�7S���r��O���_\u0019x\u0019Fᓏ=�t���|�/�H��<��n~�9IS�0*Ҫ'n���Bh�m�lHS��֞6���M�\u000e2�6��\u000e�\u0011��/�\u001d㬌|\u0018%�%1a�$;p\u0013��F�w�!z\u0018��L��Eݱ-�(��JJ�]\u0017��\u0007\u0001Y�m}��s����W���'W�\u0018~R[����r����q�?a�\u001b\u001f���\n���.��8��ͅ��G\nmߜ>,���]�`%?��6-�xi+&r^�K�韂\u0017(K�\u0011�z�Gd��C¤\u0016��\u0019g�\u00120�cZ��\u0007\u0018]�l����兾ڧ��\u0006�!Y\u000f���f\u000f+���멲m�\u0003�؋`���#wH04�GƧӓ�����-a�%�/��n��\u000f\u0017vh�`\u0001��\u001d���.Y4��uU��T�J�8:T\u0011�'�T�-}��^5��\u0014��\u0002+���4@\u0002&�\u0007,iq&Rp�dl���\u0001�\u0010�\u0006��\u0010��F�mN���k�P�4�Рe���8�\u001cݱ\u001c�Y_�\f�\u000fvT�-\u0019�\u001b~����\u0000d�[_�J��\u0004\u0012û\u001f;��О\u001cmG�W��y�s�ˬ�����V�}\u0012��5<Շ�3�\u0016;�\u0015Kס!p��`��:pꛯN%M&��f�D-\u0016��Ϗ�i���a��a}�&\u001f���Gˋ�|8�8Ng���8��H\u0000�T����x��\u0010�H�Mή�Hf\u0017�\u0000�7�>;qg�K3䣴����j��\u000e��5T�\u0012\u0000\u0000"
+        },
+        {
+          "query": {},
+          "response": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003��n�H\u0010�_�ji�������\u001d�\u0010%C\u0002!$,��Vm�\r\u001d|`��$&�ݧ��\u0010`�{1�Q��&��ߕ��O�\u0013\n1Ǩ��|�hJ\u0018+��8!���,�\bA2�4!�,-�:���/\u0002���Hf\"�e�b?&=��j<\u0017DF��n\u001e����k�9�YEMhJ\u0013�4�����f)�)'��\u0004#�<��D��lL\u0019�\u0001ۄ�b7IL�$/^�\u001dкiL�Ď�����*?TKE\u001c�(���\u0007Y����9�i��\u0005$��&�!��u��\u0007P�v�%P\u0017U�)\n��\u0007\u0019��V��:�>\u000e�`U쥌X��2�\u0013�!�-[Ӕ\b�Dq��Q\u0014�VU߲\u001c��>���H~cR\u0003GD��ÅԦ9㿃�����\f\nA8\t7{YW��)�1�E8f�L\"'��\u0010|u�Ru�R��Bj�\u0014V�Ƥ�\t\u001e\u0002Xڳ�,��)\u000ei�\u000b<�z$gd*����g\r2\u0001q�\u0018\u0017#x��\u0000W��\u0004�SHO�\u0010IU�\u0013[�T�2�\u0003�J�OT��\fGS��\n��D\u001c�8N �ʢ�m�ȨG������as�\u0006d{�kS�l�7Ӿ�z�}ק���������s�=�\f����|�/�0��\"\u000b�n}ل�f�0(f���+�\u001b�P�ہِ��@�=or�\u0002��\u001dTbm�M��4|��\u000eL�2��8�\u001d�P���0\t~�hlǿM�'d���\u000f.���\bNQ%����;놿\u0016QD\u001f˱>��\tf\u0013X���,<����:�4�ixN��������z�\f��9�<�LF}�߀�l�\f��/\u001e�#��B,�@�EK�\u00191�e��3b,G���*bV��)�Qe�<N��ħ��)�GS\u0018�񯄌�Z�e�A��t�r��p92[��y�p9��![^x��򢬿�,�!> �'�}��������i�H������.ƭ\u0014�a-��<%���A޺ow�f�]sf�\\�C�04�����\\q\rU��>W�2k������O��\u0005P��O�\u001e\u0006��\u001f��\u0013\u001c\n��|�\u0003�����z4�\u0010�\u0003�z�>�>���\u000e�D�L]��]t�'�k��k���?#�\u001c+rȶ��\u001bz����\u001b���\u001e��\u0017�\\=��\u0002GF����9\u0014��g�W�\u001f>�7�\u000f��ʢ�\u0015\u0015`2�jk�]x�r� �b\u001b�j\u00024B#\u0004�X��\u0006���ͤΥF9�\u0012td�\u0004i��?1m�6�������\u0003��(\u001f���fn\u0002ظ�\u001f�6�\u00159����?���y�A|9;m��/&�Ҵx��?�\u0002߽\u0014����w���;],9��\u0012\u0000\u0000"
+        }
+      ],
+      "queries": {},
+      "structure": {
+        "type": "string",
+        "example": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003�io�H\u0010�����hg%��}�\rȐa9\u0003��*Z5v\u001b\u001a|�ݝ����S��\u0010�d�ìF�\u0006!�~�(��x�<\"\u000f3���h�S\u001a�4͟#\u001c\u0012TEn��� \u00111\u001a�oq�k���?�\u001c\u0007��\u000e\u000f�<�m\u0012�I@\u0006x��,�DD���x$��tD\u0018���kH#\u001a�\u0011G)|��8BU�����d�����\u0013Oiʨ��\\���H@�I�=W;����恽d���AB��P5�A \"�����\u001eΎ��q@�3�A@)�*j�.\u001aw[݁�4�8���RU�Ё�Ġ*J�zۈ�أ<-}oD���=?\"ꁹa*��c�H��[�$��<1\f\u000b<lK�(J�[*4�O��\u0003�\tM���w0�����\u0014\u0012A\u0018�vg�f�N)�\u0001��8HI\u001eDB\b��yQV�,�Р,\u0013\u001a$�]�3R�\b\u0016.l\u001d�\u0017&��!^�\u0000gx&\fH��\u0005g\u001cG�\u001bs�����2�]\\��#<G\u0010\u001e���,�\u0015SVd���\u0006,JY�Ⱥ�h�\"�/\u0019\u0012����A\u0010B�����}׈h@�\u0005_����\fG.�\u0017k�${�ʹo��ܾ���w�+�IB���Ǒ�;��PY��\u0017�\u0018r֍=r��tF�KX8ٲ�����\u001e\b5�\u001f�\u001di�\u000e���!\u000f3���I&�F�茄8�on\u001d�$�|\u0014ĬCCʚqr�&�띖\u001e��C�\u0010��'�\u0003�rb�\u0004G���.��ζ�G���:\u001f��i��t\u0006;�J3�ί\u00167������4G7\u000b6]F�V�3�\u0002�Rwj\u001c�&<5�[U�\u0005��\u0017�9m�q�מ�������\u0004\u001a�0U�\t4�%\u0019�~\u00154E�\nhdQ�3��V8��P�\u000bʄ:�`,��\u00125�m��~�\u001aMQ-���\"�\t;���F�)cO\t���\b0������\u001f�\u0013�\u0000?p�\u001c} ���\u000b����\u000b�/���aU���\u0018e&�q���z��Ɩ$�\u0017�\u0004[�v�\u0016��5M���*j�\u0016[�\u0015,\u001f�E�#\u0017>_�Iq\r�)`1\u0000,0��0��\u0013�\u0003��9�$<�\t�\u001d�d�\u0003̅\u0001�J\f\u001d��֩ݎZ���!UTCWe�:ć^Qm�6m�޾�\u0019#\u001f�(�!���n\b�.)o\u0004!��zzCɾM��Ű����j+h�\u000f3X=��$�����ю\u00067c�A��3\f�g=�\u0019�����!�dj��\u00036<�\u0003�\u0018�-������ƄF>�\u0002�d���\u0010)�z|K�M��͏[��-��#��Q>a��,�\u0015eZ�[�i��Ҹg�n��Uo}u����`b�/\u0013�̬ۙ_uԯc\u000e���\fm�6��w�J\u0010(�\u0012\u0000\u0000"
+      }
+    },
+    "GET /api/v3/storage/selected-address": {
+      "calls": 1,
+      "isGraphQL": false,
+      "domains": {},
+      "examples": [
+        {
+          "query": {},
+          "response": {
+            "code": "00000",
+            "message": "OK",
+            "description": "OK",
+            "pagination": null,
+            "data": {
+              "addressInfo": {
+                "placeId": "ChIJH5xmLdE3zDERKa4a_IywVck",
+                "fullName": "KLCC, Kuala Lumpur City Centre, Kuala Lumpur, Federal Territory of Kuala Lumpur, Malaysia",
+                "shortName": "KLCC",
+                "coords": {
+                  "lat": 3.1572757,
+                  "lng": 101.7122335
+                },
+                "countryCode": "MY",
+                "postCode": "50088",
+                "city": "Kuala Lumpur"
+              }
+            },
+            "extra": null
+          }
+        }
+      ],
+      "queries": {},
+      "structure": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "00000"
+          },
+          "message": {
+            "type": "string",
+            "example": "OK"
+          },
+          "description": {
+            "type": "string",
+            "example": "OK"
+          },
+          "pagination": {
+            "type": "null"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "addressInfo": {
+                "type": "object",
+                "properties": {
+                  "placeId": {
+                    "type": "string",
+                    "example": "ChIJH5xmLdE3zDERKa4a_IywVck"
+                  },
+                  "fullName": {
+                    "type": "string",
+                    "example": "KLCC, Kuala Lumpur City Centre, Kuala Lumpur, Federal Territory of Kuala Lumpur, Malaysia"
+                  },
+                  "shortName": {
+                    "type": "string",
+                    "example": "KLCC"
+                  },
+                  "coords": {
+                    "type": "object",
+                    "properties": {
+                      "lat": {
+                        "type": "number",
+                        "example": 3.1572757
+                      },
+                      "lng": {
+                        "type": "number",
+                        "example": 101.7122335
+                      }
+                    }
+                  },
+                  "countryCode": {
+                    "type": "string",
+                    "example": "MY"
+                  },
+                  "postCode": {
+                    "type": "string",
+                    "example": "50088"
+                  },
+                  "city": {
+                    "type": "string",
+                    "example": "Kuala Lumpur"
+                  }
+                }
+              }
+            }
+          },
+          "extra": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    "POST /api/gql/CoreBusiness": {
+      "calls": 1,
+      "isGraphQL": true,
+      "domains": {},
+      "examples": [
+        {
+          "query": {},
+          "response": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003�V�n�6\u0010�\u0015�/m\u0001m*)���[b'۠N��n�6\b\u0016cid\u0013�H-I%�\u0006��\u000eu�-ɶ\u000f\u0005�<8��h8s�̡^X\u0002\u0016��\u000b[\u0014�K4�}��!;c�JSD�1�3�����\u001b\u000e?�\\����\"�\u000bMn��\u00108�gvfu�\u001e�旻�NPs����I�cg�\u001fy��\u0015�%eMA��o\bf��x}��\u001c�\bOP�V��nS�'���~�;�d��\u0010G��+�QݦX�X��r%g\u0016la\\��叮�\\����Y�\t/�� %�-JrA�(�Q�=3�\u000f(���\u000f{\u0001d�0[�6+��\u001c\u000f\u001eK0�Bر*Aؒj䊝��G`\u0017�j���A\u0019\u0012n���a����/��w��ҿ�7���\u0015���3��y\u0019�5�C\u0013�<+����\u0018t�;�z\u001e+\fάҸ*\u0016c����شxS=��O\u0005\u001a��\u0011\n�M�����1}N��n����٧\u001a���N��\u0004ʝ�)�\u0011\u0004OFP��B���z=/zh�s\u001a�+�2\u0002/��|����\u0004=\u000b�ښ4��\u0001�mjN\u001a�fDbN\u0010�Y��\u000b�n*�~\u0018�)\f���O\u0007����`\u0011-��;\u000b2�w�ܠ]���R�)�����\tw���҈m�\u0016�t�v��y�f�\u000e8��f�@�s\u0011��\u0012�\u0013\u000b���aTo���\u0000�M�\u0010�Q��5�@�r�\u0012<����y�c3lH\u0005�幭���Ģ\u001cSk;\u0012�\u0019n��\u0015�M�D�0\u0003�\u001c:�Ĩ]�3��g�^)�*M\u0006ϭ���oK4n\t\\����\u000f��\u0006�O���j/�3�!������\\qm�\u000fNGV�rF~\u0010���9�<�{n�k�N(\u001bɲD�\r��Jm;��v�ܖ�!�T8\u0019���Z�br\u001d�W!�\b��9�\t�:԰�ua\u000b����#\t�\u0018#��\u001c3R\"��械�\\�Q��P�h8�Pr�m��7���~\u0010\u0006Qԥ\u0018��ͧ'Ao\u0010v\u0007a��\u001fP��\u0010)\u0017\"��&y3e�l�(\u001e��x]�N>5>r|���v2�V�G\u0013���8���3����b�\u0016����\u0003�k�\u0002A��\\]8�<n�hV�)w\u0017��U�\u0010`t���s�dIڶ���+���碾ȶ�WN��v�ڭ\u000e�\u000b\u0018�!-s�\u000fQ�\u0017����s�oÇ*�꽼���g�ɯ��Z߫UqD�7G\u001d���+���7\u0010E�\u0005�ݐ�c2S\u0005\u0005�\n\u0006^ߋ����5��:_5�duo]���VK\r\u0019\u0019�p��+�yԜ�*�_��\u0015\u0018�)p���\u001a+��t�\nL����\u000eP��F�\u001f�V(t�@����r���tz}��5\n�w�k\u001c�B�[\b��j�V����}ؽ�N�� =�\u001d����/j��H�\n\u0000\u0000"
+        }
+      ],
+      "queries": {},
+      "structure": {
+        "type": "string",
+        "example": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003�V�n�6\u0010�\u0015�/m\u0001m*)���[b'۠N��n�6\b\u0016cid\u0013�H-I%�\u0006��\u000eu�-ɶ\u000f\u0005�<8��h8s�̡^X\u0002\u0016��\u000b[\u0014�K4�}��!;c�JSD�1�3�����\u001b\u000e?�\\����\"�\u000bMn��\u00108�gvfu�\u001e�旻�NPs����I�cg�\u001fy��\u0015�%eMA��o\bf��x}��\u001c�\bOP�V��nS�'���~�;�d��\u0010G��+�QݦX�X��r%g\u0016la\\��叮�\\����Y�\t/�� %�-JrA�(�Q�=3�\u000f(���\u000f{\u0001d�0[�6+��\u001c\u000f\u001eK0�Bر*Aؒj䊝��G`\u0017�j���A\u0019\u0012n���a����/��w��ҿ�7���\u0015���3��y\u0019�5�C\u0013�<+����\u0018t�;�z\u001e+\fάҸ*\u0016c����شxS=��O\u0005\u001a��\u0011\n�M�����1}N��n����٧\u001a���N��\u0004ʝ�)�\u0011\u0004OFP��B���z=/zh�s\u001a�+�2\u0002/��|����\u0004=\u000b�ښ4��\u0001�mjN\u001a�fDbN\u0010�Y��\u000b�n*�~\u0018�)\f���O\u0007����`\u0011-��;\u000b2�w�ܠ]���R�)�����\tw���҈m�\u0016�t�v��y�f�\u000e8��f�@�s\u0011��\u0012�\u0013\u000b���aTo���\u0000�M�\u0010�Q��5�@�r�\u0012<����y�c3lH\u0005�幭���Ģ\u001cSk;\u0012�\u0019n��\u0015�M�D�0\u0003�\u001c:�Ĩ]�3��g�^)�*M\u0006ϭ���oK4n\t\\����\u000f��\u0006�O���j/�3�!������\\qm�\u000fNGV�rF~\u0010���9�<�{n�k�N(\u001bɲD�\r��Jm;��v�ܖ�!�T8\u0019���Z�br\u001d�W!�\b��9�\t�:԰�ua\u000b����#\t�\u0018#��\u001c3R\"��械�\\�Q��P�h8�Pr�m��7���~\u0010\u0006Qԥ\u0018��ͧ'Ao\u0010v\u0007a��\u001fP��\u0010)\u0017\"��&y3e�l�(\u001e��x]�N>5>r|���v2�V�G\u0013���8���3����b�\u0016����\u0003�k�\u0002A��\\]8�<n�hV�)w\u0017��U�\u0010`t���s�dIڶ���+���碾ȶ�WN��v�ڭ\u000e�\u000b\u0018�!-s�\u000fQ�\u0017����s�oÇ*�꽼���g�ɯ��Z߫UqD�7G\u001d���+���7\u0010E�\u0005�ݐ�c2S\u0005\u0005�\n\u0006^ߋ����5��:_5�duo]���VK\r\u0019\u0019�p��+�yԜ�*�_��\u0015\u0018�)p���\u001a+��t�\nL����\u000eP��F�\u001f�V(t�@����r���tz}��5\n�w�k\u001c�B�[\b��j�V����}ؽ�N�� =�\u001d����/j��H�\n\u0000\u0000"
+      }
+    }
+  },
+  "calls": [
+    {
+      "id": 22,
+      "timestamp": "2025-07-26T06:50:26.295Z",
+      "domain": "coffee.beep.local.shub.us",
+      "method": "POST",
+      "endpoint": "/api/gql/OnlineStoreInfo",
+      "query": {},
+      "isGraphQL": true,
+      "requestHeaders": {
+        "host": "coffee.beep.local.shub.us:3001",
+        "connection": "keep-alive",
+        "content-length": "0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+        "accept": "application/json",
+        "content-type": "application/json",
+        "client": "web",
+        "origin": "http://coffee.beep.local.shub.us:3001",
+        "referer": "http://coffee.beep.local.shub.us:3001/dine",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "en,th;q=0.9,zh;q=0.8",
+        "cookie": "perm_tid=a7CPmyQAzi4G9vRXUygTFL; sh_storage_id=4eNpSPMo87PLreUJC76yxC; sess_tid=bX4HxumPw8rwM9zns6wqXN; perm_tid=4V1jTFLbdTJ3AuCaSxAPQR; sh_storage_id=qb5srSyrFfNeeyJdu6fQ4t; _gcl_au=1.1.588281573.1752146007; initialTrafficSource=utmcsr=(direct)|utmcmd=(none)|utmccn=(not set); __utmzzses=1; WZRK_G=8827f83768ac4b539860955e1853bfef; _tt_enable_cookie=1; _ttp=01JZT0MQ5ZJEQ16W4KBVPBW9EC_.tt.1; sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; __t=; __sh_is_guest=false; __sh_url_type=static; __sh_url_expired=false; __sh_url_timestamp=j%3Anull; _gid=GA1.2.1008410872.1753504619; _clck=189j64c%7C2%7Cfxx%7C0%7C2017; _ga=GA1.1.1488883823.1752146008; ttcsid=1753510792521::dDMkIJ7r-SZEKX2vC6Lc.12.1753510792521; _clsk=c4xhk4%7C1753510792690%7C1%7C1%7Cl.clarity.ms%2Fcollect; ttcsid_C6FKAB9LLTKUEOLGE7A0=1753510792521::S74NO93A4iJQeealqvB5.12.1753510792724; _ga_TENSSFY51L=GS2.1.s1753510791$o13$g1$t1753511049$j60$l0$h0; __h=U2FsdGVkX19Noqksawz9DPcDfDFovlAvzGQX66661%2BYWO6Sp%2BZwGKdv3sEqHLlic; __s=67220fa7e097f8000711b668"
+      },
+      "responseStatus": 200,
+      "responseData": {
+        "data": {
+          "onlineStoreInfo": {
+            "id": "67220fa8a2b284a465794eaf",
+            "storeName": "Coffee Bean (Webstore)",
+            "beepBrandName": "Bean",
+            "logo": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/logo/logo_fcd4e7ea-6946-4f33-d2e0-ddd8e5e1f4cb",
+            "favicon": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/favicon/favicon_b9d856a6-e469-4c7d-dc8d-c14e7916c93a",
+            "locale": "MS-MY",
+            "currency": "MYR",
+            "currencySymbol": "RM",
+            "country": "MY",
+            "state": null,
+            "street": null,
+            "analyticTools": [],
+            "businessType": "cafe"
+          }
+        }
+      },
+      "responseTime": 313,
+      "responseHeaders": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "532",
+        "connection": "keep-alive",
+        "x-powered-by": "Express",
+        "set-cookie": [
+          "__s=67220fa7e097f8000711b668; Path=/",
+          "sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; Domain=beep.test24.shub.us; Path=/; Expires=Sat, 02 Aug 2025 06:50:26 GMT; HttpOnly; SameSite=Lax"
+        ],
+        "vary": "Accept-Encoding",
+        "date": "Sat, 26 Jul 2025 06:50:26 GMT",
+        "x-envoy-upstream-service-time": "57",
+        "server": "envoy",
+        "x-request-id": "b831da0c1cfab6a55e4acbd5cee84271",
+        "x-kong-upstream-latency": "65",
+        "x-kong-proxy-latency": "0",
+        "via": "kong/3.6.1",
+        "x-kong-request-id": "9b803e09c7199c67e953065892c8bb3a"
+      }
+    },
+    {
+      "id": 21,
+      "timestamp": "2025-07-26T06:50:27.472Z",
+      "domain": "coffee.beep.local.shub.us",
+      "method": "POST",
+      "endpoint": "/api/gql/CoreStores",
+      "query": {},
+      "isGraphQL": true,
+      "requestHeaders": {
+        "host": "coffee.beep.local.shub.us:3001",
+        "connection": "keep-alive",
+        "content-length": "21",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+        "accept": "application/json",
+        "content-type": "application/json",
+        "client": "web",
+        "origin": "http://coffee.beep.local.shub.us:3001",
+        "referer": "http://coffee.beep.local.shub.us:3001/dine",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "en,th;q=0.9,zh;q=0.8",
+        "cookie": "perm_tid=a7CPmyQAzi4G9vRXUygTFL; sh_storage_id=4eNpSPMo87PLreUJC76yxC; sess_tid=bX4HxumPw8rwM9zns6wqXN; perm_tid=4V1jTFLbdTJ3AuCaSxAPQR; sh_storage_id=qb5srSyrFfNeeyJdu6fQ4t; _gcl_au=1.1.588281573.1752146007; initialTrafficSource=utmcsr=(direct)|utmcmd=(none)|utmccn=(not set); __utmzzses=1; WZRK_G=8827f83768ac4b539860955e1853bfef; _tt_enable_cookie=1; _ttp=01JZT0MQ5ZJEQ16W4KBVPBW9EC_.tt.1; sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; __t=; __sh_is_guest=false; __sh_url_type=static; __sh_url_expired=false; __sh_url_timestamp=j%3Anull; _gid=GA1.2.1008410872.1753504619; _clck=189j64c%7C2%7Cfxx%7C0%7C2017; _ga=GA1.1.1488883823.1752146008; ttcsid=1753510792521::dDMkIJ7r-SZEKX2vC6Lc.12.1753510792521; _clsk=c4xhk4%7C1753510792690%7C1%7C1%7Cl.clarity.ms%2Fcollect; ttcsid_C6FKAB9LLTKUEOLGE7A0=1753510792521::S74NO93A4iJQeealqvB5.12.1753510792724; _ga_TENSSFY51L=GS2.1.s1753510791$o13$g1$t1753511049$j60$l0$h0; __h=U2FsdGVkX19Noqksawz9DPcDfDFovlAvzGQX66661%2BYWO6Sp%2BZwGKdv3sEqHLlic; __s=67220fa7e097f8000711b668"
+      },
+      "responseStatus": 200,
+      "responseData": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003�io�H\u0010�����hg%��}�\rȐa9\u0003��*Z5v\u001b\u001a|�ݝ����S��\u0010�d�ìF�\u0006!�~�(��x�<\"\u000f3���h�S\u001a�4͟#\u001c\u0012TEn��� \u00111\u001a�oq�k���?�\u001c\u0007��\u000e\u000f�<�m\u0012�I@\u0006x��,�DD���x$��tD\u0018���kH#\u001a�\u0011G)|��8BU�����d�����\u0013Oiʨ��\\���H@�I�=W;����恽d���AB��P5�A \"�����\u001eΎ��q@�3�A@)�*j�.\u001aw[݁�4�8���RU�Ё�Ġ*J�zۈ�أ<-}oD���=?\"ꁹa*��c�H��[�$��<1\f\u000b<lK�(J�[*4�O��\u0003�\tM���w0�����\u0014\u0012A\u0018�vg�f�N)�\u0001��8HI\u001eDB\b��yQV�,�Р,\u0013\u001a$�]�3R�\b\u0016.l\u001d�\u0017&��!^�\u0000gx&\fH��\u0005g\u001cG�\u001bs�����2�]\\��#<G\u0010\u001e���,�\u0015SVd���\u0006,JY�Ⱥ�h�\"�/\u0019\u0012����A\u0010B�����}׈h@�\u0005_����\fG.�\u0017k�${�ʹo��ܾ���w�+�IB���Ǒ�;��PY��\u0017�\u0018r֍=r��tF�KX8ٲ�����\u001e\b5�\u001f�\u001di�\u000e���!\u000f3���I&�F�茄8�on\u001d�$�|\u0014ĬCCʚqr�&�띖\u001e��C�\u0010��'�\u0003�rb�\u0004G���.��ζ�G���:\u001f��i��t\u0006;�J3�ί\u00167������4G7\u000b6]F�V�3�\u0002�Rwj\u001c�&<5�[U�\u0005��\u0017�9m�q�מ�������\u0004\u001a�0U�\t4�%\u0019�~\u00154E�\nhdQ�3��V8��P�\u000bʄ:�`,��\u00125�m��~�\u001aMQ-���\"�\t;���F�)cO\t���\b0������\u001f�\u0013�\u0000?p�\u001c} ���\u000b����\u000b�/���aU���\u0018e&�q���z��Ɩ$�\u0017�\u0004[�v�\u0016��5M���*j�\u0016[�\u0015,\u001f�E�#\u0017>_�Iq\r�)`1\u0000,0��0��\u0013�\u0003��9�$<�\t�\u001d�d�\u0003̅\u0001�J\f\u001d��֩ݎZ���!UTCWe�:ć^Qm�6m�޾�\u0019#\u001f�(�!���n\b�.)o\u0004!��zzCɾM��Ű����j+h�\u000f3X=��$�����ю\u00067c�A��3\f�g=�\u0019�����!�dj��\u00036<�\u0003�\u0018�-������ƄF>�\u0002�d���\u0010)�z|K�M��͏[��-��#��Q>a��,�\u0015eZ�[�i��Ҹg�n��Uo}u����`b�/\u0013�̬ۙ_uԯc\u000e���\fm�6��w�J\u0010(�\u0012\u0000\u0000",
+      "responseTime": 1535,
+      "responseHeaders": {
+        "content-type": "application/json; charset=utf-8",
+        "transfer-encoding": "chunked",
+        "connection": "keep-alive",
+        "x-powered-by": "Express",
+        "set-cookie": [
+          "__s=67220fa7e097f8000711b668; Path=/",
+          "sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; Domain=beep.test24.shub.us; Path=/; Expires=Sat, 02 Aug 2025 06:50:27 GMT; HttpOnly; SameSite=Lax"
+        ],
+        "vary": "Accept-Encoding",
+        "content-encoding": "gzip",
+        "date": "Sat, 26 Jul 2025 06:50:27 GMT",
+        "x-envoy-upstream-service-time": "45",
+        "server": "envoy",
+        "x-request-id": "4098de41a9581a763f8817b943e8e5f4",
+        "x-kong-upstream-latency": "52",
+        "x-kong-proxy-latency": "2",
+        "via": "kong/3.6.1",
+        "x-kong-request-id": "a353264a51a2f10c82bab11228359431"
+      }
+    },
+    {
+      "id": 45,
+      "timestamp": "2025-07-26T06:50:31.476Z",
+      "domain": "coffee.beep.local.shub.us",
+      "method": "GET",
+      "endpoint": "/api/v3/storage/selected-address",
+      "query": {},
+      "isGraphQL": false,
+      "requestHeaders": {
+        "host": "coffee.beep.local.shub.us:3001",
+        "connection": "keep-alive",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+        "client": "web",
+        "accept": "*/*",
+        "referer": "http://coffee.beep.local.shub.us:3001/",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "en,th;q=0.9,zh;q=0.8",
+        "cookie": "perm_tid=a7CPmyQAzi4G9vRXUygTFL; sh_storage_id=4eNpSPMo87PLreUJC76yxC; sess_tid=bX4HxumPw8rwM9zns6wqXN; perm_tid=4V1jTFLbdTJ3AuCaSxAPQR; sh_storage_id=qb5srSyrFfNeeyJdu6fQ4t; _gcl_au=1.1.588281573.1752146007; initialTrafficSource=utmcsr=(direct)|utmcmd=(none)|utmccn=(not set); __utmzzses=1; WZRK_G=8827f83768ac4b539860955e1853bfef; _tt_enable_cookie=1; _ttp=01JZT0MQ5ZJEQ16W4KBVPBW9EC_.tt.1; sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; __t=; __sh_is_guest=false; __sh_url_type=static; __sh_url_expired=false; __sh_url_timestamp=j%3Anull; _gid=GA1.2.1008410872.1753504619; _clck=189j64c%7C2%7Cfxx%7C0%7C2017; _ga=GA1.1.1488883823.1752146008; ttcsid=1753510792521::dDMkIJ7r-SZEKX2vC6Lc.12.1753510792521; _clsk=c4xhk4%7C1753510792690%7C1%7C1%7Cl.clarity.ms%2Fcollect; ttcsid_C6FKAB9LLTKUEOLGE7A0=1753510792521::S74NO93A4iJQeealqvB5.12.1753510792724; _ga_TENSSFY51L=GS2.1.s1753510791$o13$g1$t1753511049$j60$l0$h0; __h=U2FsdGVkX19Noqksawz9DPcDfDFovlAvzGQX66661%2BYWO6Sp%2BZwGKdv3sEqHLlic; __s=67220fa7e097f8000711b668"
+      },
+      "responseStatus": 200,
+      "responseData": {
+        "code": "00000",
+        "message": "OK",
+        "description": "OK",
+        "pagination": null,
+        "data": {
+          "addressInfo": {
+            "placeId": "ChIJH5xmLdE3zDERKa4a_IywVck",
+            "fullName": "KLCC, Kuala Lumpur City Centre, Kuala Lumpur, Federal Territory of Kuala Lumpur, Malaysia",
+            "shortName": "KLCC",
+            "coords": {
+              "lat": 3.1572757,
+              "lng": 101.7122335
+            },
+            "countryCode": "MY",
+            "postCode": "50088",
+            "city": "Kuala Lumpur"
+          }
+        },
+        "extra": null
+      },
+      "responseTime": 272,
+      "responseHeaders": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "373",
+        "connection": "keep-alive",
+        "x-powered-by": "Express",
+        "set-cookie": [
+          "__s=67220fa7e097f8000711b668; Path=/",
+          "sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; Domain=beep.test24.shub.us; Path=/; Expires=Sat, 02 Aug 2025 06:50:31 GMT; HttpOnly; SameSite=Lax"
+        ],
+        "vary": "Accept-Encoding",
+        "date": "Sat, 26 Jul 2025 06:50:31 GMT",
+        "x-envoy-upstream-service-time": "6",
+        "server": "envoy",
+        "x-request-id": "fdb68eef6fd0cb7b1dffd616477fbdc1",
+        "x-kong-upstream-latency": "10",
+        "x-kong-proxy-latency": "2",
+        "via": "kong/3.6.1",
+        "x-kong-request-id": "fb74d42bef266f48bd7a294071dad53f"
+      }
+    },
+    {
+      "id": 47,
+      "timestamp": "2025-07-26T06:50:31.846Z",
+      "domain": "coffee.beep.local.shub.us",
+      "method": "POST",
+      "endpoint": "/api/gql/OnlineStoreInfo",
+      "query": {},
+      "isGraphQL": true,
+      "requestHeaders": {
+        "host": "coffee.beep.local.shub.us:3001",
+        "connection": "keep-alive",
+        "content-length": "0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+        "accept": "application/json",
+        "content-type": "application/json",
+        "client": "web",
+        "origin": "http://coffee.beep.local.shub.us:3001",
+        "referer": "http://coffee.beep.local.shub.us:3001/",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "en,th;q=0.9,zh;q=0.8",
+        "cookie": "perm_tid=a7CPmyQAzi4G9vRXUygTFL; sh_storage_id=4eNpSPMo87PLreUJC76yxC; sess_tid=bX4HxumPw8rwM9zns6wqXN; perm_tid=4V1jTFLbdTJ3AuCaSxAPQR; sh_storage_id=qb5srSyrFfNeeyJdu6fQ4t; _gcl_au=1.1.588281573.1752146007; initialTrafficSource=utmcsr=(direct)|utmcmd=(none)|utmccn=(not set); __utmzzses=1; WZRK_G=8827f83768ac4b539860955e1853bfef; _tt_enable_cookie=1; _ttp=01JZT0MQ5ZJEQ16W4KBVPBW9EC_.tt.1; sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; __t=; __sh_is_guest=false; __sh_url_type=static; __sh_url_expired=false; __sh_url_timestamp=j%3Anull; _gid=GA1.2.1008410872.1753504619; _clck=189j64c%7C2%7Cfxx%7C0%7C2017; _ga=GA1.1.1488883823.1752146008; ttcsid=1753510792521::dDMkIJ7r-SZEKX2vC6Lc.12.1753510792521; _clsk=c4xhk4%7C1753510792690%7C1%7C1%7Cl.clarity.ms%2Fcollect; ttcsid_C6FKAB9LLTKUEOLGE7A0=1753510792521::S74NO93A4iJQeealqvB5.12.1753510792724; _ga_TENSSFY51L=GS2.1.s1753510791$o13$g1$t1753511049$j60$l0$h0; __h=U2FsdGVkX19Noqksawz9DPcDfDFovlAvzGQX66661%2BYWO6Sp%2BZwGKdv3sEqHLlic"
+      },
+      "responseStatus": 200,
+      "responseData": {
+        "data": {
+          "onlineStoreInfo": {
+            "id": "67220fa8a2b284a465794eaf",
+            "storeName": "Coffee Bean (Webstore)",
+            "beepBrandName": "Bean",
+            "logo": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/logo/logo_fcd4e7ea-6946-4f33-d2e0-ddd8e5e1f4cb",
+            "favicon": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/favicon/favicon_b9d856a6-e469-4c7d-dc8d-c14e7916c93a",
+            "locale": "MS-MY",
+            "currency": "MYR",
+            "currencySymbol": "RM",
+            "country": "MY",
+            "state": null,
+            "street": null,
+            "analyticTools": [],
+            "businessType": "cafe"
+          }
+        }
+      },
+      "responseTime": 362,
+      "responseHeaders": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "532",
+        "connection": "keep-alive",
+        "x-powered-by": "Express",
+        "set-cookie": [
+          "__s=67220fa7e097f8000711b668; Path=/",
+          "sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; Domain=beep.test24.shub.us; Path=/; Expires=Sat, 02 Aug 2025 06:50:31 GMT; HttpOnly; SameSite=Lax"
+        ],
+        "vary": "Accept-Encoding",
+        "date": "Sat, 26 Jul 2025 06:50:31 GMT",
+        "x-envoy-upstream-service-time": "106",
+        "server": "envoy",
+        "x-request-id": "70dfdba4694416d85e7fae9687177b22",
+        "x-kong-upstream-latency": "112",
+        "x-kong-proxy-latency": "1",
+        "via": "kong/3.6.1",
+        "x-kong-request-id": "0e46b5131417a741c8ae22560a321a0d"
+      }
+    },
+    {
+      "id": 46,
+      "timestamp": "2025-07-26T06:50:32.197Z",
+      "domain": "coffee.beep.local.shub.us",
+      "method": "POST",
+      "endpoint": "/api/gql/CoreStores",
+      "query": {},
+      "isGraphQL": true,
+      "requestHeaders": {
+        "host": "coffee.beep.local.shub.us:3001",
+        "connection": "keep-alive",
+        "content-length": "21",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+        "accept": "application/json",
+        "content-type": "application/json",
+        "client": "web",
+        "origin": "http://coffee.beep.local.shub.us:3001",
+        "referer": "http://coffee.beep.local.shub.us:3001/",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "en,th;q=0.9,zh;q=0.8",
+        "cookie": "perm_tid=a7CPmyQAzi4G9vRXUygTFL; sh_storage_id=4eNpSPMo87PLreUJC76yxC; sess_tid=bX4HxumPw8rwM9zns6wqXN; perm_tid=4V1jTFLbdTJ3AuCaSxAPQR; sh_storage_id=qb5srSyrFfNeeyJdu6fQ4t; _gcl_au=1.1.588281573.1752146007; initialTrafficSource=utmcsr=(direct)|utmcmd=(none)|utmccn=(not set); __utmzzses=1; WZRK_G=8827f83768ac4b539860955e1853bfef; _tt_enable_cookie=1; _ttp=01JZT0MQ5ZJEQ16W4KBVPBW9EC_.tt.1; sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; __t=; __sh_is_guest=false; __sh_url_type=static; __sh_url_expired=false; __sh_url_timestamp=j%3Anull; _gid=GA1.2.1008410872.1753504619; _clck=189j64c%7C2%7Cfxx%7C0%7C2017; _ga=GA1.1.1488883823.1752146008; ttcsid=1753510792521::dDMkIJ7r-SZEKX2vC6Lc.12.1753510792521; _clsk=c4xhk4%7C1753510792690%7C1%7C1%7Cl.clarity.ms%2Fcollect; ttcsid_C6FKAB9LLTKUEOLGE7A0=1753510792521::S74NO93A4iJQeealqvB5.12.1753510792724; _ga_TENSSFY51L=GS2.1.s1753510791$o13$g1$t1753511049$j60$l0$h0; __h=U2FsdGVkX19Noqksawz9DPcDfDFovlAvzGQX66661%2BYWO6Sp%2BZwGKdv3sEqHLlic"
+      },
+      "responseStatus": 200,
+      "responseData": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003�mo�8\u0010ǿJdiu{Rԋ�\u001c��Pz�i�\u000b�BO��!\u000ex�8ibSҊ�N\u0002�B�w/��j�y\u0001�ߓa<��ix\u0004>b\b4\u001e��sBq���\u0014�\u00184�4\t\u0002��\f\u0018��CBK��\u0013��\u0019G\u0011���q�3��)�\"<@K�`\u0019�2�����3BgC̘���Ƅ������MF\u0012\n\u001aʑ!\u0003��!K2<瞛�H��4߸�}wpD\u00168+�����4\"e`/Y�h}��*>Р<�d����G�����\u0005���A�\b�/U�d]6d�v��D^�Y\u0012��@��(`G\u001f%BU�Z��\u0011}A>�y�{%���u��\u0011\u0010_����*\u0001���X��(�\u0005�g���>�vu$��R\u001b\u0005X�<@��%Y�~\u0017&$�Y��D`���^��!3�P\u0004\u001a\u0001�r\\\u0006�a̠p^\u001d�T\u001f��&��ژ�U�1R��x���=��\u0004�2�k\u0012�\u0002ͥ\u0001�r\u001cr�\u0011��L�\t\u0017~K\u001f�\u0013�\u0018%ST�ã��\"<�\u000bOP�G\u0016T�i��FXԲv\u0004\r[�mU�/(\u0012\u0019�( Q\u0014�p�Ue�I\u0005۪���LC����\u0019�S�=��Q\u0017o�7S���r��O���_\u0019x\u0019Fᓏ=�t���|�/�H��<��n~�9IS�0*Ҫ'n���Bh�m�lHS��֞6���M�\u000e2�6��\u000e�\u0011��/�\u001d㬌|\u0018%�%1a�$;p\u0013��F�w�!z\u0018��L��Eݱ-�(��JJ�]\u0017��\u0007\u0001Y�m}��s����W���'W�\u0018~R[����r����q�?a�\u001b\u001f���\n���.��8��ͅ��G\nmߜ>,���]�`%?��6-�xi+&r^�K�韂\u0017(K�\u0011�z�Gd��C¤\u0016��\u0019g�\u00120�cZ��\u0007\u0018]�l����兾ڧ��\u0006�!Y\u000f���f\u000f+���멲m�\u0003�؋`���#wH04�GƧӓ�����-a�%�/��n��\u000f\u0017vh�`\u0001��\u001d���.Y4��uU��T�J�8:T\u0011�'�T�-}��^5��\u0014��\u0002+���4@\u0002&�\u0007,iq&Rp�dl���\u0001�\u0010�\u0006��\u0010��F�mN���k�P�4�Рe���8�\u001cݱ\u001c�Y_�\f�\u000fvT�-\u0019�\u001b~����\u0000d�[_�J��\u0004\u0012û\u001f;��О\u001cmG�W��y�s�ˬ�����V�}\u0012��5<Շ�3�\u0016;�\u0015Kס!p��`��:pꛯN%M&��f�D-\u0016��Ϗ�i���a��a}�&\u001f���Gˋ�|8�8Ng���8��H\u0000�T����x��\u0010�H�Mή�Hf\u0017�\u0000�7�>;qg�K3䣴����j��\u000e��5T�\u0012\u0000\u0000",
+      "responseTime": 715,
+      "responseHeaders": {
+        "content-type": "application/json; charset=utf-8",
+        "transfer-encoding": "chunked",
+        "connection": "keep-alive",
+        "x-powered-by": "Express",
+        "set-cookie": [
+          "__s=67220fa7e097f8000711b668; Path=/",
+          "sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; Domain=beep.test24.shub.us; Path=/; Expires=Sat, 02 Aug 2025 06:50:31 GMT; HttpOnly; SameSite=Lax"
+        ],
+        "vary": "Accept-Encoding",
+        "content-encoding": "gzip",
+        "date": "Sat, 26 Jul 2025 06:50:31 GMT",
+        "x-envoy-upstream-service-time": "125",
+        "server": "envoy",
+        "x-request-id": "bb14b22c98de7eb69d5052d3f205a049",
+        "x-kong-upstream-latency": "130",
+        "x-kong-proxy-latency": "1",
+        "via": "kong/3.6.1",
+        "x-kong-request-id": "33e4764b371f6d4fe34b351491e72479"
+      }
+    },
+    {
+      "id": 48,
+      "timestamp": "2025-07-26T06:50:32.588Z",
+      "domain": "coffee.beep.local.shub.us",
+      "method": "POST",
+      "endpoint": "/api/gql/CoreBusiness",
+      "query": {},
+      "isGraphQL": true,
+      "requestHeaders": {
+        "host": "coffee.beep.local.shub.us:3001",
+        "connection": "keep-alive",
+        "content-length": "58",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+        "accept": "application/json",
+        "content-type": "application/json",
+        "client": "web",
+        "origin": "http://coffee.beep.local.shub.us:3001",
+        "referer": "http://coffee.beep.local.shub.us:3001/",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "en,th;q=0.9,zh;q=0.8",
+        "cookie": "perm_tid=a7CPmyQAzi4G9vRXUygTFL; sh_storage_id=4eNpSPMo87PLreUJC76yxC; sess_tid=bX4HxumPw8rwM9zns6wqXN; perm_tid=4V1jTFLbdTJ3AuCaSxAPQR; sh_storage_id=qb5srSyrFfNeeyJdu6fQ4t; _gcl_au=1.1.588281573.1752146007; initialTrafficSource=utmcsr=(direct)|utmcmd=(none)|utmccn=(not set); __utmzzses=1; WZRK_G=8827f83768ac4b539860955e1853bfef; _tt_enable_cookie=1; _ttp=01JZT0MQ5ZJEQ16W4KBVPBW9EC_.tt.1; sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; __t=; __sh_is_guest=false; __sh_url_type=static; __sh_url_expired=false; __sh_url_timestamp=j%3Anull; _gid=GA1.2.1008410872.1753504619; _clck=189j64c%7C2%7Cfxx%7C0%7C2017; _ga=GA1.1.1488883823.1752146008; ttcsid=1753510792521::dDMkIJ7r-SZEKX2vC6Lc.12.1753510792521; _clsk=c4xhk4%7C1753510792690%7C1%7C1%7Cl.clarity.ms%2Fcollect; ttcsid_C6FKAB9LLTKUEOLGE7A0=1753510792521::S74NO93A4iJQeealqvB5.12.1753510792724; _ga_TENSSFY51L=GS2.1.s1753510791$o13$g1$t1753511049$j60$l0$h0; __h=U2FsdGVkX19Noqksawz9DPcDfDFovlAvzGQX66661%2BYWO6Sp%2BZwGKdv3sEqHLlic; __s=67220fa7e097f8000711b668"
+      },
+      "responseStatus": 200,
+      "responseData": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003�V�n�6\u0010�\u0015�/m\u0001m*)���[b'۠N��n�6\b\u0016cid\u0013�H-I%�\u0006��\u000eu�-ɶ\u000f\u0005�<8��h8s�̡^X\u0002\u0016��\u000b[\u0014�K4�}��!;c�JSD�1�3�����\u001b\u000e?�\\����\"�\u000bMn��\u00108�gvfu�\u001e�旻�NPs����I�cg�\u001fy��\u0015�%eMA��o\bf��x}��\u001c�\bOP�V��nS�'���~�;�d��\u0010G��+�QݦX�X��r%g\u0016la\\��叮�\\����Y�\t/�� %�-JrA�(�Q�=3�\u000f(���\u000f{\u0001d�0[�6+��\u001c\u000f\u001eK0�Bر*Aؒj䊝��G`\u0017�j���A\u0019\u0012n���a����/��w��ҿ�7���\u0015���3��y\u0019�5�C\u0013�<+����\u0018t�;�z\u001e+\fάҸ*\u0016c����شxS=��O\u0005\u001a��\u0011\n�M�����1}N��n����٧\u001a���N��\u0004ʝ�)�\u0011\u0004OFP��B���z=/zh�s\u001a�+�2\u0002/��|����\u0004=\u000b�ښ4��\u0001�mjN\u001a�fDbN\u0010�Y��\u000b�n*�~\u0018�)\f���O\u0007����`\u0011-��;\u000b2�w�ܠ]���R�)�����\tw���҈m�\u0016�t�v��y�f�\u000e8��f�@�s\u0011��\u0012�\u0013\u000b���aTo���\u0000�M�\u0010�Q��5�@�r�\u0012<����y�c3lH\u0005�幭���Ģ\u001cSk;\u0012�\u0019n��\u0015�M�D�0\u0003�\u001c:�Ĩ]�3��g�^)�*M\u0006ϭ���oK4n\t\\����\u000f��\u0006�O���j/�3�!������\\qm�\u000fNGV�rF~\u0010���9�<�{n�k�N(\u001bɲD�\r��Jm;��v�ܖ�!�T8\u0019���Z�br\u001d�W!�\b��9�\t�:԰�ua\u000b����#\t�\u0018#��\u001c3R\"��械�\\�Q��P�h8�Pr�m��7���~\u0010\u0006Qԥ\u0018��ͧ'Ao\u0010v\u0007a��\u001fP��\u0010)\u0017\"��&y3e�l�(\u001e��x]�N>5>r|���v2�V�G\u0013���8���3����b�\u0016����\u0003�k�\u0002A��\\]8�<n�hV�)w\u0017��U�\u0010`t���s�dIڶ���+���碾ȶ�WN��v�ڭ\u000e�\u000b\u0018�!-s�\u000fQ�\u0017����s�oÇ*�꽼���g�ɯ��Z߫UqD�7G\u001d���+���7\u0010E�\u0005�ݐ�c2S\u0005\u0005�\n\u0006^ߋ����5��:_5�duo]���VK\r\u0019\u0019�p��+�yԜ�*�_��\u0015\u0018�)p���\u001a+��t�\nL����\u000eP��F�\u001f�V(t�@����r���tz}��5\n�w�k\u001c�B�[\b��j�V����}ؽ�N�� =�\u001d����/j��H�\n\u0000\u0000",
+      "responseTime": 372,
+      "responseHeaders": {
+        "content-type": "application/json; charset=utf-8",
+        "transfer-encoding": "chunked",
+        "connection": "keep-alive",
+        "x-powered-by": "Express",
+        "set-cookie": [
+          "__s=67220fa7e097f8000711b668; Path=/",
+          "sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; Domain=beep.test24.shub.us; Path=/; Expires=Sat, 02 Aug 2025 06:50:32 GMT; HttpOnly; SameSite=Lax"
+        ],
+        "vary": "Accept-Encoding",
+        "content-encoding": "gzip",
+        "date": "Sat, 26 Jul 2025 06:50:32 GMT",
+        "x-envoy-upstream-service-time": "120",
+        "server": "envoy",
+        "x-request-id": "df85b778ed08150c9ef259d1d5864660",
+        "x-kong-upstream-latency": "127",
+        "x-kong-proxy-latency": "7",
+        "via": "kong/3.6.1",
+        "x-kong-request-id": "51e6340ff9d163630af19d265a188437"
+      }
+    },
+    {
+      "id": 69,
+      "timestamp": "2025-07-26T06:50:32.917Z",
+      "domain": "coffee.beep.local.shub.us",
+      "method": "POST",
+      "endpoint": "/api/gql/CoreStores",
+      "query": {},
+      "isGraphQL": true,
+      "requestHeaders": {
+        "host": "coffee.beep.local.shub.us:3001",
+        "connection": "keep-alive",
+        "content-length": "21",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+        "accept": "application/json",
+        "content-type": "application/json",
+        "client": "web",
+        "origin": "http://coffee.beep.local.shub.us:3001",
+        "referer": "http://coffee.beep.local.shub.us:3001/dine",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "en,th;q=0.9,zh;q=0.8",
+        "cookie": "perm_tid=a7CPmyQAzi4G9vRXUygTFL; sh_storage_id=4eNpSPMo87PLreUJC76yxC; sess_tid=bX4HxumPw8rwM9zns6wqXN; perm_tid=4V1jTFLbdTJ3AuCaSxAPQR; sh_storage_id=qb5srSyrFfNeeyJdu6fQ4t; _gcl_au=1.1.588281573.1752146007; initialTrafficSource=utmcsr=(direct)|utmcmd=(none)|utmccn=(not set); __utmzzses=1; WZRK_G=8827f83768ac4b539860955e1853bfef; _tt_enable_cookie=1; _ttp=01JZT0MQ5ZJEQ16W4KBVPBW9EC_.tt.1; sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; __t=; __sh_is_guest=false; __sh_url_type=static; __sh_url_expired=false; __sh_url_timestamp=j%3Anull; _gid=GA1.2.1008410872.1753504619; _clck=189j64c%7C2%7Cfxx%7C0%7C2017; _ga=GA1.1.1488883823.1752146008; ttcsid=1753510792521::dDMkIJ7r-SZEKX2vC6Lc.12.1753510792521; _clsk=c4xhk4%7C1753510792690%7C1%7C1%7Cl.clarity.ms%2Fcollect; ttcsid_C6FKAB9LLTKUEOLGE7A0=1753510792521::S74NO93A4iJQeealqvB5.12.1753510792724; _ga_TENSSFY51L=GS2.1.s1753510791$o13$g1$t1753511049$j60$l0$h0; __h=U2FsdGVkX19Noqksawz9DPcDfDFovlAvzGQX66661%2BYWO6Sp%2BZwGKdv3sEqHLlic; __s=67220fa7e097f8000711b668"
+      },
+      "responseStatus": 200,
+      "responseData": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003��n�H\u0010�_�ji�������\u001d�\u0010%C\u0002!$,��Vm�\r\u001d|`��$&�ݧ��\u0010`�{1�Q��&��ߕ��O�\u0013\n1Ǩ��|�hJ\u0018+��8!���,�\bA2�4!�,-�:���/\u0002���Hf\"�e�b?&=��j<\u0017DF��n\u001e����k�9�YEMhJ\u0013�4�����f)�)'��\u0004#�<��D��lL\u0019�\u0001ۄ�b7IL�$/^�\u001dкiL�Ď�����*?TKE\u001c�(���\u0007Y����9�i��\u0005$��&�!��u��\u0007P�v�%P\u0017U�)\n��\u0007\u0019��V��:�>\u000e�`U쥌X��2�\u0013�!�-[Ӕ\b�Dq��Q\u0014�VU߲\u001c��>���H~cR\u0003GD��ÅԦ9㿃�����\f\nA8\t7{YW��)�1�E8f�L\"'��\u0010|u�Ru�R��Bj�\u0014V�Ƥ�\t\u001e\u0002Xڳ�,��)\u000ei�\u000b<�z$gd*����g\r2\u0001q�\u0018\u0017#x��\u0000W��\u0004�SHO�\u0010IU�\u0013[�T�2�\u0003�J�OT��\fGS��\n��D\u001c�8N �ʢ�m�ȨG������as�\u0006d{�kS�l�7Ӿ�z�}ק���������s�=�\f����|�/�0��\"\u000b�n}ل�f�0(f���+�\u001b�P�ہِ��@�=or�\u0002��\u001dTbm�M��4|��\u000eL�2��8�\u001d�P���0\t~�hlǿM�'d���\u000f.���\bNQ%����;놿\u0016QD\u001f˱>��\tf\u0013X���,<����:�4�ixN��������z�\f��9�<�LF}�߀�l�\f��/\u001e�#��B,�@�EK�\u00191�e��3b,G���*bV��)�Qe�<N��ħ��)�GS\u0018�񯄌�Z�e�A��t�r��p92[��y�p9��![^x��򢬿�,�!> �'�}��������i�H������.ƭ\u0014�a-��<%���A޺ow�f�]sf�\\�C�04�����\\q\rU��>W�2k������O��\u0005P��O�\u001e\u0006��\u001f��\u0013\u001c\n��|�\u0003�����z4�\u0010�\u0003�z�>�>���\u000e�D�L]��]t�'�k��k���?#�\u001c+rȶ��\u001bz����\u001b���\u001e��\u0017�\\=��\u0002GF����9\u0014��g�W�\u001f>�7�\u000f��ʢ�\u0015\u0015`2�jk�]x�r� �b\u001b�j\u00024B#\u0004�X��\u0006���ͤΥF9�\u0012td�\u0004i��?1m�6�������\u0003��(\u001f���fn\u0002ظ�\u001f�6�\u00159����?���y�A|9;m��/&�Ҵx��?�\u0002߽\u0014����w���;],9��\u0012\u0000\u0000",
+      "responseTime": 313,
+      "responseHeaders": {
+        "content-type": "application/json; charset=utf-8",
+        "transfer-encoding": "chunked",
+        "connection": "keep-alive",
+        "x-powered-by": "Express",
+        "set-cookie": [
+          "__s=67220fa7e097f8000711b668; Path=/",
+          "sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; Domain=beep.test24.shub.us; Path=/; Expires=Sat, 02 Aug 2025 06:50:33 GMT; HttpOnly; SameSite=Lax"
+        ],
+        "vary": "Accept-Encoding",
+        "content-encoding": "gzip",
+        "date": "Sat, 26 Jul 2025 06:50:33 GMT",
+        "x-envoy-upstream-service-time": "52",
+        "server": "envoy",
+        "x-request-id": "89527ea7ff8a5d5fe47b44eeeb196873",
+        "x-kong-upstream-latency": "58",
+        "x-kong-proxy-latency": "1",
+        "via": "kong/3.6.1",
+        "x-kong-request-id": "6b6dbf0fbb9d79553ace3b1a52d06467"
+      }
+    },
+    {
+      "id": 70,
+      "timestamp": "2025-07-26T06:50:33.458Z",
+      "domain": "coffee.beep.local.shub.us",
+      "method": "POST",
+      "endpoint": "/api/gql/OnlineStoreInfo",
+      "query": {},
+      "isGraphQL": true,
+      "requestHeaders": {
+        "host": "coffee.beep.local.shub.us:3001",
+        "connection": "keep-alive",
+        "content-length": "0",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+        "accept": "application/json",
+        "content-type": "application/json",
+        "client": "web",
+        "origin": "http://coffee.beep.local.shub.us:3001",
+        "referer": "http://coffee.beep.local.shub.us:3001/dine",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "en,th;q=0.9,zh;q=0.8",
+        "cookie": "perm_tid=a7CPmyQAzi4G9vRXUygTFL; sh_storage_id=4eNpSPMo87PLreUJC76yxC; sess_tid=bX4HxumPw8rwM9zns6wqXN; perm_tid=4V1jTFLbdTJ3AuCaSxAPQR; sh_storage_id=qb5srSyrFfNeeyJdu6fQ4t; _gcl_au=1.1.588281573.1752146007; initialTrafficSource=utmcsr=(direct)|utmcmd=(none)|utmccn=(not set); __utmzzses=1; WZRK_G=8827f83768ac4b539860955e1853bfef; _tt_enable_cookie=1; _ttp=01JZT0MQ5ZJEQ16W4KBVPBW9EC_.tt.1; sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; __t=; __sh_is_guest=false; __sh_url_type=static; __sh_url_expired=false; __sh_url_timestamp=j%3Anull; _gid=GA1.2.1008410872.1753504619; _clck=189j64c%7C2%7Cfxx%7C0%7C2017; _ga=GA1.1.1488883823.1752146008; ttcsid=1753510792521::dDMkIJ7r-SZEKX2vC6Lc.12.1753510792521; _clsk=c4xhk4%7C1753510792690%7C1%7C1%7Cl.clarity.ms%2Fcollect; ttcsid_C6FKAB9LLTKUEOLGE7A0=1753510792521::S74NO93A4iJQeealqvB5.12.1753510792724; _ga_TENSSFY51L=GS2.1.s1753510791$o13$g1$t1753511049$j60$l0$h0; __h=U2FsdGVkX19Noqksawz9DPcDfDFovlAvzGQX66661%2BYWO6Sp%2BZwGKdv3sEqHLlic; __s=67220fa7e097f8000711b668"
+      },
+      "responseStatus": 200,
+      "responseData": {
+        "data": {
+          "onlineStoreInfo": {
+            "id": "67220fa8a2b284a465794eaf",
+            "storeName": "Coffee Bean (Webstore)",
+            "beepBrandName": "Bean",
+            "logo": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/logo/logo_fcd4e7ea-6946-4f33-d2e0-ddd8e5e1f4cb",
+            "favicon": "https://d16kpilgrxu9w6.cloudfront.net/coffee/online-store/appearance/image/favicon/favicon_b9d856a6-e469-4c7d-dc8d-c14e7916c93a",
+            "locale": "MS-MY",
+            "currency": "MYR",
+            "currencySymbol": "RM",
+            "country": "MY",
+            "state": null,
+            "street": null,
+            "analyticTools": [],
+            "businessType": "cafe"
+          }
+        }
+      },
+      "responseTime": 852,
+      "responseHeaders": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "532",
+        "connection": "keep-alive",
+        "x-powered-by": "Express",
+        "set-cookie": [
+          "__s=67220fa7e097f8000711b668; Path=/",
+          "sid=s%3Auxxlt3je_CIT-GRQL1ou1wZWPBDkCdCA.b14O4mbL5vhB%2Fas5PwyPITdzyily%2B%2FSr1LgihmkPvnY; Domain=beep.test24.shub.us; Path=/; Expires=Sat, 02 Aug 2025 06:50:33 GMT; HttpOnly; SameSite=Lax"
+        ],
+        "vary": "Accept-Encoding",
+        "date": "Sat, 26 Jul 2025 06:50:33 GMT",
+        "x-envoy-upstream-service-time": "35",
+        "server": "envoy",
+        "x-request-id": "1c901b00eb16983fabfbc3648e478ca3",
+        "x-kong-upstream-latency": "39",
+        "x-kong-proxy-latency": "2",
+        "via": "kong/3.6.1",
+        "x-kong-request-id": "1170ee2e8ee8b91fa8c75124acf02c38"
+      }
+    }
+  ]
+}
