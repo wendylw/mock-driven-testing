@@ -10,7 +10,11 @@
     "generate-all-mocks": "node src/cli/generate-all.js",
     "test": "jest",
     "lint": "eslint src/",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "proxy": "node proxy-server.js",
+    "demo": "node visual-demo-simple.js",
+    "update-mocks": "node update-mocks-from-capture.js",
+    "verify": "node verify-updated-mocks.js"
   },
   "keywords": [
     "mock",
@@ -27,9 +31,11 @@
     "@babel/traverse": "^7.23.0",
     "axios": "^1.6.0",
     "commander": "^11.1.0",
+    "express": "^4.18.2",
     "fs-extra": "^11.1.1",
     "glob": "^10.3.10",
     "handlebars": "^4.7.8",
+    "http-proxy-middleware": "^2.0.6",
     "lodash": "^4.17.21",
     "openai": "^4.20.0"
   },
