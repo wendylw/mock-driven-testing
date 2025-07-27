@@ -11,7 +11,10 @@
     "test": "jest",
     "lint": "eslint src/",
     "format": "prettier --write src/",
-    "proxy": "node proxy-server.js",
+    "proxy": "node cli.js",
+    "proxy:beep": "node cli.js beep-v1-webapp",
+    "proxy:backoffice": "node cli.js backoffice-v2-webapp",
+    "proxy:list": "node cli.js list",
     "demo": "node visual-demo-simple.js",
     "update-mocks": "node update-mocks-from-capture.js",
     "verify": "node verify-updated-mocks.js"

@@ -1,7 +1,7 @@
 /**
  * 实时捕获的 API Mock - 基于真实的 beep-v1-webapp API 响应
- * 自动生成时间: 2025-07-26T10:21:46.052Z
- * 已捕获 48 个端点，共 150 次调用
+ * 自动生成时间: 2025-07-26T11:03:08.656Z
+ * 已捕获 48 个端点，共 166 次调用
  * 
  * 使用方法:
  * import { handlers } from './api-mocks-realtime';
@@ -875,7 +875,7 @@ export const handlers = [
                     },
                     "beepBrandName": "Bean",
                     "beepStoreNameLocationSuffix": "Cafe (Pay First)",
-                    "hash": "U2FsdGVkX19upHGCsQh2IKLbvBYECPovlFF5OprW8UOawoXMsOFr6miuwYwp932b"
+                    "hash": "U2FsdGVkX1%2BVxKUkvv2ajX37wpHmfL5g%2BftkY4wCdzWEhKC65i744n4t4jFH8FCj"
                 },
                 {
                     "id": "67286735e097f800076806a9",
@@ -932,7 +932,7 @@ export const handlers = [
                     },
                     "beepBrandName": "Bean",
                     "beepStoreNameLocationSuffix": "Cafe (Pay Later)",
-                    "hash": "U2FsdGVkX1%2B3re%2BYLewZ8Mw1YrsVpEbpeO0o8M0oBfwJfqLZFVlEh2xV36mxJSAc"
+                    "hash": "U2FsdGVkX1%2BRLoTtz%2FMdOO49f2Cg1c3ZU2lYrBvC2ianHvHqBrc6uZLNOmDiwcam"
                 },
                 {
                     "id": "673d54420e5c2300079412a1",
@@ -990,7 +990,7 @@ export const handlers = [
                     },
                     "beepBrandName": "Bean",
                     "beepStoreNameLocationSuffix": "Cafe (Webstore)",
-                    "hash": "U2FsdGVkX1866%2FO%2FryTSvs6EoeOwI4qhhT91Ji05Uq27NJSDyFU1%2F1HcHwDLp%2FeW"
+                    "hash": "U2FsdGVkX1%2B8meBcQ7cVTDsRHXvLjKePRT1rJNe%2BSiSWUuyYOreawZUaAa99ovUS"
                 },
                 {
                     "id": "680744152a1d4d0006291cd6",
@@ -1047,7 +1047,7 @@ export const handlers = [
                     },
                     "beepBrandName": "Bean",
                     "beepStoreNameLocationSuffix": "Cafe (Pay At Count Only)",
-                    "hash": "U2FsdGVkX19ugO5pla%2FhyLrikPy0i9DerfsxNpQeX8%2BbwZkJZciL9RRv%2BRWUuyzO"
+                    "hash": "U2FsdGVkX19MVRPyyLdzxClBRyA3cA4zWhpmOmnIxh4u5Az27HXRLSqEruveQqKz"
                 }
             ]
         }
@@ -2595,7 +2595,7 @@ export const handlers = [
     return res(
       ctx.status(200),
       ctx.json({
-    "redirectTo": "U2FsdGVkX1%2FRa%2FnX0w77OZsuroR4baUJwQptso1lhLVCojbfC6SGM9BcvWCaED3i"
+    "redirectTo": "U2FsdGVkX19ISyTnaZOPUBt61bmh16FtonO5MHrw068uvFgERg8SlvT52jzQ20%2F1"
 })
     );
   }),
