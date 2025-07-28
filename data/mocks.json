@@ -1,0 +1,45 @@
+[
+  {
+    "id": "7da065c2108cc9a322b2d0301a4a688c",
+    "name": "Demo API - Success",
+    "method": "GET",
+    "url": "/demo",
+    "response": {
+      "status": 200,
+      "body": {
+        "message": "Hello from MDT Mock!",
+        "timestamp": "2025-07-28T08:05:26.204Z",
+        "version": "1.0.0"
+      }
+    },
+    "createdAt": "2025-07-28T08:05:26.204Z"
+  },
+  {
+    "id": "748058e99c5714ead79d208c7a3c7737",
+    "name": "User API - Mock User",
+    "method": "GET",
+    "url": "/api/user",
+    "response": {
+      "status": 200,
+      "body": {
+        "id": 1,
+        "name": "Mock User",
+        "email": "mock@example.com"
+      }
+    },
+    "createdAt": "2025-07-28T08:05:26.205Z"
+  },
+  {
+    "id": "2e7f3030aa57a67345685ec3d1234f82",
+    "name": "Test API",
+    "method": "GET",
+    "url": "/test",
+    "response": {
+      "status": 200,
+      "body": {
+        "result": "success"
+      }
+    },
+    "createdAt": "2025-07-28T08:07:50.855Z"
+  }
+]
