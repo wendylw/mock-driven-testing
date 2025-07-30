@@ -29,6 +29,26 @@ app.get('/health', (req, res) => {
 // Mock管理API路由
 app.use('/api/mocks', require('./mock/controller'));
 
+// 场景管理API路由
+app.use('/api/scenarios', require('./scenario/controller'));
+
+// 初始化场景切换器
+const ScenarioService = require('./scenario/service');
+const MockService = require('./mock/service');
+const ScenarioSwitcher = require('./scenario/switcher');
+
+const scenarioService = new ScenarioService();
+const mockService = new MockService();
+const scenarioSwitcher = new ScenarioSwitcher(scenarioService, mockService);
+
+// 初始化场景系统
+scenarioSwitcher.initialize().catch(err => {
+  logger.error('Failed to initialize scenario switcher:', err.message);
+});
+
+// 将场景切换器添加到app上下文，以便其他模块使用
+app.locals.scenarioSwitcher = scenarioSwitcher;
+
 // 代理中间件（放在最后，匹配所有其他请求）
 app.use('/', require('./proxy/middleware'));
 

@@ -49,7 +49,7 @@ class MockService {
     try {
       const mock = await this.storage.getMockById(id);
       if (!mock) {
-        throw new Error('Mock not found');
+        return null;
       }
       return mock;
     } catch (error) {

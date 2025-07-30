@@ -41,5 +41,35 @@
       }
     },
     "createdAt": "2025-07-28T08:07:50.855Z"
+  },
+  {
+    "id": "bcb4aeaee6eaa689da9654fd9c152ce6",
+    "name": "Demo API - Success",
+    "method": "GET",
+    "url": "/demo",
+    "response": {
+      "status": 200,
+      "body": {
+        "message": "Hello from MDT Mock!",
+        "timestamp": "2025-07-28T08:20:21.556Z",
+        "version": "1.0.0"
+      }
+    },
+    "createdAt": "2025-07-28T08:20:21.556Z"
+  },
+  {
+    "id": "45e19ad1691c0066c8468efed66a17b3",
+    "name": "User API - Mock User",
+    "method": "GET",
+    "url": "/api/user",
+    "response": {
+      "status": 200,
+      "body": {
+        "id": 1,
+        "name": "Mock User",
+        "email": "mock@example.com"
+      }
+    },
+    "createdAt": "2025-07-28T08:20:21.556Z"
   }
 ]

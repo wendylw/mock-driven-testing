@@ -1,0 +1,135 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": "baseline-button-001",
+      "component": "Button",
+      "path": "src/common/components/Button/index.jsx",
+      "version": "36b5fbfa",
+      "createdAt": "2024-09-25T17:56:47+0800",
+      "lastUpdated": "2025-07-29T00:00:00+0800",
+      "snapshotCount": 15,
+      "propsVariations": 12,
+      "status": "healthy",
+      "corruptionType": null,
+      "branch": "develop",
+      "commit": "68bb4f50",
+      "size": 2.6,
+      "usageCount": 27,
+      "riskLevel": "low",
+      "businessImpact": "用户界面组件",
+      "criticalUsageScenarios": ["购物车操作", "搜索功能", "确认对话"],
+      "baselineDetails": {
+        "currentComponentCommit": "68bb4f503d46bc5c32527ca1b946c3294ef47f7c",
+        "baselineCommit": "68bb4f503d46bc5c32527ca1b946c3294ef47f7c",
+        "statusReason": "基准快照与当前Button组件状态完全一致"
+      }
+    },
+    {
+      "id": "baseline-createorderbutton-001",
+      "component": "CreateOrderButton",
+      "path": "src/ordering/components/CreateOrderButton/index.jsx",
+      "version": "2.1.2",
+      "createdAt": "2025-01-15T10:00:00",
+      "lastUpdated": "2025-01-27T16:20:00",
+      "snapshotCount": 8,
+      "propsVariations": 6,
+      "status": "outdated",
+      "corruptionType": null,
+      "branch": "develop",
+      "commit": "a2d5c8f",
+      "size": 156.3,
+      "usageCount": 7,
+      "riskLevel": "high",
+      "businessImpact": "直接影响营收",
+      "criticalUsageScenarios": ["支付流程", "订单创建", "购物车结算"],
+      "baselineDetails": {
+        "currentComponentCommit": "d1234567890abcdef1234567890abcdef12345678",
+        "baselineCommit": "a2d5c8f1234567890abcdef1234567890abcdef12",
+        "statusReason": "组件已更新但基准快照还是旧状态，需要更新基准"
+      }
+    },
+    {
+      "id": "baseline-modal-001",
+      "component": "Modal",
+      "path": "src/common/components/Modal/index.jsx",
+      "version": "1.1.8",
+      "createdAt": "2025-01-10T09:15:00",
+      "lastUpdated": "2025-01-20T09:45:00",
+      "snapshotCount": 6,
+      "propsVariations": 4,
+      "status": "corrupted",
+      "corruptionType": "fileCorrupted",
+      "branch": "develop",
+      "commit": "b7086be5",
+      "size": 89.7,
+      "usageCount": 10,
+      "riskLevel": "low",
+      "businessImpact": "影响用户决策",
+      "criticalUsageScenarios": ["确认对话", "警告提示", "信息展示"],
+      "baselineDetails": {
+        "currentComponentCommit": "b7086be5b570b1799afdf1acbf23e691da2c2a83",
+        "baselineCommit": "b7086be5b570b1799afdf1acbf23e691da2c2a83",
+        "statusReason": "基准快照文件损坏，需要重建",
+        "corruptionDetails": "快照图片文件丢失"
+      }
+    },
+    {
+      "id": "baseline-input-001",
+      "component": "Input",
+      "path": "src/common/components/Input/Input.jsx",
+      "version": "2.1.4",
+      "createdAt": "2025-01-08T11:45:00",
+      "lastUpdated": "2025-03-05T19:29:51+0800",
+      "snapshotCount": 12,
+      "propsVariations": 8,
+      "status": "healthy",
+      "corruptionType": null,
+      "branch": "develop",
+      "commit": "d9059fad",
+      "size": 201.3,
+      "usageCount": 4,
+      "riskLevel": "low",
+      "businessImpact": "数据质量相关",
+      "criticalUsageScenarios": ["用户信息收集", "表单输入"],
+      "baselineDetails": {
+        "currentComponentCommit": "d9059fad6427fb00c65775c5d181cc599105e974",
+        "baselineCommit": "d9059fad6427fb00c65775c5d181cc599105e974",
+        "statusReason": "基准快照与当前Input组件状态完全一致"
+      }
+    },
+    {
+      "id": "baseline-oldcard-001",
+      "component": "OldCard",
+      "path": "src/common/components/OldCard/index.jsx",
+      "version": "1.2.0",
+      "createdAt": "2025-01-10T10:00:00",
+      "lastUpdated": "2025-01-15T14:30:00",
+      "snapshotCount": 6,
+      "propsVariations": 4,
+      "status": "corrupted",
+      "corruptionType": "componentDeleted",
+      "branch": "develop",
+      "commit": "old123abc",
+      "size": 87.5,
+      "usageCount": 0,
+      "riskLevel": "low",
+      "businessImpact": "组件已删除",
+      "criticalUsageScenarios": [],
+      "baselineDetails": {
+        "currentComponentCommit": null,
+        "baselineCommit": "old123abc1234567890abcdef1234567890abcdef12",
+        "statusReason": "组件已从develop分支删除，基准数据需要清理",
+        "corruptionDetails": "组件文件不存在"
+      }
+    }
+  ],
+  "meta": {
+    "total": 5,
+    "healthy": 2,
+    "outdated": 1,
+    "corrupted": 2,
+    "healthPercentage": 40,
+    "lastCheck": "2025-01-29T10:30:00+0800"
+  }
+}

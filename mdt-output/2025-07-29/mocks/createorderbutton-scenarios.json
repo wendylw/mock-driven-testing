@@ -1,0 +1,46 @@
+{
+  "component": "CreateOrderButton",
+  "scenarios": {
+    "order.create.success": {
+      "name": "订单创建成功",
+      "description": "测试订单成功创建流程",
+      "mockData": {},
+      "apiMocks": [
+        {
+          "endpoint": "/api/order/create",
+          "method": "POST",
+          "response": {
+            "orderId": "ORDER_123",
+            "status": "created"
+          }
+        }
+      ]
+    },
+    "order.create.payment-failed": {
+      "name": "支付失败",
+      "description": "测试支付失败的错误处理",
+      "mockData": {},
+      "apiMocks": [
+        {
+          "endpoint": "/api/order/create",
+          "method": "POST",
+          "response": {
+            "error": "Payment failed",
+            "code": "PAYMENT_ERROR"
+          },
+          "status": 400
+        }
+      ]
+    },
+    "order.create.login-required": {
+      "name": "需要登录",
+      "description": "测试未登录用户的重定向",
+      "mockData": {
+        "user": {
+          "isLogin": false
+        }
+      },
+      "apiMocks": []
+    }
+  }
+}
