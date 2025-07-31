@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Table, Button, Space, Tag, Progress, Row, Col, Statistic, Alert, Modal, message } from 'antd';
-import { DatabaseOutlined, SyncOutlined, CheckCircleOutlined, ExclamationCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DatabaseOutlined, SyncOutlined, CheckCircleOutlined, ExclamationCircleOutlined, DeleteOutlined, FireOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import BaselineDetailModal from './BaselineDetailModal';
 import SnapshotModal from './SnapshotModal';
 import VersionHistoryModal from './VersionHistoryModal';
 import StatusColumn from './components/StatusColumn';
 import { calculateIntelligentStatus } from './utils/statusCalculator';
+import { baselineService } from '../../../../services/baseline.service';
+import { BaselineStatus, BaselineListItem } from '../../../../services/types/baseline';
 
 interface BaselineInfo {
   id: string;
@@ -45,6 +47,17 @@ const PureComponentsBaselines: React.FC = () => {
   }, []);
 
   // 从分析数据生成基准数据的备用方法
+  // 获取组件的关键场景
+  const getCriticalScenariosForComponent = (componentName: string): string[] => {
+    const scenarios: Record<string, string[]> = {
+      'Button': ['购物车操作', '搜索功能', '确认对话'],
+      'CreateOrderButton': ['支付流程', '订单创建', '购物车结算'],
+      'Modal': ['确认对话', '警告提示', '信息展示'],
+      'Input': ['用户信息收集', '表单输入', '搜索输入']
+    };
+    return scenarios[componentName] || [];
+  };
+
   const generateBaselinesFromAnalysis = (analysisData: any): BaselineInfo[] => {
     const baselines: BaselineInfo[] = Object.entries(analysisData.components).map(([componentName, componentInfo]: [string, any]) => {
       // 简化的状态判断逻辑
@@ -155,49 +168,59 @@ const PureComponentsBaselines: React.FC = () => {
     console.log('开始加载基准数据...');
     
     try {
-      // 直接从public目录读取基准数据
-      console.log('发送请求到: /baselines.json');
-      const response = await fetch('/baselines.json');
-      console.log('响应状态:', response.status, response.statusText);
+      // 从后端API获取基准列表
+      const baselineList = await baselineService.getBaselines();
+      console.log('获取到基准列表:', baselineList);
       
-      if (!response.ok) {
-        throw new Error(`HTTP错误: ${response.status} ${response.statusText}`);
-      }
+      // 批量获取状态详情
+      const baselineIds = baselineList.map(item => item.id);
+      const statusMap = await baselineService.getBatchStatuses(baselineIds);
+      console.log('批量状态详情:', statusMap);
       
-      const apiResponse = await response.json();
-      console.log('API响应数据:', apiResponse);
-      
-      if (apiResponse.success) {
-        // 转换API数据为UI数据格式
-        const baselines: BaselineInfo[] = apiResponse.data.map((item: any) => ({
+      // 转换API数据为UI数据格式
+      const baselines: BaselineInfo[] = baselineList.map((item: BaselineListItem) => {
+        const status = statusMap[item.id];
+        const statusDetail = status?.statusDetail;
+        
+        // 根据状态确定损坏类型
+        let corruptionType: 'fileCorrupted' | 'componentDeleted' | undefined;
+        if (statusDetail?.type === 'deleted') {
+          corruptionType = 'componentDeleted';
+        } else if (statusDetail?.type === 'corrupted') {
+          corruptionType = 'fileCorrupted';
+        }
+        
+        // 基于组件类型计算业务影响
+        const businessImpact = item.component === 'CreateOrderButton' ? '直接影响营收' : 
+                             item.usageCount > 20 ? '影响用户体验' : '数据质量相关';
+        
+        // 获取关键场景
+        const criticalScenarios = getCriticalScenariosForComponent(item.component);
+        
+        return {
           id: item.id,
           component: item.component,
           path: item.path,
-          version: item.version,
-          createdAt: new Date(item.createdAt),
-          lastUpdated: new Date(item.lastUpdated),
-          snapshotCount: item.snapshotCount,
-          propsVariations: item.propsVariations,
-          status: item.status,
-          corruptionType: item.corruptionType,
-          branch: item.branch,
-          commit: item.commit,
-          size: item.size,
+          version: '0.1.0', // 从status获取或使用默认值
+          createdAt: status ? new Date(status.metrics.lastUpdated) : new Date(),
+          lastUpdated: status ? new Date(status.metrics.lastUpdated) : new Date(),
+          snapshotCount: status?.metrics.snapshotCount || 0,
+          propsVariations: 0, // 需要从后端获取
+          status: (statusDetail?.type || 'healthy') as any,
+          corruptionType,
+          branch: 'develop',
+          commit: 'unknown',
+          size: status?.metrics.size || 0,
           usageCount: item.usageCount,
-          riskLevel: item.riskLevel,
-          businessImpact: item.businessImpact,
-          criticalUsageScenarios: item.criticalUsageScenarios
-        }));
-        
-        console.log('基准数据转换完成，共', baselines.length, '条记录');
-        console.log('基准数据统计:', apiResponse.meta);
-        setBaselines(baselines);
-        message.success(`成功加载${baselines.length}个组件的基准数据`);
-      } else {
-        console.error('API返回错误:', apiResponse);
-        message.error('API返回失败状态');
-        setBaselines([]);
-      }
+          riskLevel: item.usageCount > 15 ? 'high' : 'low',
+          businessImpact,
+          criticalUsageScenarios: criticalScenarios
+        };
+      });
+      
+      console.log('基准数据转换完成，共', baselines.length, '条记录');
+      setBaselines(baselines);
+      message.success(`成功加载${baselines.length}个组件的基准数据`);
     } catch (error) {
       console.error('加载基准数据失败:', error);
       message.error(`加载基准数据失败: ${error instanceof Error ? error.message : '未知错误'}`);
@@ -274,7 +297,7 @@ const PureComponentsBaselines: React.FC = () => {
           <p>确定要清理 <strong>{baseline.component}</strong> 的基准数据吗？</p>
           <Alert 
             message="清理说明" 
-            description="此组件已从develop分支删除，清理基准数据不会影响现有功能，但会提高健康度统计的准确性。"
+            description="此组件已从develop分支删除，清理基准数据不会影响现有功能，可以减少无效数据的干扰。"
             type="info" 
             showIcon 
             style={{ marginTop: 12 }}
@@ -308,12 +331,19 @@ const PureComponentsBaselines: React.FC = () => {
     const outdated = baselines.filter(b => b.status === 'outdated').length;
     const corrupted = baselines.filter(b => b.status === 'corrupted').length;
     const total = baselines.length;
+    const needUpdate = outdated + corrupted;
+    const highFrequency = baselines.filter(b => b.usageCount > 5).length;
+    // 模拟新增组件数据，实际应该从后端获取
+    const newComponents = 2;
     
     return {
       healthy,
       outdated,
       corrupted,
       total,
+      needUpdate,
+      highFrequency,
+      newComponents,
       healthPercentage: total > 0 ? Math.round((healthy / total) * 100) : 0,
     };
   };
@@ -347,7 +377,7 @@ const PureComponentsBaselines: React.FC = () => {
             }
           </div>
           <div style={{ fontSize: '11px', color: '#1890ff', marginTop: 2 }}>
-            使用次数: {record.usageCount} • {record.businessImpact}
+            被引用: {record.usageCount}次 • {record.businessImpact}
           </div>
         </div>
       ),
@@ -515,34 +545,30 @@ const PureComponentsBaselines: React.FC = () => {
         <Col span={6}>
           <Card>
             <Statistic
-              title="健康基准"
-              value={stats.healthy}
-              prefix={<CheckCircleOutlined />}
-              valueStyle={{ color: '#52c41a' }}
+              title="需要更新"
+              value={stats.needUpdate}
+              prefix={<SyncOutlined />}
+              valueStyle={{ color: stats.needUpdate > 0 ? '#ff4d4f' : '#52c41a' }}
             />
           </Card>
         </Col>
         <Col span={6}>
           <Card>
             <Statistic
-              title="需要更新"
-              value={stats.outdated}
-              prefix={<ExclamationCircleOutlined />}
-              valueStyle={{ color: '#faad14' }}
+              title="高频引用组件"
+              value={stats.highFrequency}
+              prefix={<FireOutlined />}
+              valueStyle={{ color: '#fa8c16' }}
             />
           </Card>
         </Col>
         <Col span={6}>
           <Card>
-            <div style={{ marginBottom: 8 }}>
-              <span style={{ fontSize: '14px', color: '#666' }}>基准健康度</span>
-            </div>
-            <Progress
-              type="dashboard"
-              percent={stats.healthPercentage}
-              size={80}
-              format={percent => `${percent}%`}
-              strokeColor={stats.healthPercentage > 80 ? '#52c41a' : stats.healthPercentage > 60 ? '#faad14' : '#ff4d4f'}
+            <Statistic
+              title="新增组件（未建基准）"
+              value={stats.newComponents}
+              prefix={<PlusCircleOutlined />}
+              valueStyle={{ color: '#722ed1' }}
             />
           </Card>
         </Col>

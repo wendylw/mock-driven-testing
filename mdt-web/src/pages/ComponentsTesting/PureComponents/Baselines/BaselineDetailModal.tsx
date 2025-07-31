@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Tabs, Card, Row, Col, Progress, Tag, Alert, Button, List, Timeline } from 'antd';
+import { Modal, Tabs, Card, Row, Col, Progress, Tag, Alert, Button, List, Timeline, message } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined, ClockCircleOutlined, BugOutlined, RocketOutlined, ToolOutlined } from '@ant-design/icons';
 import type { BaselineDetails, ActionSuggestion, RiskAlert, Issue } from './types';
 import VisualIntelligenceSection from './components/VisualIntelligenceSection';
 import ExecutableRecommendations from './components/ExecutableRecommendations';
 import InteractiveRecommendations from './components/InteractiveRecommendations';
 import ProgressiveIntelligence from './components/ProgressiveIntelligence';
+import ProblemDiagnostic from './components/ProblemDiagnostic';
+import { baselineService } from '../../../../services/baseline.service';
+import type { AnalysisResult } from '../../../../services/types/baseline';
 
 interface BaselineInfo {
   id: string;
@@ -51,17 +54,132 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
     setLoading(true);
     setDetails(null);
     try {
-      const response = await fetch('/baseline-details.json');
-      const data = await response.json();
-      if (data.success && data.data[baselineId]) {
-        setDetails(data.data[baselineId]);
-      } else {
-        console.warn(`未找到基准详情数据: ${baselineId}`);
-      }
+      // 触发全面分析
+      const analysisResult = await baselineService.triggerAnalysis(baselineId);
+      console.log('分析结果:', analysisResult);
+      
+      // 转换为内部格式
+      const baselineDetails = convertAnalysisToDetails(analysisResult);
+      setDetails(baselineDetails);
     } catch (error) {
       console.error('加载基准详情失败:', error);
+      message.error('加载基准详情失败');
+      
+      // 回退到静态数据
+      try {
+        const response = await fetch('/baseline-details.json');
+        const data = await response.json();
+        if (data.success && data.data[baselineId]) {
+          setDetails(data.data[baselineId]);
+        }
+      } catch (fallbackError) {
+        console.error('备用数据加载失败:', fallbackError);
+      }
     }
     setLoading(false);
+  };
+  
+  // 转换API响应到内部格式
+  const convertAnalysisToDetails = (analysis: AnalysisResult): BaselineDetails => {
+    const { status, diagnostic, suggestions } = analysis;
+    
+    // 计算质量评级
+    const overallGrade = diagnostic.healthScore >= 90 ? 'A+' : 
+                        diagnostic.healthScore >= 80 ? 'A' :
+                        diagnostic.healthScore >= 70 ? 'B' :
+                        diagnostic.healthScore >= 60 ? 'C' : 'D';
+    
+    // 转换问题列表
+    const issues: Issue[] = diagnostic.problems.map((problem, index) => ({
+      id: problem.id,
+      severity: problem.severity === 'critical' ? 'critical' as const : 
+                problem.severity === 'warning' ? 'high' as const : 
+                problem.severity === 'info' ? 'medium' as const : 'low' as const,
+      category: problem.category === 'code-quality' ? 'maintainability' as const : 
+                problem.category as any,
+      title: problem.rootCause.what,
+      description: problem.impact,
+      impact: problem.impact,
+      recommendation: problem.quickFix?.solution || '需要手动修复',
+      estimatedFixTime: problem.quickFix?.estimatedTime || '未知'
+    }));
+    
+    // 转换建议列表
+    const actionSuggestions: ActionSuggestion[] = [
+      ...suggestions.visualSuggestions.map(vs => ({
+        id: vs.id,
+        type: 'optimize' as const,
+        priority: vs.priority === 'high' ? 'high' as const : 
+                 vs.priority === 'medium' ? 'medium' as const : 'low' as const,
+        title: vs.title,
+        description: vs.description,
+        benefits: [`影响${vs.affectedElements}个元素`, '提升用户体验', '改善可访问性'],
+        estimatedTime: '5分钟',
+        steps: vs.visualEvidence.annotations.map(a => a.suggestion)
+      })),
+      ...suggestions.codeSuggestions.map(cs => ({
+        id: cs.id,
+        type: cs.issue.includes('渲染') ? 'optimize' as const : 'refactor' as const,
+        priority: cs.impact.includes('性能降低') ? 'high' as const : 'medium' as const,
+        title: cs.issue,
+        description: cs.reasoning,
+        benefits: cs.benefits,
+        estimatedTime: cs.autoFix.estimatedTime,
+        steps: [
+          `打开文件: ${cs.codeDiff.filePath}`,
+          `定位到第 ${cs.codeDiff.lineNumber} 行`,
+          '应用建议的代码更改',
+          '运行测试验证'
+        ]
+      }))
+    ];
+    
+    // 构建详情对象
+    return {
+      id: analysis.baselineId,
+      component: status.component,
+      status: status.status as any,
+      statusLabel: status.statusLabel,
+      statusDetail: status.statusDetail,
+      qualityMetrics: {
+        healthScore: diagnostic.healthScore,
+        issues,
+        issueCount: issues.length,
+        criticalCount: issues.filter(i => i.severity === 'critical').length,
+        autoFixAvailable: 0, // Removed from Issue interface
+        qualityAssessment: {
+          overallGrade: overallGrade as 'A' | 'B' | 'C' | 'D' | 'F',
+          stability: diagnostic.healthScore >= 80 ? 'excellent' : diagnostic.healthScore >= 60 ? 'good' : 'poor',
+          maintainability: diagnostic.healthScore >= 75 ? 'good' : 'fair',
+          testability: diagnostic.healthScore >= 70 ? 'good' : 'fair'
+        },
+        testCoverage: {
+          overallCoverage: 85,
+          snapshotCoverage: 90,
+          propsCoverage: 80,
+          stateCoverage: 75,
+          interactionCoverage: 70
+        },
+        performanceMetrics: {
+          renderTime: { average: 12, max: 25, min: 8 },
+          memoryUsage: { average: 2.5, max: 4.2, min: 1.8 },
+          bundleSize: { raw: 3.2, gzipped: 1.1 }
+        }
+      },
+      actionSuggestions,
+      visualIntelligence: suggestions.visualSuggestions,
+      interactiveSuggestions: suggestions.interactiveSuggestions,
+      progressiveLearning: suggestions.progressiveLearning,
+      problemDiagnostic: {
+        rootCause: diagnostic.rootCauses,
+        affectedScenarios: diagnostic.problems.map(p => p.affectedScenarios),
+        evidence: diagnostic.evidence,
+        recommendations: diagnostic.recommendations
+      },
+      executableRecommendations: suggestions.codeSuggestions,
+      riskAlerts: [],
+      versions: []
+    };
   };
 
   const renderQualityMetrics = () => {
@@ -670,7 +788,7 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
                   <div style={{ fontSize: '24px', fontWeight: 'bold', color: baseline.riskLevel === 'high' ? '#ff4d4f' : '#52c41a' }}>
                     {baseline.usageCount}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#666' }}>使用次数</div>
+                  <div style={{ fontSize: '12px', color: '#666' }}>引用次数</div>
                   <Tag 
                     color={baseline.riskLevel === 'high' ? 'red' : 'green'} 
                     style={{ marginTop: '4px' }}
@@ -734,40 +852,55 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
   };
 
   const renderIntelligentSuggestions = () => {
-    if (!baseline) return null;
+    if (!baseline || !details) return null;
     
     return (
       <div>
         {/* 可视化智能建议 */}
-        <VisualIntelligenceSection baseline={baseline} />
+        <VisualIntelligenceSection 
+          baseline={baseline} 
+          baselineId={baseline.id}
+          visualSuggestions={details.visualIntelligence}
+        />
         
         {/* 可执行代码建议 */}
-        <ExecutableRecommendations baseline={baseline} />
+        <ExecutableRecommendations 
+          baseline={baseline}
+          baselineId={baseline.id}
+          codeSuggestions={details.executableRecommendations}
+        />
         
         {/* 交互式智能助手 */}
-        <InteractiveRecommendations baseline={baseline} />
+        <InteractiveRecommendations 
+          baseline={baseline}
+          baselineId={baseline.id}
+          interactiveSuggestions={details.interactiveSuggestions}
+        />
         
         {/* 渐进式智能学习 */}
-        <ProgressiveIntelligence baseline={baseline} />
+        <ProgressiveIntelligence 
+          baseline={baseline}
+          progressiveLearning={details.progressiveLearning}
+        />
       </div>
     );
   };
 
+  const renderProblemDiagnostic = () => {
+    if (!baseline) return null;
+    return <ProblemDiagnostic baseline={baseline} />;
+  };
+
   const tabItems = [
+    {
+      key: 'diagnostic',
+      label: '🔍 问题诊断',
+      children: renderProblemDiagnostic()
+    },
     {
       key: 'intelligent',
       label: '🤖 智能建议',
       children: renderIntelligentSuggestions()
-    },
-    {
-      key: 'quality',
-      label: '📊 质量指标',
-      children: renderQualityMetrics()
-    },
-    {
-      key: 'suggestions',
-      label: '⚙️ 操作建议',
-      children: renderOperationSuggestions()
     }
   ];
 
@@ -784,7 +917,7 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
                 {baseline.riskLevel === 'high' ? '高风险' : '低风险'}
               </Tag>
               <Tag color="blue">
-                {baseline.usageCount} 次使用
+                被 {baseline.usageCount} 个组件引用
               </Tag>
             </div>
           )}

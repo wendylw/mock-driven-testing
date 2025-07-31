@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Card, Row, Col, Tag, Button, message } from 'antd';
 import { EyeOutlined, BugOutlined } from '@ant-design/icons';
+import { VisualSuggestion } from '../../../../../services/types/baseline';
+import { baselineService } from '../../../../../services/baseline.service';
 
 interface VisualIssue {
   id: string;
@@ -28,13 +30,44 @@ interface VisualIssue {
 
 interface Props {
   baseline: any;
+  baselineId: string;
+  visualSuggestions?: VisualSuggestion[];
 }
 
-const VisualIntelligenceSection: React.FC<Props> = ({ baseline }) => {
+const VisualIntelligenceSection: React.FC<Props> = ({ baseline, baselineId, visualSuggestions = [] }) => {
   const [selectedIssue, setSelectedIssue] = useState<string | null>(null);
   const [applyingFix, setApplyingFix] = useState<string | null>(null);
   
-  const visualIssues: VisualIssue[] = [
+  // 将API数据转换为组件内部格式
+  const visualIssues: VisualIssue[] = visualSuggestions.map(suggestion => ({
+    id: suggestion.id,
+    type: suggestion.type,
+    title: suggestion.title,
+    priority: suggestion.priority,
+    description: suggestion.description,
+    suggestion: suggestion.visualEvidence.annotations[0]?.suggestion || '',
+    affectedElements: suggestion.affectedElements,
+    visualHighlight: {
+      screenshot: suggestion.visualEvidence.screenshotUrl,
+      annotations: suggestion.visualEvidence.annotations.map(ann => ({
+        position: ann.position,
+        issue: ann.issue,
+        suggestion: ann.suggestion,
+        priority: suggestion.priority,
+        oneClickFix: ann.oneClickFix
+      }))
+    },
+    beforeAfter: suggestion.beforeAfter ? {
+      before: suggestion.beforeAfter.beforeUrl,
+      after: suggestion.beforeAfter.afterUrl
+    } : {
+      before: '',
+      after: ''
+    }
+  }));
+  
+  // 如果没有API数据，使用默认数据
+  const defaultVisualIssues: VisualIssue[] = visualIssues.length > 0 ? visualIssues : [
     {
       id: 'accessibility-001',
       type: 'accessibility_issues',

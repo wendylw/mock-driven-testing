@@ -10,6 +10,7 @@ import {
   LineChartOutlined,
   UserOutlined
 } from '@ant-design/icons';
+import { ProgressiveLearning } from '../../../../../services/types/baseline';
 
 interface LearningPattern {
   id: string;
@@ -48,13 +49,24 @@ interface TeamInsight {
 
 interface Props {
   baseline: any;
+  progressiveLearning?: ProgressiveLearning;
 }
 
-const ProgressiveIntelligence: React.FC<Props> = () => {
+const ProgressiveIntelligence: React.FC<Props> = ({ progressiveLearning }) => {
   const [expandedPattern, setExpandedPattern] = useState<string | null>(null);
   
-  // 模拟学习数据
-  const learningPatterns: LearningPattern[] = [
+  // 转换API数据或使用默认数据
+  const learningPatterns: LearningPattern[] = progressiveLearning?.patterns.map(p => ({
+    id: p.id,
+    type: p.type.includes('code') ? 'code_style' as const : 
+          p.type.includes('workflow') ? 'workflow_pattern' as const : 'component_preference' as const,
+    title: p.title,
+    description: p.description,
+    confidence: p.confidence,
+    examples: p.examples,
+    lastSeen: p.lastSeen,
+    impact: p.confidence > 90 ? 'high' as const : p.confidence > 70 ? 'medium' as const : 'low' as const
+  })) || [
     {
       id: 'pattern-1',
       type: 'code_style',

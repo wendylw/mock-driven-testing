@@ -9,6 +9,8 @@ import {
   MinusCircleOutlined,
   PlusCircleOutlined
 } from '@ant-design/icons';
+import { CodeSuggestion } from '../../../../../services/types/baseline';
+import { baselineService } from '../../../../../services/baseline.service';
 
 interface CodeRecommendation {
   id: string;
@@ -28,13 +30,38 @@ interface CodeRecommendation {
 
 interface Props {
   baseline: any;
+  baselineId: string;
+  codeSuggestions?: CodeSuggestion[];
 }
 
-const ExecutableRecommendations: React.FC<Props> = ({ baseline }) => {
+const ExecutableRecommendations: React.FC<Props> = ({ baseline, baselineId, codeSuggestions = [] }) => {
   const [expandedRec, setExpandedRec] = useState<string | null>(null);
   const [applyingFix, setApplyingFix] = useState<string | null>(null);
   
-  const recommendations: CodeRecommendation[] = [
+  // 转换API数据为内部格式
+  const recommendations: CodeRecommendation[] = codeSuggestions.map(suggestion => ({
+    id: suggestion.id,
+    issue: suggestion.issue,
+    impact: suggestion.impact,
+    reasoning: suggestion.reasoning,
+    benefits: suggestion.benefits,
+    autoFix: {
+      title: suggestion.codeDiff.title,
+      preview: suggestion.codeDiff.current,
+      finalCode: suggestion.codeDiff.suggested,
+      steps: [
+        `打开文件: ${suggestion.codeDiff.filePath}`,
+        `定位到第 ${suggestion.codeDiff.lineNumber} 行`,
+        '应用代码更改',
+        '运行测试验证'
+      ],
+      expectedImprovement: suggestion.benefits[0] || '性能提升'
+    },
+    filePath: suggestion.codeDiff.filePath
+  }));
+  
+  // 如果没有API数据，使用默认数据
+  const defaultRecommendations: CodeRecommendation[] = recommendations.length > 0 ? recommendations : [
     {
       id: 'memo-optimization',
       issue: 'Button组件重复渲染',

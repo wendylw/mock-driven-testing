@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Button, Space, message, Avatar, Steps, Select } from 'antd';
 import { RobotOutlined, UserOutlined, BulbOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { baselineService } from '../../../../../services/baseline.service';
+import { InteractiveSuggestion } from '../../../../../services/types/baseline';
 
 interface ConversationMessage {
   id: string;
@@ -21,38 +23,28 @@ interface ConversationMessage {
 
 interface Props {
   baseline: any;
+  baselineId: string;
+  interactiveSuggestions?: InteractiveSuggestion;
 }
 
-const InteractiveRecommendations: React.FC<Props> = ({ baseline }) => {
-  const [conversation, setConversation] = useState<ConversationMessage[]>([
-    {
-      id: '1',
-      type: 'ai',
-      content: '检测到Button组件的loading状态可能有更好的用户体验方案',
-      options: [
-        {
-          id: 'show-suggestion',
-          text: '显示具体建议',
-          action: 'show_detailed_suggestion'
-        },
-        {
-          id: 'show-best-practices',
-          text: '查看其他项目的最佳实践',
-          action: 'show_best_practices'
-        },
-        {
-          id: 'auto-optimize',
-          text: '自动优化并预览效果',
-          action: 'auto_optimize'
-        },
-        {
-          id: 'remind-later',
-          text: '稍后提醒我',
-          action: 'remind_later'
-        }
-      ]
+const InteractiveRecommendations: React.FC<Props> = ({ baseline, baselineId, interactiveSuggestions }) => {
+  const [sessionId] = useState(`session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
+  const [conversation, setConversation] = useState<ConversationMessage[]>([]);
+  
+  useEffect(() => {
+    if (interactiveSuggestions) {
+      setConversation([{
+        id: '1',
+        type: 'ai',
+        content: interactiveSuggestions.initialMessage,
+        options: interactiveSuggestions.options.map(opt => ({
+          id: opt.id,
+          text: opt.text,
+          action: opt.action
+        }))
+      }]);
     }
-  ]);
+  }, [interactiveSuggestions]);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [processing, setProcessing] = useState(false);
@@ -69,10 +61,38 @@ const InteractiveRecommendations: React.FC<Props> = ({ baseline }) => {
 
     setConversation(prev => [...prev, userMessage]);
 
-    // 模拟AI响应
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      // 调用后端API处理交互
+      const response = await baselineService.handleSuggestionInteraction(
+        baselineId,
+        sessionId,
+        option.action,
+        { currentTopic: interactiveSuggestions?.currentTopic }
+      );
 
-    let aiResponse: ConversationMessage;
+      // 转换响应为对话消息
+      const aiResponse: ConversationMessage = {
+        id: `ai-${Date.now()}`,
+        type: 'ai',
+        content: response.nextMessage || '正在处理您的请求...',
+        options: response.nextOptions,
+        visualDemo: response.visualDemo,
+        implementationOptions: response.implementationOptions
+      };
+
+      setConversation(prev => [...prev, aiResponse]);
+      
+      // 更新步骤进度
+      if (response.progress?.steps) {
+        const completedSteps = response.progress.steps.filter(s => s.status === 'completed').length;
+        setCurrentStep(completedSteps);
+      }
+    } catch (error) {
+      console.error('交互处理失败:', error);
+      message.error('处理请求时出错，请重试');
+      
+      // 回退到静态响应
+      let aiResponse: ConversationMessage;
 
     switch (option.action) {
       case 'show_detailed_suggestion':
@@ -164,8 +184,10 @@ const InteractiveRecommendations: React.FC<Props> = ({ baseline }) => {
         };
     }
 
-    setConversation(prev => [...prev, aiResponse]);
-    setCurrentStep(prev => prev + 1);
+      setConversation(prev => [...prev, aiResponse]);
+      setCurrentStep(prev => prev + 1);
+    }
+    
     setProcessing(false);
   };
 
