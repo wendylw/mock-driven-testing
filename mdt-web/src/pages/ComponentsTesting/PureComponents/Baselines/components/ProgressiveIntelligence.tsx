@@ -99,7 +99,20 @@ const ProgressiveIntelligence: React.FC<Props> = ({ progressiveLearning }) => {
     }
   ];
 
-  const personalizedSuggestions: PersonalizedSuggestion[] = [
+  const personalizedSuggestions: PersonalizedSuggestion[] = progressiveLearning?.personalizedSuggestions?.map(s => ({
+    id: s.id,
+    title: s.title,
+    reason: s.reason,
+    basedOnPattern: s.basedOnPattern,
+    confidence: s.confidence,
+    previousAcceptance: s.previousAcceptance || 85,
+    customizedFor: s.customizedFor || '你的编码风格偏好',
+    learnedFrom: s.learnedFrom || {
+      similarComponents: [],
+      teamPreferences: [],
+      historicalChoices: []
+    }
+  })) || [
     {
       id: 'pers-1',
       title: '为Button组件添加loading状态的进度条',
@@ -130,7 +143,14 @@ const ProgressiveIntelligence: React.FC<Props> = ({ progressiveLearning }) => {
     }
   ];
 
-  const teamInsights: TeamInsight[] = [
+  const teamInsights: TeamInsight[] = progressiveLearning?.teamInsights?.map(i => ({
+    id: i.id,
+    pattern: i.pattern,
+    adoption: i.adoption,
+    trend: i.trend as 'increasing' | 'stable' | 'decreasing',
+    recommendation: i.recommendation,
+    impact: i.impact
+  })) || [
     {
       id: 'insight-1',
       pattern: '团队开始更多使用CSS-in-JS',
@@ -213,7 +233,7 @@ const ProgressiveIntelligence: React.FC<Props> = ({ progressiveLearning }) => {
           <Col span={6}>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '8px' }}>
-                87%
+                {progressiveLearning?.accuracyRate || 87}%
               </div>
               <div style={{ fontSize: '14px', opacity: 0.9 }}>建议准确率</div>
             </div>
@@ -221,7 +241,7 @@ const ProgressiveIntelligence: React.FC<Props> = ({ progressiveLearning }) => {
           <Col span={6}>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '8px' }}>
-                14
+                {progressiveLearning?.learningDays || 14}
               </div>
               <div style={{ fontSize: '14px', opacity: 0.9 }}>天学习历史</div>
             </div>

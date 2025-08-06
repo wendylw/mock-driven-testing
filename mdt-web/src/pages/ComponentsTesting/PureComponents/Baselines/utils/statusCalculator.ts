@@ -88,7 +88,22 @@ export const calculateIntelligentStatus = (baseline: BaselineInfo): StatusDetail
     }
   }
   
-  // 2. 不稳定状态 - 基于变更频率
+  // 2. 已弃用状态 - 组件存在但无使用
+  if (baseline.usageCount === 0 && baseline.status === 'healthy') {
+    const daysSinceCreated = dayjs().diff(dayjs(baseline.createdAt), 'day');
+    if (daysSinceCreated > 30) {
+      return {
+        type: 'deprecated',
+        label: '已弃用',
+        badgeStatus: 'default',
+        hasDetail: true,
+        detailTitle: '组件未被使用',
+        detailMessage: `该组件已创建${daysSinceCreated}天，但系统中没有任何地方引用此组件，建议归档或删除`
+      };
+    }
+  }
+  
+  // 3. 不稳定状态 - 基于变更频率
   if (last30Days.length >= 10) {
     const avgDays = Math.round(30 / last30Days.length);
     return {
@@ -101,7 +116,7 @@ export const calculateIntelligentStatus = (baseline: BaselineInfo): StatusDetail
     };
   }
   
-  // 3. 渐变中 - 小改动累积
+  // 4. 渐变中 - 小改动累积
   const minorChanges = last30Days.filter((v: VersionRecord) => 
     v.linesChanged.added < 10 && 
     v.linesChanged.deleted < 10 &&
@@ -123,7 +138,7 @@ export const calculateIntelligentStatus = (baseline: BaselineInfo): StatusDetail
     };
   }
   
-  // 4. 可优化 - 基于代码分析
+  // 5. 可优化 - 基于代码分析
   const optimizationOpportunities = analyzeOptimization(baseline);
   if (optimizationOpportunities.length > 0) {
     const topOptimization = optimizationOpportunities[0];
@@ -137,7 +152,7 @@ export const calculateIntelligentStatus = (baseline: BaselineInfo): StatusDetail
     };
   }
   
-  // 5. 过时状态
+  // 6. 过时状态
   if (baseline.status === 'outdated') {
     const daysSinceUpdate = dayjs().diff(dayjs(baseline.lastUpdated), 'day');
     const versionsBehind = calculateVersionsBehind(baseline);
@@ -152,7 +167,7 @@ export const calculateIntelligentStatus = (baseline: BaselineInfo): StatusDetail
     };
   }
   
-  // 6. 健康状态
+  // 7. 健康状态
   const lastChange = changeHistory[0];
   const daysSinceLastChange = lastChange 
     ? dayjs().diff(dayjs(lastChange.timestamp), 'day')

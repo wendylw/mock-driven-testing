@@ -2,11 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
-import { WebSocketServer } from 'ws';
 import { errorHandler } from './middleware/error.middleware';
 import { requestLogger } from './middleware/logger.middleware';
 import baselineRoutes from './routes/baseline.routes';
 import analysisRoutes from './routes/analysis.routes';
+import baselineDetailsRoutes from './routes/baseline-details.route';
+// import batchRoutes from './routes/batch.routes';
+import { wsService } from './services/websocket.service';
 import { logger } from './utils/logger';
 
 // Load environment variables
@@ -35,7 +37,6 @@ const getRedisService = async () => {
 
 const app = express();
 const server = createServer(app);
-const wss = new WebSocketServer({ server });
 
 // Middleware
 app.use(cors({
@@ -62,30 +63,11 @@ app.get('/health', (_req, res) => {
 // API Routes
 app.use('/api/baselines', baselineRoutes);
 app.use('/api/analysis', analysisRoutes);
+app.use('/api', baselineDetailsRoutes);  // 基准详情路由
+// app.use('/api/batch', batchRoutes);
 
 // Error handling
 app.use(errorHandler);
-
-// WebSocket handling
-wss.on('connection', (ws) => {
-  logger.info('New WebSocket connection');
-  
-  ws.on('message', (message) => {
-    try {
-      const data = JSON.parse(message.toString());
-      if (data.type === 'auth') {
-        // Handle authentication
-        logger.info('WebSocket authentication attempt');
-      }
-    } catch (error) {
-      logger.error('WebSocket message error:', error);
-    }
-  });
-  
-  ws.on('close', () => {
-    logger.info('WebSocket connection closed');
-  });
-});
 
 // Initialize services and start server
 async function startServer() {
@@ -101,6 +83,10 @@ async function startServer() {
     // Initialize Redis/Cache
     await RedisService.initialize();
     logger.info('Cache service connected');
+    
+    // Initialize WebSocket service
+    wsService.initialize(server);
+    logger.info('WebSocket service initialized');
     
     // Start server
     const PORT = process.env.PORT || 3000;

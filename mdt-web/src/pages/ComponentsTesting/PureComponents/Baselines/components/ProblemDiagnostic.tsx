@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Card, Row, Col, Tag, Timeline, Button, Collapse, Space, Tooltip, Badge } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Card, Row, Col, Tag, Timeline, Button, Collapse, Space, Tooltip, Badge, Spin, message } from 'antd';
 import { 
   WarningOutlined, 
   BugOutlined, 
   ThunderboltOutlined,
   CodeOutlined,
   DesktopOutlined,
-  MobileOutlined,
   ApiOutlined,
   ClockCircleOutlined,
   FireOutlined,
   RightOutlined,
   TeamOutlined
 } from '@ant-design/icons';
+import BaselineApiService from '../../../../../services/baselineApi';
 
 const { Panel } = Collapse;
 
@@ -51,109 +51,102 @@ interface Props {
 }
 
 const ProblemDiagnostic: React.FC<Props> = ({ baseline }) => {
-  const [expandedIssue, setExpandedIssue] = useState<string | null>(null);
-  const [activeDevice, setActiveDevice] = useState<'desktop' | 'mobile'>('desktop');
+  const [expandedIssue, setExpandedIssue] = useState<string | string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [diagnosticData, setDiagnosticData] = useState<any>(null);
 
-  // 模拟实时检测的问题
-  const liveIssues: LiveIssue[] = [
-    {
-      id: 'perf-001',
-      severity: 'critical',
-      category: 'performance',
-      impact: '导致列表页面卡顿，影响用户下单',
-      affectedUsers: '影响低端设备（iPhone 8 及以下规格）',
-      reproduction: '在商品列表页快速滚动时',
-      frequency: '每次滚动触发 50+ 次',
-      evidence: {
-        type: 'trace',
-        content: {
-          renderTime: 45,
-          threshold: 16,
-          callStack: ['Button.render', 'ProductList.render', 'App.render']
-        }
-      },
-      rootCause: {
-        what: '组件在列表中重复渲染',
-        why: 'Button组件未使用React.memo，每次父组件更新都会重新渲染',
-        where: {
-          file: 'src/components/Button/index.tsx',
-          line: 12,
-          code: 'export const Button = ({ onClick, children, type }) => {'
-        },
-        when: '父组件任何state变化时'
-      },
-      quickFix: {
-        available: true,
-        solution: '添加 React.memo 包装组件',
-        confidence: 95,
-        estimatedTime: '30秒'
+  useEffect(() => {
+    loadDiagnosticData();
+  }, [baseline.id]);
+
+  const loadDiagnosticData = async () => {
+    setLoading(true);
+    try {
+      console.log('Loading diagnostic data for baseline:', baseline.id);
+      const response = await BaselineApiService.getDiagnostic(baseline.id);
+      console.log('Diagnostic response:', response);
+      if (response.success) {
+        setDiagnosticData(response.data);
       }
-    },
-    {
-      id: 'a11y-001',
-      severity: 'warning',
-      category: 'accessibility',
-      impact: '屏幕阅读器无法识别按钮功能',
-      affectedUsers: '不符合WCAG 2.1 AA标准',
-      reproduction: '使用屏幕阅读器浏览时',
-      frequency: '每个按钮实例',
-      evidence: {
-        type: 'code',
-        content: {
-          issue: '缺少 aria-label',
-          current: '<button onClick={handleClick}>{icon}</button>',
-          expected: '<button aria-label="保存" onClick={handleClick}>{icon}</button>'
+    } catch (error) {
+      console.error('Failed to load diagnostic data:', error);
+      message.error('加载诊断数据失败');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 转换API数据格式为组件期望的格式
+  const transformProblemData = (problem: any): LiveIssue => {
+    // 处理 evidence 字段的不同格式
+    let evidence = problem.evidence;
+    if (evidence && typeof evidence === 'object') {
+      // 如果是字符串，尝试解析
+      if (typeof evidence === 'string') {
+        try {
+          evidence = JSON.parse(evidence);
+        } catch (e) {
+          console.error('Failed to parse evidence:', e);
         }
-      },
-      rootCause: {
-        what: '纯图标按钮无文字说明',
-        why: '仅使用图标，没有提供文本替代',
-        where: {
-          file: 'src/components/Button/index.tsx',
-          line: 28,
-          code: '{icon && <Icon type={icon} />}'
-        },
-        when: '渲染纯图标按钮时'
-      },
-      quickFix: {
-        available: true,
-        solution: '自动添加 aria-label 属性',
-        confidence: 90,
-        estimatedTime: '1分钟'
       }
-    },
-    {
-      id: 'ux-001',
-      severity: 'info',
-      category: 'ux',
-      impact: '用户不知道操作是否在进行中',
-      affectedUsers: '用户测试发现的体验问题',
-      reproduction: '点击提交按钮后等待响应时',
-      frequency: '约20%的用户会重复点击',
-      evidence: {
-        type: 'video',
-        content: {
-          description: '用户点击后没有反馈，3秒内点击了4次'
-        }
-      },
-      rootCause: {
-        what: '缺少loading状态反馈',
-        why: 'loading时仅禁用按钮，无视觉提示',
-        where: {
-          file: 'src/components/Button/index.tsx',
-          line: 35,
-          code: 'disabled={loading || disabled}'
-        },
-        when: '执行异步操作时'
-      },
-      quickFix: {
-        available: true,
-        solution: '添加 loading 动画效果',
-        confidence: 85,
-        estimatedTime: '2分钟'
+      // 确保有 content 字段（后端可能用 data 字段）
+      if (!evidence.content && evidence.data) {
+        evidence.content = evidence.data;
+      }
+      // 确保有 type 字段
+      if (!evidence.type) {
+        evidence.type = 'code';
       }
     }
-  ];
+
+    // 处理 rootCause 字段
+    let rootCause = problem.rootCause || problem.root_cause;
+    if (typeof rootCause === 'string') {
+      try {
+        rootCause = JSON.parse(rootCause);
+      } catch (e) {
+        console.error('Failed to parse rootCause:', e);
+        rootCause = {};
+      }
+    }
+
+    // 处理 quickFix 字段
+    let quickFix = problem.quickFix || problem.quick_fix;
+    if (typeof quickFix === 'string') {
+      try {
+        quickFix = JSON.parse(quickFix);
+      } catch (e) {
+        console.error('Failed to parse quickFix:', e);
+        quickFix = null;
+      }
+    }
+
+    return {
+      id: problem.id,
+      severity: problem.severity,
+      category: problem.category,
+      impact: problem.impact,
+      affectedUsers: problem.affectedScenarios || problem.affected_scenarios || problem.affectedUsers || '影响部分用户',
+      reproduction: problem.reproduction,
+      frequency: problem.frequency,
+      evidence: evidence || { type: 'code', content: {} },
+      rootCause: {
+        what: rootCause?.what || rootCause?.issue || '',
+        why: rootCause?.why || rootCause?.parentUpdates || '',
+        where: rootCause?.where || { file: '', line: 0, code: '' },
+        when: rootCause?.when || ''
+      },
+      quickFix: quickFix ? {
+        available: true,
+        solution: quickFix.solution || '',
+        confidence: quickFix.confidence || 85,
+        estimatedTime: quickFix.estimatedTime || quickFix.effort || '未知'
+      } : undefined
+    };
+  };
+
+  // 使用API数据
+  const liveIssues: LiveIssue[] = diagnosticData?.problems?.map(transformProblemData) || [];
 
   const getSeverityColor = (severity: string) => {
     const colors = {
@@ -253,6 +246,23 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline }) => {
     // 这里可以跳转到智能建议或直接应用修复
   };
 
+  if (loading) {
+    return (
+      <Card style={{ marginBottom: 24, minHeight: 400 }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 300 }}>
+          <Spin size="large" tip="正在分析问题..." />
+        </div>
+      </Card>
+    );
+  }
+
+  const summary = diagnosticData?.summary || {
+    criticalCount: 0,
+    warningCount: 0,
+    infoCount: 0,
+    fixableCount: 0
+  };
+
   return (
     <Card 
       title={
@@ -261,24 +271,6 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline }) => {
             <BugOutlined style={{ color: '#ff4d4f' }} />
             <span>实时问题诊断</span>
             <Badge count={liveIssues.filter(i => i.severity === 'critical').length} />
-          </div>
-          <div>
-            <Button.Group size="small">
-              <Button 
-                type={activeDevice === 'desktop' ? 'primary' : 'default'}
-                icon={<DesktopOutlined />}
-                onClick={() => setActiveDevice('desktop')}
-              >
-                桌面端
-              </Button>
-              <Button 
-                type={activeDevice === 'mobile' ? 'primary' : 'default'}
-                icon={<MobileOutlined />}
-                onClick={() => setActiveDevice('mobile')}
-              >
-                移动端
-              </Button>
-            </Button.Group>
           </div>
         </div>
       } 
@@ -296,7 +288,7 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline }) => {
               border: '1px solid #ffbb96'
             }}>
               <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#fa541c' }}>
-                {liveIssues.filter(i => i.severity === 'critical').length}
+                {summary.criticalCount}
               </div>
               <div style={{ fontSize: '12px', color: '#666', marginTop: 4 }}>严重问题</div>
             </div>
@@ -310,7 +302,7 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline }) => {
               border: '1px solid #ffe58f'
             }}>
               <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#faad14' }}>
-                {liveIssues.filter(i => i.severity === 'warning').length}
+                {summary.warningCount}
               </div>
               <div style={{ fontSize: '12px', color: '#666', marginTop: 4 }}>警告</div>
             </div>
@@ -324,7 +316,7 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline }) => {
               border: '1px solid #91d5ff'
             }}>
               <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#1890ff' }}>
-                {liveIssues.filter(i => i.quickFix?.available).length}
+                {summary.fixableCount}
               </div>
               <div style={{ fontSize: '12px', color: '#666', marginTop: 4 }}>可快速修复</div>
             </div>
@@ -338,12 +330,17 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline }) => {
               border: '1px solid #b7eb8f'
             }}>
               <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#52c41a' }}>
-                {Math.round(
-                  liveIssues
-                    .filter(i => i.quickFix?.available)
-                    .reduce((sum, i) => sum + (i.quickFix?.confidence || 0), 0) / 
-                  liveIssues.filter(i => i.quickFix?.available).length
-                )}%
+                {liveIssues.length === 0 
+                  ? '无需修复'
+                  : liveIssues.filter(i => i.quickFix?.available).length > 0 
+                    ? Math.round(
+                        liveIssues
+                          .filter(i => i.quickFix?.available)
+                          .reduce((sum, i) => sum + (i.quickFix?.confidence || 0), 0) / 
+                        liveIssues.filter(i => i.quickFix?.available).length
+                      ) + '%'
+                    : '手动修复'
+                }
               </div>
               <div style={{ fontSize: '12px', color: '#666', marginTop: 4 }}>平均修复置信度</div>
             </div>
@@ -352,12 +349,21 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline }) => {
       </div>
 
       {/* 问题列表 */}
-      <Collapse 
-        activeKey={expandedIssue}
-        onChange={(key) => setExpandedIssue(Array.isArray(key) ? key[0] : key)}
-        accordion
-      >
-        {liveIssues.map((issue) => (
+      {liveIssues.length === 0 ? (
+        <div style={{ 
+          textAlign: 'center', 
+          padding: '40px',
+          color: '#999'
+        }}>
+          暂无检测到问题
+        </div>
+      ) : (
+        <Collapse 
+          activeKey={expandedIssue}
+          onChange={(key) => setExpandedIssue(Array.isArray(key) ? key[0] : key)}
+          accordion
+        >
+          {liveIssues.map((issue) => (
           <Panel
             key={issue.id}
             header={
@@ -510,8 +516,9 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline }) => {
               </Col>
             </Row>
           </Panel>
-        ))}
-      </Collapse>
+          ))}
+        </Collapse>
+      )}
 
       {/* 底部提示 */}
       <div style={{ 

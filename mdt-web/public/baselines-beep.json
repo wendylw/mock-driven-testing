@@ -1,0 +1,50 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": "baseline-button-beep-001",
+      "component": "Button",
+      "path": "beep-v1-webapp/src/common/components/Button/index.jsx",
+      "version": "1.0.0",
+      "createdAt": "2025-08-05T08:48:16Z",
+      "lastUpdated": "2025-08-05T08:48:16Z",
+      "snapshotCount": 0,
+      "propsVariations": 12,
+      "status": "healthy",
+      "branch": "develop",
+      "commit": "abc123",
+      "size": 3.2,
+      "usageCount": 242,
+      "riskLevel": "low",
+      "businessImpact": "High - Used across ordering, authentication, and profile flows",
+      "criticalUsageScenarios": [
+        "Add to Cart in ordering flow",
+        "Login/Sign up authentication",
+        "Profile save actions",
+        "Modal confirmations"
+      ],
+      "realWorldStats": {
+        "repository": "beep-v1-webapp",
+        "totalFiles": 94,
+        "totalInstances": 242,
+        "typeDistribution": {
+          "primary": 168,
+          "secondary": 56,
+          "text": 18
+        },
+        "themeDistribution": {
+          "default": 200,
+          "danger": 28,
+          "info": 10,
+          "ghost": 4
+        },
+        "commonPatterns": [
+          "Form submissions (45 instances with loading state)",
+          "Modal actions (32 instances)",
+          "Navigation actions (28 instances)",
+          "Full-width blocks (120 instances)"
+        ]
+      }
+    }
+  ]
+}

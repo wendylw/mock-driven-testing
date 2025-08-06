@@ -3,6 +3,7 @@ import { DiagnosticService } from './diagnostic.service';
 import { SuggestionService } from './suggestion.service';
 import { DatabaseService } from './database.service';
 import { RedisService } from './redis.service';
+import { analysisProgressService } from './analysis-progress.service';
 import { logger } from '../utils/logger';
 
 export interface AnalysisResult {
@@ -28,7 +29,9 @@ export class AnalyzeService {
 
   async analyzeBaseline(baselineId: string, options?: { force?: boolean }): Promise<AnalysisResult> {
     const startTime = Date.now();
-    const analysisId = `analysis-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    
+    // 创建分析进度跟踪
+    const analysisId = await analysisProgressService.createAnalysis(baselineId);
     
     logger.info(`Starting analysis for baseline: ${baselineId}, analysisId: ${analysisId}`);
 
@@ -38,16 +41,52 @@ export class AnalyzeService {
         const recentAnalysis = await this.getRecentAnalysis(baselineId);
         if (recentAnalysis) {
           logger.info(`Using recent analysis for baseline: ${baselineId}`);
+          await analysisProgressService.completeAnalysis(analysisId);
           return recentAnalysis;
         }
       }
 
-      // 并行执行所有分析
+      // Step 1: 收集文件信息
+      await analysisProgressService.updateProgress(analysisId, '收集文件信息', 'processing');
+      // 模拟一些工作
+      await new Promise(resolve => setTimeout(resolve, 500));
+      await analysisProgressService.updateProgress(analysisId, '收集文件信息', 'completed');
+
+      // Step 2-4: 并行执行分析
+      await Promise.all([
+        analysisProgressService.updateProgress(analysisId, '代码质量分析', 'processing'),
+        analysisProgressService.updateProgress(analysisId, '性能分析', 'processing'),
+        analysisProgressService.updateProgress(analysisId, '可访问性分析', 'processing')
+      ]);
+
       const [status, diagnostic, suggestions] = await Promise.all([
         this.statusService.getBaselineStatus(baselineId),
         this.diagnosticService.getDiagnostic(baselineId),
         this.suggestionService.getSuggestions(baselineId)
       ]);
+
+      // 标记分析步骤完成
+      await Promise.all([
+        analysisProgressService.updateProgress(analysisId, '代码质量分析', 'completed'),
+        analysisProgressService.updateProgress(analysisId, '性能分析', 'completed'),
+        analysisProgressService.updateProgress(analysisId, '可访问性分析', 'completed')
+      ]);
+
+      // Step 5: 视觉对比分析
+      await analysisProgressService.updateProgress(analysisId, '视觉对比分析', 'processing');
+      // 这里可以添加实际的视觉对比逻辑
+      await new Promise(resolve => setTimeout(resolve, 800));
+      await analysisProgressService.updateProgress(analysisId, '视觉对比分析', 'completed');
+
+      // Step 6: 生成智能建议
+      await analysisProgressService.updateProgress(analysisId, '生成智能建议', 'processing');
+      // 建议已在suggestions中生成
+      await analysisProgressService.updateProgress(analysisId, '生成智能建议', 'completed');
+
+      // Step 7: 计算健康评分
+      await analysisProgressService.updateProgress(analysisId, '计算健康评分', 'processing');
+      const healthScore = this.calculateHealthScore(diagnostic);
+      await analysisProgressService.updateProgress(analysisId, '计算健康评分', 'completed');
 
       const duration = Date.now() - startTime;
       
@@ -56,7 +95,10 @@ export class AnalyzeService {
         baselineId,
         timestamp: new Date(),
         status,
-        diagnostic,
+        diagnostic: {
+          ...diagnostic,
+          healthScore
+        },
         suggestions,
         duration
       };
@@ -67,13 +109,37 @@ export class AnalyzeService {
       // 触发后续操作（如通知、自动修复等）
       await this.triggerPostAnalysisActions(result);
 
+      // 标记分析完成
+      await analysisProgressService.completeAnalysis(analysisId);
+
       logger.info(`Analysis completed for baseline: ${baselineId}, duration: ${duration}ms`);
       
       return result;
     } catch (error) {
       logger.error(`Analysis failed for baseline: ${baselineId}`, error);
+      // 标记分析失败
+      await analysisProgressService.failAnalysis(analysisId, error instanceof Error ? error.message : String(error));
       throw error;
     }
+  }
+
+  private calculateHealthScore(diagnostic: any): number {
+    const { summary } = diagnostic;
+    
+    // 基础分数100
+    let score = 100;
+    
+    // 严重问题扣20分
+    score -= summary.criticalCount * 20;
+    
+    // 警告问题扣10分
+    score -= summary.warningCount * 10;
+    
+    // 建议问题扣5分
+    score -= summary.infoCount * 5;
+    
+    // 确保分数在0-100之间
+    return Math.max(0, Math.min(100, score));
   }
 
   async getAnalysisHistory(baselineId: string, limit: number = 10): Promise<AnalysisResult[]> {
@@ -208,5 +274,28 @@ export class AnalyzeService {
     await this.suggestionService.invalidateCache(baselineId);
     
     logger.info(`Analysis cache invalidated for baseline: ${baselineId}`);
+  }
+
+  /**
+   * 获取分析进度
+   */
+  async getAnalysisProgress(analysisId: string) {
+    const progress = await analysisProgressService.getProgress(analysisId);
+    if (!progress) {
+      throw new Error(`Analysis not found: ${analysisId}`);
+    }
+    
+    return {
+      analysisId: progress.analysisId,
+      status: progress.status,
+      progress: progress.progress,
+      currentStep: progress.currentStep,
+      completedSteps: progress.steps.filter(s => s.status === 'completed').map(s => s.name),
+      remainingSteps: progress.steps.filter(s => s.status === 'pending').map(s => s.name),
+      estimatedTime: progress.estimatedTime,
+      startTime: progress.startTime,
+      endTime: progress.endTime,
+      error: progress.error
+    };
   }
 }

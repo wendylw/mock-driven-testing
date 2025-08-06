@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { message } from 'antd';
-import BaselineApiService from '../services/baselineApi';
+import { cachedBaselineApi } from '../services/cached-baseline-api';
+import { memoryCache } from '../services/cache.service';
 
 // 基准信息接口（与现有的保持一致）
 interface BaselineInfo {
@@ -33,6 +34,22 @@ interface UseBaselinesResult {
   refresh: () => Promise<void>;
 }
 
+// Helper function to map intelligent status to basic status
+const mapIntelligentStatusToBasicStatus = (intelligentStatus: string): 'healthy' | 'outdated' | 'corrupted' => {
+  const statusMap: Record<string, 'healthy' | 'outdated' | 'corrupted'> = {
+    'healthy': 'healthy',
+    'optimizable': 'healthy',
+    'outdated': 'outdated',
+    'drifting': 'outdated',
+    'unstable': 'outdated',
+    'corrupted': 'corrupted',
+    'deleted': 'corrupted',
+    'deprecated': 'healthy' // 已弃用但仍然是健康的文件
+  };
+  
+  return statusMap[intelligentStatus] || 'healthy';
+};
+
 /**
  * Hook for managing baseline data with API integration
  */
@@ -52,7 +69,7 @@ export const useBaselines = (): UseBaselinesResult => {
       if (useRemoteApi) {
         // 尝试从API加载
         try {
-          const response = await BaselineApiService.getBaselines();
+          const response = await cachedBaselineApi.getBaselines();
           
           if (response.success && response.data) {
             // 转换API数据为前端格式
@@ -63,17 +80,17 @@ export const useBaselines = (): UseBaselinesResult => {
               // 保留其他必要的转换
             }));
             
-            // 并行获取每个基准的智能状态
+            // 并行获取每个基准的智能状态（使用缓存）
             const baselinesWithStatus = await Promise.all(
               apiBaselines.map(async (baseline: BaselineInfo) => {
                 try {
-                  const statusResponse = await BaselineApiService.getStatus(baseline.id);
+                  const statusResponse = await cachedBaselineApi.getStatus(baseline.id);
                   if (statusResponse.success) {
                     return {
                       ...baseline,
                       intelligentStatus: statusResponse.data.statusDetail,
                       // 可以覆盖其他字段
-                      status: this.mapIntelligentStatusToBasicStatus(statusResponse.data.status)
+                      status: mapIntelligentStatusToBasicStatus(statusResponse.data.status)
                     };
                   }
                 } catch (statusError) {
@@ -119,20 +136,15 @@ export const useBaselines = (): UseBaselinesResult => {
     }
   }, []);
 
-  // Helper function to map intelligent status to basic status
-  const mapIntelligentStatusToBasicStatus = (intelligentStatus: string): 'healthy' | 'outdated' | 'corrupted' => {
-    const statusMap: Record<string, 'healthy' | 'outdated' | 'corrupted'> = {
-      'healthy': 'healthy',
-      'optimizable': 'healthy',
-      'outdated': 'outdated',
-      'drifting': 'outdated',
-      'unstable': 'outdated',
-      'corrupted': 'corrupted',
-      'deleted': 'corrupted'
-    };
+  // 刷新函数：清除缓存并重新加载
+  const refresh = useCallback(async () => {
+    // 清除相关缓存
+    memoryCache.deletePattern(/^baselines:/);
+    memoryCache.deletePattern(/^baseline:/);
     
-    return statusMap[intelligentStatus] || 'healthy';
-  };
+    // 重新加载数据
+    await loadBaselines();
+  }, [loadBaselines]);
 
   useEffect(() => {
     loadBaselines();
@@ -142,6 +154,6 @@ export const useBaselines = (): UseBaselinesResult => {
     baselines,
     loading,
     error,
-    refresh: loadBaselines
+    refresh
   };
 };

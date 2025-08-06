@@ -21,12 +21,13 @@ const StatusColumn: React.FC<Props> = ({ baseline }) => {
       case 'unstable': return '#fa8c16';    // 橙红色 - 不稳定
       case 'drifting': return '#1890ff';    // 蓝色 - 渐变中
       case 'optimizable': return '#52c41a'; // 绿色 - 可优化（归为绿色）
+      case 'deprecated': return '#d9d9d9';  // 灰色 - 已弃用
       default: return '#666';
     }
   };
   
-  // 需要解释图标的状态：不稳定、渐变中、可优化、损坏、过时、已删除
-  const needsExplanation = ['unstable', 'drifting', 'optimizable', 'corrupted', 'outdated', 'deleted'].includes(intelligentStatus.type);
+  // 需要解释图标的状态：不稳定、渐变中、可优化、损坏、过时、已删除、已弃用
+  const needsExplanation = ['unstable', 'drifting', 'optimizable', 'corrupted', 'outdated', 'deleted', 'deprecated'].includes(intelligentStatus.type);
   
   return (
     <Space size={4}>

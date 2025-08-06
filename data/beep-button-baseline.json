@@ -1,0 +1,189 @@
+{
+  "component": "Button",
+  "path": "src/common/components/Button/index.jsx",
+  "repository": "beep-v1-webapp",
+  "analysis": {
+    "props": {
+      "children": {
+        "type": "node",
+        "required": false,
+        "default": null,
+        "description": "Button content"
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "Additional CSS classes"
+      },
+      "contentClassName": {
+        "type": "string",
+        "required": false,
+        "default": "",
+        "description": "CSS classes for button content wrapper"
+      },
+      "style": {
+        "type": "object",
+        "required": false,
+        "default": {},
+        "description": "Inline styles"
+      },
+      "type": {
+        "type": "enum",
+        "values": ["primary", "secondary", "text"],
+        "required": false,
+        "default": "primary",
+        "description": "Button visual type"
+      },
+      "size": {
+        "type": "enum",
+        "values": ["small", "normal"],
+        "required": false,
+        "default": "normal",
+        "description": "Button size"
+      },
+      "theme": {
+        "type": "enum",
+        "values": ["default", "danger", "info", "ghost"],
+        "required": false,
+        "default": "default",
+        "description": "Button color theme"
+      },
+      "buttonType": {
+        "type": "enum",
+        "values": ["submit", "button", "reset"],
+        "required": false,
+        "default": "submit",
+        "description": "HTML button type attribute"
+      },
+      "block": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Full width button"
+      },
+      "icon": {
+        "type": "element",
+        "required": false,
+        "default": null,
+        "description": "Icon element to display"
+      },
+      "loading": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Shows loading spinner and disables click"
+      },
+      "onClick": {
+        "type": "function",
+        "required": false,
+        "default": "() => {}",
+        "description": "Click handler"
+      }
+    },
+    "styleVariations": {
+      "combinations": [
+        {
+          "type": "primary",
+          "theme": "default",
+          "color": "orange",
+          "styles": "text-white bg-orange border-orange"
+        },
+        {
+          "type": "primary",
+          "theme": "danger",
+          "color": "red",
+          "styles": "text-white bg-red border-red"
+        },
+        {
+          "type": "primary",
+          "theme": "info",
+          "color": "blue",
+          "styles": "text-white bg-blue border-blue"
+        },
+        {
+          "type": "secondary",
+          "theme": "default",
+          "color": "orange",
+          "styles": "text-orange bg-white border-orange"
+        },
+        {
+          "type": "secondary",
+          "theme": "danger",
+          "color": "red",
+          "styles": "text-red bg-white border-red"
+        },
+        {
+          "type": "secondary",
+          "theme": "info",
+          "color": "blue",
+          "styles": "text-blue bg-white border-blue"
+        },
+        {
+          "type": "text",
+          "theme": "default",
+          "color": "orange",
+          "styles": "text-orange bg-transparent"
+        },
+        {
+          "type": "text",
+          "theme": "ghost",
+          "color": "gray",
+          "styles": "text-gray bg-transparent"
+        },
+        {
+          "type": "text",
+          "theme": "danger",
+          "color": "red",
+          "styles": "text-red bg-transparent"
+        },
+        {
+          "type": "text",
+          "theme": "info",
+          "color": "blue",
+          "styles": "text-blue bg-transparent"
+        }
+      ]
+    },
+    "features": {
+      "loadingState": true,
+      "iconSupport": true,
+      "responsiveSize": true,
+      "tailwindClasses": true,
+      "moduleCSS": true,
+      "accessibility": {
+        "dataTestId": "common.button.btn",
+        "buttonTypeAttribute": true
+      }
+    },
+    "usagePatterns": [
+      {
+        "name": "Add to Cart Button",
+        "example": "<Button block type=\"primary\" loading={isAddToCartLoading} onClick={() => dispatch(addToCart())}>Add to Cart - $10.00</Button>",
+        "location": "ordering/containers/Menu/components/ProductDetailDrawer"
+      },
+      {
+        "name": "Disabled Button",
+        "example": "<Button block type=\"primary\" disabled>Select Variant</Button>",
+        "location": "ordering/containers/Menu/components/ProductDetailDrawer"
+      }
+    ],
+    "dependencies": {
+      "internal": [
+        "../Loader"
+      ],
+      "external": [
+        "react",
+        "prop-types"
+      ]
+    },
+    "codeMetrics": {
+      "linesOfCode": 93,
+      "complexity": "low",
+      "hasTests": false,
+      "hasStorybook": false
+    }
+  },
+  "created": "2025-08-05T12:00:00Z",
+  "lastUpdated": "2025-08-05T12:00:00Z"
+}

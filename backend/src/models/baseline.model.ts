@@ -28,7 +28,7 @@ export interface VersionRecord {
 }
 
 export interface StatusDetail {
-  type: 'healthy' | 'outdated' | 'corrupted' | 'deleted' | 'unstable' | 'drifting' | 'optimizable';
+  type: 'healthy' | 'outdated' | 'corrupted' | 'deleted' | 'unstable' | 'drifting' | 'optimizable' | 'deprecated';
   label: string;
   badgeStatus?: string;
   hasDetail: boolean;

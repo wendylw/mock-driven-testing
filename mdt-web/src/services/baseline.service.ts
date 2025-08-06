@@ -78,7 +78,7 @@ class BaselineService {
   /**
    * 触发基准分析
    */
-  async triggerAnalysis(baselineId: string, force: boolean = false): Promise<AnalysisResult> {
+  async triggerAnalysis(baselineId: string, force: boolean = false): Promise<any> {
     const response = await api.post<any, any>(
       `/api/baselines/${baselineId}/analyze`,
       { force },

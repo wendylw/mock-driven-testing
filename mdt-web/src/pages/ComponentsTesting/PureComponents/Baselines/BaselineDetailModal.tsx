@@ -7,7 +7,9 @@ import ExecutableRecommendations from './components/ExecutableRecommendations';
 import InteractiveRecommendations from './components/InteractiveRecommendations';
 import ProgressiveIntelligence from './components/ProgressiveIntelligence';
 import ProblemDiagnostic from './components/ProblemDiagnostic';
+import { AnalysisProgress } from '../../../../components/AnalysisProgress';
 import { baselineService } from '../../../../services/baseline.service';
+import BaselineApiService from '../../../../services/baselineApi';
 import type { AnalysisResult } from '../../../../services/types/baseline';
 
 interface BaselineInfo {
@@ -43,6 +45,8 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
 }) => {
   const [details, setDetails] = useState<BaselineDetails | null>(null);
   const [loading, setLoading] = useState(false);
+  const [analysisId, setAnalysisId] = useState<string>('');
+  const [showProgress, setShowProgress] = useState(false);
 
   useEffect(() => {
     if (visible && baseline) {
@@ -53,20 +57,84 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
   const loadBaselineDetails = async (baselineId: string) => {
     setLoading(true);
     setDetails(null);
+    
     try {
-      // 触发全面分析
-      const analysisResult = await baselineService.triggerAnalysis(baselineId);
-      console.log('分析结果:', analysisResult);
+      // 优先尝试从后端 API 获取真实数据
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        const response = await fetch(`${apiUrl}/api/baselines/${baselineId}/details`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            setDetails(data.data);
+            setLoading(false);
+            return;
+          }
+        }
+      } catch (apiError) {
+        console.error('API 请求失败:', apiError);
+      }
       
-      // 转换为内部格式
-      const baselineDetails = convertAnalysisToDetails(analysisResult);
-      setDetails(baselineDetails);
+      // 检查是否启用远程API
+      const useRemoteApi = import.meta.env.VITE_USE_REMOTE_API === 'true';
+      
+      if (useRemoteApi) {
+        try {
+          // 触发分析并获取analysisId
+          const triggerResponse = await BaselineApiService.triggerAnalysis(baselineId);
+          if (triggerResponse.success && triggerResponse.data) {
+            setAnalysisId(triggerResponse.data.analysisId);
+            setShowProgress(true);
+            setLoading(false);
+            return; // 等待分析完成后再加载数据
+          }
+        } catch (apiError) {
+          console.error('API分析触发失败:', apiError);
+          // 继续尝试其他方法
+        }
+      }
+      
+      // 检查是否是 BEEP Button 基准
+      if (baselineId === 'baseline-button-beep-001') {
+        // 优先加载 BEEP Button 的真实数据（完整格式）
+        const beepResponse = await fetch('/baseline-details-beep-full.json');
+        const beepData = await beepResponse.json();
+        
+        if (beepData.success && beepData.data && beepData.data[baselineId]) {
+          setDetails(beepData.data[baselineId]);
+          return;
+        }
+      }
+      
+      // 使用Mock数据作为降级方案
+      const response = await fetch('/analysis-report.json');
+      const data = await response.json();
+      
+      if (data.success && data.data) {
+        const baselineDetails = convertAnalysisToDetails(data.data);
+        setDetails(baselineDetails);
+      } else {
+        throw new Error('Failed to load analysis data');
+      }
     } catch (error) {
       console.error('加载基准详情失败:', error);
       message.error('加载基准详情失败');
       
       // 回退到静态数据
       try {
+        // 如果是 BEEP Button，优先尝试加载 BEEP 特定数据
+        if (baselineId === 'baseline-button-beep-001') {
+          const beepResponse = await fetch('/baseline-details-beep-full.json');
+          const beepData = await beepResponse.json();
+          
+          if (beepData.success && beepData.data && beepData.data[baselineId]) {
+            setDetails(beepData.data[baselineId]);
+            return;
+          }
+        }
+        
+        // 否则使用通用的备用数据
         const response = await fetch('/baseline-details.json');
         const data = await response.json();
         if (data.success && data.data[baselineId]) {
@@ -77,6 +145,46 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
       }
     }
     setLoading(false);
+  };
+  
+  const handleAnalysisComplete = async () => {
+    setShowProgress(false);
+    if (baseline) {
+      // 重新加载数据
+      setLoading(true);
+      try {
+        // 获取最新的分析结果
+        const history = await baselineService.getAnalysisHistory(baseline.id, 1);
+        if (history && history.length > 0) {
+          const baselineDetails = convertAnalysisToDetails(history[0]);
+          setDetails(baselineDetails);
+        } else {
+          // 如果没有历史记录，检查是否是 BEEP Button
+          if (baseline.id === 'baseline-button-beep-001') {
+            const beepResponse = await fetch('/baseline-details-beep-full.json');
+            const beepData = await beepResponse.json();
+            
+            if (beepData.success && beepData.data && beepData.data[baseline.id]) {
+              setDetails(beepData.data[baseline.id]);
+              return;
+            }
+          }
+          
+          // 否则使用Mock数据
+          const response = await fetch('/analysis-report.json');
+          const data = await response.json();
+          
+          if (data.success && data.data) {
+            const baselineDetails = convertAnalysisToDetails(data.data);
+            setDetails(baselineDetails);
+          }
+        }
+      } catch (error) {
+        console.error('加载分析结果失败:', error);
+        message.error('加载分析结果失败');
+      }
+      setLoading(false);
+    }
   };
   
   // 转换API响应到内部格式
@@ -905,8 +1013,17 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
   ];
 
   return (
-    <Modal
-      title={
+    <>
+      {/* 分析进度弹窗 */}
+      <AnalysisProgress
+        analysisId={analysisId}
+        visible={showProgress}
+        onComplete={handleAnalysisComplete}
+        onClose={() => setShowProgress(false)}
+      />
+      
+      <Modal
+        title={
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ fontSize: '16px', fontWeight: 'bold' }}>
             基准详情 - {baseline?.component || ''}
@@ -941,6 +1058,7 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
     >
       {renderContent()}
     </Modal>
+    </>
   );
 };
 

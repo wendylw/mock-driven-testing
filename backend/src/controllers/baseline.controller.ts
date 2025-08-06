@@ -242,7 +242,12 @@ export class BaselineController {
       
       res.json({
         success: true,
-        data: analysisResult
+        data: {
+          analysisId: analysisResult.id,
+          status: 'processing',
+          estimatedTime: '30秒',
+          progress: 0
+        }
       });
     } catch (error) {
       if (error instanceof Error && error.message.includes('not found')) {

@@ -127,6 +127,21 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 分析进度表
+CREATE TABLE IF NOT EXISTS analysis_progress (
+  analysis_id VARCHAR(50) PRIMARY KEY,
+  baseline_id VARCHAR(50) NOT NULL,
+  status VARCHAR(20) NOT NULL,
+  progress INTEGER DEFAULT 0,
+  current_step VARCHAR(100),
+  steps TEXT NOT NULL,
+  estimated_time INTEGER,
+  start_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  end_time DATETIME,
+  error TEXT,
+  FOREIGN KEY (baseline_id) REFERENCES baselines(id) ON DELETE CASCADE
+);
+
 -- 创建索引
 CREATE INDEX IF NOT EXISTS idx_baselines_component_name ON baselines(component_name);
 CREATE INDEX IF NOT EXISTS idx_baselines_status ON baselines(status);
@@ -146,3 +161,5 @@ CREATE INDEX IF NOT EXISTS idx_queue_created_at ON analysis_queue(created_at);
 CREATE INDEX IF NOT EXISTS idx_sessions_baseline_user ON interactive_sessions(baseline_id, user_id);
 CREATE INDEX IF NOT EXISTS idx_sessions_expires ON interactive_sessions(expires_at);
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_progress_baseline_id ON analysis_progress(baseline_id);
+CREATE INDEX IF NOT EXISTS idx_progress_status ON analysis_progress(status);

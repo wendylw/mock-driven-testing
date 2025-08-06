@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { DatabaseService } from './database.service';
 import { RedisService } from './redis.service';
+import { usageAnalyzerService } from './usage-analyzer.service';
 import { logger } from '../utils/logger';
 import { 
   BaselineRecord, 
@@ -75,6 +76,36 @@ export class StatusService {
           detailTitle: '组件已删除',
           detailMessage: '组件文件不存在，建议清理基准数据'
         };
+      }
+    }
+
+    // Check for deprecated status (component exists but not used)
+    if (baseline.usage_count === 0 && baseline.status === 'healthy') {
+      const daysSinceCreated = Math.floor(
+        (Date.now() - new Date(baseline.created_at).getTime()) / (1000 * 60 * 60 * 24)
+      );
+      
+      if (daysSinceCreated > 30) {
+        // Analyze actual usage in the codebase
+        const projectPath = process.env.PROJECT_ROOT || path.resolve(__dirname, '../../../');
+        const usage = await usageAnalyzerService.analyzeComponentUsage(
+          baseline.component_name,
+          baseline.component_path,
+          projectPath
+        );
+        
+        if (usage.usageCount === 0) {
+          return {
+            type: 'deprecated',
+            label: '已弃用',
+            hasDetail: true,
+            detailTitle: '组件未被使用',
+            detailMessage: `该组件已创建${daysSinceCreated}天，但系统中没有任何地方引用此组件，建议归档或删除`
+          };
+        } else {
+          // Update usage count in database
+          await this.updateUsageCount(baseline.id, usage.usageCount);
+        }
       }
     }
 
@@ -215,5 +246,11 @@ export class StatusService {
     const cacheKey = `status:${baselineId}`;
     await RedisService.del(cacheKey);
     logger.info(`Cache invalidated for baseline: ${baselineId}`);
+  }
+
+  private async updateUsageCount(baselineId: string, usageCount: number): Promise<void> {
+    const sql = 'UPDATE baselines SET usage_count = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
+    await DatabaseService.query(sql, [usageCount, baselineId]);
+    logger.info(`Updated usage count for baseline ${baselineId}: ${usageCount}`);
   }
 }
