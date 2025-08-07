@@ -19,7 +19,7 @@ class BaselineService {
    * 获取基准列表
    */
   async getBaselines(): Promise<BaselineListItem[]> {
-    const response = await api.get<any, any>('/api/baselines', getAuthHeaders());
+    const response = await api.get<any, any>('/baselines', getAuthHeaders());
     return response.data || response; // Handle interceptor returning data directly
   }
 
@@ -27,7 +27,7 @@ class BaselineService {
    * 获取基准状态
    */
   async getBaselineStatus(baselineId: string): Promise<BaselineStatus> {
-    const response = await api.get<any, any>(`/api/baselines/${baselineId}/status`, getAuthHeaders());
+    const response = await api.get<any, any>(`/baselines/${baselineId}/status`, getAuthHeaders());
     return response.data || response;
   }
 
@@ -35,7 +35,7 @@ class BaselineService {
    * 获取问题诊断
    */
   async getDiagnostic(baselineId: string): Promise<DiagnosticResult> {
-    const response = await api.get<any, any>(`/api/baselines/${baselineId}/diagnostic`, getAuthHeaders());
+    const response = await api.get<any, any>(`/baselines/${baselineId}/diagnostic`, getAuthHeaders());
     return response.data || response;
   }
 
@@ -43,7 +43,7 @@ class BaselineService {
    * 获取智能建议
    */
   async getSuggestions(baselineId: string): Promise<SuggestionsResult> {
-    const response = await api.get<any, any>(`/api/baselines/${baselineId}/suggestions`, getAuthHeaders());
+    const response = await api.get<any, any>(`/baselines/${baselineId}/suggestions`, getAuthHeaders());
     return response.data || response;
   }
 
@@ -57,7 +57,7 @@ class BaselineService {
     context?: any
   ): Promise<any> {
     const response = await api.post<any, any>(
-      `/api/baselines/${baselineId}/suggestions/interact`,
+      `/baselines/${baselineId}/suggestions/interact`,
       { sessionId, action, context },
       getAuthHeaders()
     );
@@ -69,7 +69,7 @@ class BaselineService {
    */
   async applySuggestion(baselineId: string, suggestionId: string): Promise<void> {
     await api.post(
-      `/api/baselines/${baselineId}/suggestions/${suggestionId}/apply`,
+      `/baselines/${baselineId}/suggestions/${suggestionId}/apply`,
       {},
       getAuthHeaders()
     );
@@ -80,7 +80,7 @@ class BaselineService {
    */
   async triggerAnalysis(baselineId: string, force: boolean = false): Promise<any> {
     const response = await api.post<any, any>(
-      `/api/baselines/${baselineId}/analyze`,
+      `/baselines/${baselineId}/analyze`,
       { force },
       getAuthHeaders()
     );
@@ -92,7 +92,7 @@ class BaselineService {
    */
   async getAnalysisHistory(baselineId: string, limit: number = 10): Promise<AnalysisResult[]> {
     const response = await api.get<any, any>(
-      `/api/baselines/${baselineId}/analyze/history?limit=${limit}`,
+      `/baselines/${baselineId}/analyze/history?limit=${limit}`,
       getAuthHeaders()
     );
     return response.data || response;

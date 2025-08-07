@@ -1,5 +1,5 @@
 import { DatabaseService } from './database.service';
-import { RedisService } from './redis.service';
+import { CacheService } from './cache.service';
 import { VisualSuggestionEngine } from '../analyzers/visual-suggestion.engine';
 import { CodeSuggestionEngine } from '../analyzers/code-suggestion.engine';
 import { InteractiveEngine } from '../analyzers/interactive.engine';
@@ -24,7 +24,7 @@ export class SuggestionService {
   async getSuggestions(baselineId: string): Promise<SuggestionsResult> {
     // Check cache first
     const cacheKey = `suggestions:${baselineId}`;
-    const cached = await RedisService.getJSON<SuggestionsResult>(cacheKey);
+    const cached = await CacheService.getJSON<SuggestionsResult>(cacheKey);
     if (cached) {
       logger.info(`Cache hit for suggestions: ${baselineId}`);
       return cached;
@@ -52,7 +52,7 @@ export class SuggestionService {
       };
 
       // Cache the result
-      await RedisService.setJSON(cacheKey, result, SuggestionService.CACHE_TTL);
+      await CacheService.setJSON(cacheKey, result, SuggestionService.CACHE_TTL);
       
       // Store in database for persistence
       await this.storeSuggestionResult(baselineId, result);
@@ -123,7 +123,7 @@ export class SuggestionService {
 
   async invalidateCache(baselineId: string): Promise<void> {
     const cacheKey = `suggestions:${baselineId}`;
-    await RedisService.del(cacheKey);
+    await CacheService.del(cacheKey);
     logger.info(`Suggestions cache invalidated for baseline: ${baselineId}`);
   }
 

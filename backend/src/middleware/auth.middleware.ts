@@ -36,6 +36,17 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     }
     
     const token = authHeader.substring(7);
+    
+    // For development, accept the fake token
+    if (process.env.NODE_ENV !== 'production' && token.includes('fake-jwt-token')) {
+      req.user = {
+        userId: 'user-001',
+        email: 'developer@example.com',
+        role: 'developer'
+      };
+      return next();
+    }
+    
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'dev-secret') as JwtPayload;
     
     req.user = decoded;

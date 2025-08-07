@@ -39,32 +39,68 @@ const VisualIntelligenceSection: React.FC<Props> = ({ baseline, baselineId, visu
   const [applyingFix, setApplyingFix] = useState<string | null>(null);
   
   // 将API数据转换为组件内部格式
-  const visualIssues: VisualIssue[] = visualSuggestions.map(suggestion => ({
-    id: suggestion.id,
-    type: suggestion.type,
-    title: suggestion.title,
-    priority: suggestion.priority,
-    description: suggestion.description,
-    suggestion: suggestion.visualEvidence.annotations[0]?.suggestion || '',
-    affectedElements: suggestion.affectedElements,
-    visualHighlight: {
-      screenshot: suggestion.visualEvidence.screenshotUrl,
-      annotations: suggestion.visualEvidence.annotations.map(ann => ({
-        position: ann.position,
-        issue: ann.issue,
-        suggestion: ann.suggestion,
-        priority: suggestion.priority,
-        oneClickFix: ann.oneClickFix
-      }))
-    },
-    beforeAfter: suggestion.beforeAfter ? {
-      before: suggestion.beforeAfter.beforeUrl,
-      after: suggestion.beforeAfter.afterUrl
-    } : {
-      before: '',
-      after: ''
+  const visualIssues: VisualIssue[] = visualSuggestions.map(suggestion => {
+    const visualDiff = suggestion.visualDiff || {};
+    const affectedStyles = suggestion.affectedStyles || {};
+    
+    // 根据问题类型生成合适的标注
+    const annotations = [];
+    if (suggestion.title?.includes('内边距')) {
+      // Padding问题标注
+      annotations.push({
+        position: { x: 50, y: 45 },
+        issue: `Expected: ${visualDiff.expected}`,
+        suggestion: `Actual: ${visualDiff.actual}`,
+        priority: suggestion.severity || 'medium',
+        oneClickFix: '应用设计规范'
+      });
+    } else if (suggestion.title?.includes('颜色对比度')) {
+      // 颜色对比度问题
+      annotations.push({
+        position: { x: 120, y: 45 },
+        issue: `对比度: ${visualDiff.contrast || '2.8:1'}`,
+        suggestion: `需要: ${visualDiff.required || '4.5:1'}`,
+        priority: suggestion.severity || 'high',
+        oneClickFix: '调整颜色对比度'
+      });
+    } else if (suggestion.title?.includes('圆角')) {
+      // 圆角问题
+      Object.entries(affectedStyles).forEach(([type, radius], index) => {
+        annotations.push({
+          position: { x: 50 + index * 80, y: 30 },
+          issue: `${type}: ${radius}`,
+          suggestion: '应该: 4px',
+          priority: 'low',
+          oneClickFix: '统一圆角'
+        });
+      });
     }
-  }));
+    
+    return {
+      id: suggestion.id,
+      type: suggestion.type,
+      title: suggestion.title || 'Visual Issue Detected',
+      priority: (suggestion.severity === 'critical' ? 'high' : 
+                suggestion.severity === 'warning' ? 'medium' : 'low') as 'high' | 'medium' | 'low',
+      description: suggestion.description || 'Visual problem detected',
+      suggestion: suggestion.recommendation?.action || '需要修复',
+      affectedElements: Object.keys(affectedStyles).length || 1,
+      visualHighlight: {
+        screenshot: '/mock-screenshot.png',
+        annotations: annotations.length > 0 ? annotations : [{
+          position: { x: 120, y: 45 },
+          issue: '视觉问题',
+          suggestion: '需要修复',
+          priority: 'medium',
+          oneClickFix: '修复'
+        }]
+      },
+      beforeAfter: {
+        before: '/mock-before.png',
+        after: '/mock-after.png'
+      }
+    };
+  });
   
   // 如果没有API数据，使用默认数据
   const defaultVisualIssues: VisualIssue[] = visualIssues.length > 0 ? visualIssues : [
@@ -152,16 +188,102 @@ const VisualIntelligenceSection: React.FC<Props> = ({ baseline, baselineId, visu
                     justifyContent: 'center',
                     position: 'relative'
                   }}>
-                    {/* 模拟Button组件 */}
-                    <div style={{
-                      background: '#f0f0f0',
-                      padding: '8px 16px',
-                      borderRadius: '4px',
-                      border: '1px solid #d9d9d9',
-                      color: '#666'
-                    }}>
-                      Save Profile
-                    </div>
+                    {/* 根据问题类型展示不同的按钮状态 */}
+                    {issue.title.includes('内边距') && (
+                      <div style={{
+                        position: 'relative',
+                        display: 'inline-block'
+                      }}>
+                        <button style={{
+                          background: '#FF9419',
+                          padding: '8px 16px', // 实际的padding (错误)
+                          borderRadius: '8px',
+                          border: '1px solid #FF9419',
+                          color: 'white',
+                          height: '40px', // small size
+                          fontSize: '14px',
+                          fontWeight: '700',
+                          cursor: 'pointer',
+                          fontFamily: 'Lato, "Open Sans", Helvetica, Arial, sans-serif',
+                          letterSpacing: '0.02em'
+                        }}>
+                          保存资料
+                        </button>
+                        {/* 显示padding标注线 */}
+                        <div style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          border: '1px dashed #ff4d4f',
+                          pointerEvents: 'none'
+                        }}>
+                          <div style={{
+                            position: 'absolute',
+                            top: '8px',
+                            left: '16px',
+                            right: '16px',
+                            bottom: '8px',
+                            border: '1px dashed #52c41a',
+                          }} />
+                        </div>
+                      </div>
+                    )}
+                    
+                    {issue.title.includes('颜色对比度') && (
+                      <button style={{
+                        background: '#DEDEDF', // gray-400
+                        padding: '12px 16px',
+                        borderRadius: '8px',
+                        border: '1px solid #DEDEDF',
+                        color: '#9E9E9E', // gray-600 (低对比度)
+                        height: '50px',
+                        fontSize: '16px',
+                        fontWeight: '700',
+                        cursor: 'not-allowed',
+                        opacity: 0.6,
+                        fontFamily: 'Lato, "Open Sans", Helvetica, Arial, sans-serif',
+                          letterSpacing: '0.02em'
+                      }} disabled>
+                        保存资料
+                      </button>
+                    )}
+                    
+                    {issue.title.includes('圆角') && (
+                      <div style={{ display: 'flex', gap: 12 }}>
+                        <button style={{
+                          background: '#FF9419',
+                          padding: '12px 16px',
+                          borderRadius: '4px', // primary圆角
+                          border: '1px solid #FF9419',
+                          color: 'white',
+                          height: '50px',
+                          fontSize: '16px',
+                          fontWeight: '700',
+                          cursor: 'pointer',
+                          fontFamily: 'Lato, "Open Sans", Helvetica, Arial, sans-serif',
+                          letterSpacing: '0.02em'
+                        }}>
+                          主要按钮
+                        </button>
+                        <button style={{
+                          background: 'white',
+                          padding: '12px 16px',
+                          borderRadius: '2px', // 不一致的圆角
+                          border: '1px solid #FF9419',
+                          color: '#FF9419',
+                          height: '50px',
+                          fontSize: '16px',
+                          fontWeight: '700',
+                          cursor: 'pointer',
+                          fontFamily: 'Lato, "Open Sans", Helvetica, Arial, sans-serif',
+                          letterSpacing: '0.02em'
+                        }}>
+                          次要按钮
+                        </button>
+                      </div>
+                    )}
                     
                     {/* 问题标注点 */}
                     {issue.visualHighlight.annotations.map((annotation, i) => (
@@ -243,15 +365,51 @@ const VisualIntelligenceSection: React.FC<Props> = ({ baseline, baselineId, visu
                         alignItems: 'center',
                         justifyContent: 'center'
                       }}>
-                        <div style={{
-                          background: '#f0f0f0',
-                          padding: '6px 12px',
-                          borderRadius: '4px',
-                          color: '#666',
-                          fontSize: '12px'
-                        }}>
-                          Save Profile
-                        </div>
+                        {issue.title.includes('内边距') && (
+                          <button style={{
+                            background: '#FF9419',
+                            padding: '8px 16px', // 错误的padding
+                            borderRadius: '8px',
+                            border: '1px solid #FF9419',
+                            color: 'white',
+                            height: '40px',
+                            fontSize: '14px',
+                            fontWeight: '700',
+                            cursor: 'pointer'
+                          }}>
+                            保存资料
+                          </button>
+                        )}
+                        {issue.title.includes('颜色对比度') && (
+                          <button style={{
+                            background: '#f5f5f5',
+                            padding: '12px 16px',
+                            borderRadius: '8px',
+                            border: '1px solid #e8e8e8',
+                            color: '#bfbfbf', // 低对比度
+                            height: '50px',
+                            fontSize: '16px',
+                            fontWeight: '700',
+                            cursor: 'not-allowed',
+                            opacity: 0.6
+                          }} disabled>
+                            保存资料
+                          </button>
+                        )}
+                        {issue.title.includes('圆角') && (
+                          <button style={{
+                            background: '#FF9419',
+                            padding: '12px 16px',
+                            borderRadius: '2px', // 错误的圆角
+                            border: '1px solid #FF9419',
+                            color: 'white',
+                            height: '50px',
+                            fontSize: '16px',
+                            fontWeight: '500'
+                          }}>
+                            主要按钮
+                          </button>
+                        )}
                       </div>
                     </div>
                   </Col>
@@ -275,15 +433,51 @@ const VisualIntelligenceSection: React.FC<Props> = ({ baseline, baselineId, visu
                         alignItems: 'center',
                         justifyContent: 'center'
                       }}>
-                        <div style={{
-                          background: '#1890ff',
-                          padding: '6px 12px',
-                          borderRadius: '4px',
-                          color: 'white',
-                          fontSize: '12px'
-                        }}>
-                          Save Profile
-                        </div>
+                        {issue.title.includes('内边距') && (
+                          <button style={{
+                            background: '#FF9419',
+                            padding: '12px 24px', // 正确的padding (设计规范)
+                            borderRadius: '8px',
+                            border: '1px solid #FF9419',
+                            color: 'white',
+                            height: '50px',
+                            fontSize: '16px',
+                            fontWeight: '700',
+                            cursor: 'pointer'
+                          }}>
+                            保存资料
+                          </button>
+                        )}
+                        {issue.title.includes('颜色对比度') && (
+                          <button style={{
+                            background: '#DEDEDF', // gray-400
+                            padding: '12px 16px',
+                            borderRadius: '8px',
+                            border: '1px solid #DEDEDF',
+                            color: '#303030', // gray-800 (高对比度)
+                            height: '50px',
+                            fontSize: '16px',
+                            fontWeight: '700',
+                            cursor: 'not-allowed',
+                            opacity: 0.8
+                          }} disabled>
+                            保存资料
+                          </button>
+                        )}
+                        {issue.title.includes('圆角') && (
+                          <button style={{
+                            background: '#FF9419',
+                            padding: '12px 16px',
+                            borderRadius: '8px', // 统一的圆角 (设计规范)
+                            border: '1px solid #FF9419',
+                            color: 'white',
+                            height: '50px',
+                            fontSize: '16px',
+                            fontWeight: '500'
+                          }}>
+                            主要按钮
+                          </button>
+                        )}
                       </div>
                     </div>
                   </Col>

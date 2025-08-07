@@ -1,5 +1,5 @@
 import { DatabaseService } from './database.service';
-import { RedisService } from './redis.service';
+import { CacheService } from './cache.service';
 import { wsService } from './websocket.service';
 import { logger } from '../utils/logger';
 
@@ -73,7 +73,7 @@ export class AnalysisProgressService {
 
     // 从缓存获取
     const cacheKey = `analysis-progress:${analysisId}`;
-    const cached = await RedisService.getJSON<AnalysisProgress>(cacheKey);
+    const cached = await CacheService.getJSON<AnalysisProgress>(cacheKey);
     if (cached) {
       this.progressMap.set(analysisId, cached);
       return cached;
@@ -103,7 +103,7 @@ export class AnalysisProgressService {
 
     // 缓存结果
     this.progressMap.set(analysisId, progress);
-    await RedisService.setJSON(cacheKey, progress, AnalysisProgressService.CACHE_TTL);
+    await CacheService.setJSON(cacheKey, progress, AnalysisProgressService.CACHE_TTL);
 
     return progress;
   }
@@ -237,7 +237,7 @@ export class AnalysisProgressService {
   private async saveProgress(analysisId: string, progress: AnalysisProgress): Promise<void> {
     // 保存到缓存
     const cacheKey = `analysis-progress:${analysisId}`;
-    await RedisService.setJSON(cacheKey, progress, AnalysisProgressService.CACHE_TTL);
+    await CacheService.setJSON(cacheKey, progress, AnalysisProgressService.CACHE_TTL);
 
     // 保存到数据库
     try {

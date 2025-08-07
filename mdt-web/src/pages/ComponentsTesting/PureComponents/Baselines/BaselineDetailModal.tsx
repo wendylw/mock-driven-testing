@@ -62,7 +62,7 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
       // 优先尝试从后端 API 获取真实数据
       try {
         const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/baselines/${baselineId}/details`);
+        const response = await fetch(`${apiUrl}/api/baselines/${baselineId}/details?t=${Date.now()}`);
         
         if (response.ok) {
           const data = await response.json();
@@ -95,54 +95,13 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
         }
       }
       
-      // 检查是否是 BEEP Button 基准
-      if (baselineId === 'baseline-button-beep-001') {
-        // 优先加载 BEEP Button 的真实数据（完整格式）
-        const beepResponse = await fetch('/baseline-details-beep-full.json');
-        const beepData = await beepResponse.json();
-        
-        if (beepData.success && beepData.data && beepData.data[baselineId]) {
-          setDetails(beepData.data[baselineId]);
-          return;
-        }
-      }
-      
-      // 使用Mock数据作为降级方案
-      const response = await fetch('/analysis-report.json');
-      const data = await response.json();
-      
-      if (data.success && data.data) {
-        const baselineDetails = convertAnalysisToDetails(data.data);
-        setDetails(baselineDetails);
-      } else {
-        throw new Error('Failed to load analysis data');
-      }
+      // 如果后端API失败，显示错误信息
+      throw new Error('无法加载基准详情数据');
     } catch (error) {
       console.error('加载基准详情失败:', error);
       message.error('加载基准详情失败');
       
-      // 回退到静态数据
-      try {
-        // 如果是 BEEP Button，优先尝试加载 BEEP 特定数据
-        if (baselineId === 'baseline-button-beep-001') {
-          const beepResponse = await fetch('/baseline-details-beep-full.json');
-          const beepData = await beepResponse.json();
-          
-          if (beepData.success && beepData.data && beepData.data[baselineId]) {
-            setDetails(beepData.data[baselineId]);
-            return;
-          }
-        }
-        
-        // 否则使用通用的备用数据
-        const response = await fetch('/baseline-details.json');
-        const data = await response.json();
-        if (data.success && data.data[baselineId]) {
-          setDetails(data.data[baselineId]);
-        }
-      } catch (fallbackError) {
-        console.error('备用数据加载失败:', fallbackError);
-      }
+      // 不再使用静态备用数据，直接显示错误状态
     }
     setLoading(false);
   };
@@ -156,28 +115,11 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
         // 获取最新的分析结果
         const history = await baselineService.getAnalysisHistory(baseline.id, 1);
         if (history && history.length > 0) {
-          const baselineDetails = convertAnalysisToDetails(history[0]);
-          setDetails(baselineDetails);
+          // TODO: 实现从分析历史转换为详情格式
+          message.info('分析历史数据转换功能待实现');
         } else {
-          // 如果没有历史记录，检查是否是 BEEP Button
-          if (baseline.id === 'baseline-button-beep-001') {
-            const beepResponse = await fetch('/baseline-details-beep-full.json');
-            const beepData = await beepResponse.json();
-            
-            if (beepData.success && beepData.data && beepData.data[baseline.id]) {
-              setDetails(beepData.data[baseline.id]);
-              return;
-            }
-          }
-          
-          // 否则使用Mock数据
-          const response = await fetch('/analysis-report.json');
-          const data = await response.json();
-          
-          if (data.success && data.data) {
-            const baselineDetails = convertAnalysisToDetails(data.data);
-            setDetails(baselineDetails);
-          }
+          // 没有分析历史记录时的处理
+          message.info('该组件暂无分析历史记录');
         }
       } catch (error) {
         console.error('加载分析结果失败:', error);
@@ -185,109 +127,6 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
       }
       setLoading(false);
     }
-  };
-  
-  // 转换API响应到内部格式
-  const convertAnalysisToDetails = (analysis: AnalysisResult): BaselineDetails => {
-    const { status, diagnostic, suggestions } = analysis;
-    
-    // 计算质量评级
-    const overallGrade = diagnostic.healthScore >= 90 ? 'A+' : 
-                        diagnostic.healthScore >= 80 ? 'A' :
-                        diagnostic.healthScore >= 70 ? 'B' :
-                        diagnostic.healthScore >= 60 ? 'C' : 'D';
-    
-    // 转换问题列表
-    const issues: Issue[] = diagnostic.problems.map((problem, index) => ({
-      id: problem.id,
-      severity: problem.severity === 'critical' ? 'critical' as const : 
-                problem.severity === 'warning' ? 'high' as const : 
-                problem.severity === 'info' ? 'medium' as const : 'low' as const,
-      category: problem.category === 'code-quality' ? 'maintainability' as const : 
-                problem.category as any,
-      title: problem.rootCause.what,
-      description: problem.impact,
-      impact: problem.impact,
-      recommendation: problem.quickFix?.solution || '需要手动修复',
-      estimatedFixTime: problem.quickFix?.estimatedTime || '未知'
-    }));
-    
-    // 转换建议列表
-    const actionSuggestions: ActionSuggestion[] = [
-      ...suggestions.visualSuggestions.map(vs => ({
-        id: vs.id,
-        type: 'optimize' as const,
-        priority: vs.priority === 'high' ? 'high' as const : 
-                 vs.priority === 'medium' ? 'medium' as const : 'low' as const,
-        title: vs.title,
-        description: vs.description,
-        benefits: [`影响${vs.affectedElements}个元素`, '提升用户体验', '改善可访问性'],
-        estimatedTime: '5分钟',
-        steps: vs.visualEvidence.annotations.map(a => a.suggestion)
-      })),
-      ...suggestions.codeSuggestions.map(cs => ({
-        id: cs.id,
-        type: cs.issue.includes('渲染') ? 'optimize' as const : 'refactor' as const,
-        priority: cs.impact.includes('性能降低') ? 'high' as const : 'medium' as const,
-        title: cs.issue,
-        description: cs.reasoning,
-        benefits: cs.benefits,
-        estimatedTime: cs.autoFix.estimatedTime,
-        steps: [
-          `打开文件: ${cs.codeDiff.filePath}`,
-          `定位到第 ${cs.codeDiff.lineNumber} 行`,
-          '应用建议的代码更改',
-          '运行测试验证'
-        ]
-      }))
-    ];
-    
-    // 构建详情对象
-    return {
-      id: analysis.baselineId,
-      component: status.component,
-      status: status.status as any,
-      statusLabel: status.statusLabel,
-      statusDetail: status.statusDetail,
-      qualityMetrics: {
-        healthScore: diagnostic.healthScore,
-        issues,
-        issueCount: issues.length,
-        criticalCount: issues.filter(i => i.severity === 'critical').length,
-        autoFixAvailable: 0, // Removed from Issue interface
-        qualityAssessment: {
-          overallGrade: overallGrade as 'A' | 'B' | 'C' | 'D' | 'F',
-          stability: diagnostic.healthScore >= 80 ? 'excellent' : diagnostic.healthScore >= 60 ? 'good' : 'poor',
-          maintainability: diagnostic.healthScore >= 75 ? 'good' : 'fair',
-          testability: diagnostic.healthScore >= 70 ? 'good' : 'fair'
-        },
-        testCoverage: {
-          overallCoverage: 85,
-          snapshotCoverage: 90,
-          propsCoverage: 80,
-          stateCoverage: 75,
-          interactionCoverage: 70
-        },
-        performanceMetrics: {
-          renderTime: { average: 12, max: 25, min: 8 },
-          memoryUsage: { average: 2.5, max: 4.2, min: 1.8 },
-          bundleSize: { raw: 3.2, gzipped: 1.1 }
-        }
-      },
-      actionSuggestions,
-      visualIntelligence: suggestions.visualSuggestions,
-      interactiveSuggestions: suggestions.interactiveSuggestions,
-      progressiveLearning: suggestions.progressiveLearning,
-      problemDiagnostic: {
-        rootCause: diagnostic.rootCauses,
-        affectedScenarios: diagnostic.problems.map(p => p.affectedScenarios),
-        evidence: diagnostic.evidence,
-        recommendations: diagnostic.recommendations
-      },
-      executableRecommendations: suggestions.codeSuggestions,
-      riskAlerts: [],
-      versions: []
-    };
   };
 
   const renderQualityMetrics = () => {
@@ -996,7 +835,9 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
 
   const renderProblemDiagnostic = () => {
     if (!baseline) return null;
-    return <ProblemDiagnostic baseline={baseline} />;
+    
+    // 直接传递原始数据给ProblemDiagnostic组件，让它自己处理数据获取
+    return <ProblemDiagnostic baseline={baseline} diagnosticData={null} />;
   };
 
   const tabItems = [

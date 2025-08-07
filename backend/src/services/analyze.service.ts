@@ -2,7 +2,7 @@ import { StatusService } from './status.service';
 import { DiagnosticService } from './diagnostic.service';
 import { SuggestionService } from './suggestion.service';
 import { DatabaseService } from './database.service';
-import { RedisService } from './redis.service';
+import { CacheService } from './cache.service';
 import { analysisProgressService } from './analysis-progress.service';
 import { logger } from '../utils/logger';
 
@@ -166,7 +166,7 @@ export class AnalyzeService {
   private async getRecentAnalysis(baselineId: string): Promise<AnalysisResult | null> {
     // 检查缓存
     const cacheKey = `analysis:${baselineId}:latest`;
-    const cached = await RedisService.getJSON<AnalysisResult>(cacheKey);
+    const cached = await CacheService.getJSON<AnalysisResult>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -198,7 +198,7 @@ export class AnalyzeService {
     };
 
     // 缓存结果
-    await RedisService.setJSON(cacheKey, result, 30 * 60); // 30分钟
+    await CacheService.setJSON(cacheKey, result, 30 * 60); // 30分钟
     
     return result;
   }
@@ -221,7 +221,7 @@ export class AnalyzeService {
 
       // 缓存最新分析结果
       const cacheKey = `analysis:${result.baselineId}:latest`;
-      await RedisService.setJSON(cacheKey, result, 30 * 60);
+      await CacheService.setJSON(cacheKey, result, 30 * 60);
       
     } catch (error) {
       logger.error('Failed to store analysis result:', error);
@@ -266,7 +266,7 @@ export class AnalyzeService {
 
   async invalidateAnalysisCache(baselineId: string): Promise<void> {
     const cacheKey = `analysis:${baselineId}:latest`;
-    await RedisService.del(cacheKey);
+    await CacheService.del(cacheKey);
     
     // 同时清除各个服务的缓存
     await this.statusService.invalidateCache(baselineId);

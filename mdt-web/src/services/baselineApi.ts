@@ -151,7 +151,7 @@ class BaselineApiService {
    */
   async getDiagnostic(baselineId: string): Promise<ApiResponse<DiagnosticResponse>> {
     const response = await this.api.get<ApiResponse<DiagnosticResponse>>(`/baselines/${baselineId}/diagnostic`);
-    return response.data;
+    return response.data || response;
   }
 
   /**

@@ -32,7 +32,7 @@ const InteractiveRecommendations: React.FC<Props> = ({ baseline, baselineId, int
   const [conversation, setConversation] = useState<ConversationMessage[]>([]);
   
   useEffect(() => {
-    if (interactiveSuggestions) {
+    if (interactiveSuggestions && interactiveSuggestions.initialMessage && interactiveSuggestions.options) {
       setConversation([{
         id: '1',
         type: 'ai',

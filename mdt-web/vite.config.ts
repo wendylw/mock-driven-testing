@@ -10,14 +10,15 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
+    port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3000',
         changeOrigin: true,
+        rewrite: (path) => path // 不要重写路径，保持 /api 前缀
       },
       '/socket.io': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3000',
         ws: true,
       },
     },

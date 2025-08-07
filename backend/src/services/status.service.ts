@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { DatabaseService } from './database.service';
-import { RedisService } from './redis.service';
+import { DatabaseService } from './database-sqlite.service';
+import { CacheService } from './cache.service';
 import { usageAnalyzerService } from './usage-analyzer.service';
 import { logger } from '../utils/logger';
 import { 
@@ -18,7 +18,7 @@ export class StatusService {
   async getBaselineStatus(baselineId: string): Promise<BaselineStatus> {
     // Check cache first
     const cacheKey = `status:${baselineId}`;
-    const cached = await RedisService.getJSON<BaselineStatus>(cacheKey);
+    const cached = await CacheService.getJSON<BaselineStatus>(cacheKey);
     if (cached) {
       logger.info(`Cache hit for baseline status: ${baselineId}`);
       return cached;
@@ -51,7 +51,7 @@ export class StatusService {
     };
 
     // Cache the result
-    await RedisService.setJSON(cacheKey, result, StatusService.CACHE_TTL);
+    await CacheService.setJSON(cacheKey, result, StatusService.CACHE_TTL);
 
     return result;
   }
@@ -244,7 +244,7 @@ export class StatusService {
 
   async invalidateCache(baselineId: string): Promise<void> {
     const cacheKey = `status:${baselineId}`;
-    await RedisService.del(cacheKey);
+    await CacheService.del(cacheKey);
     logger.info(`Cache invalidated for baseline: ${baselineId}`);
   }
 

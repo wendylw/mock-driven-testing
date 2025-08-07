@@ -31,13 +31,13 @@ router.get('/baselines/:id/details', async (req, res) => {
     // 构建详情数据
     const details = await baselineService.getBaselineDetails(id);
     
-    res.json({
+    return res.json({
       success: true,
       data: details
     });
   } catch (error) {
     console.error('Error getting baseline details:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       error: 'Failed to get baseline details'
     });
@@ -52,13 +52,13 @@ router.get('/baselines/:id/analysis-history', async (req, res) => {
     
     const history = await baselineService.getAnalysisHistory(id, Number(limit));
     
-    res.json({
+    return res.json({
       success: true,
       data: history
     });
   } catch (error) {
     console.error('Error getting analysis history:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       error: 'Failed to get analysis history'
     });

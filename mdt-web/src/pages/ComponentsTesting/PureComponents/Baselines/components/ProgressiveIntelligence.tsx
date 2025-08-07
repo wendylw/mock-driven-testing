@@ -56,11 +56,12 @@ const ProgressiveIntelligence: React.FC<Props> = ({ progressiveLearning }) => {
   const [expandedPattern, setExpandedPattern] = useState<string | null>(null);
   
   // 转换API数据或使用默认数据
-  const learningPatterns: LearningPattern[] = progressiveLearning?.patterns.map(p => ({
+  // 注意：后端返回的是{learningHistory, recommendations, adaptiveInsights}格式
+  const learningPatterns: LearningPattern[] = progressiveLearning?.patterns?.map(p => ({
     id: p.id,
-    type: p.type.includes('code') ? 'code_style' as const : 
-          p.type.includes('workflow') ? 'workflow_pattern' as const : 'component_preference' as const,
-    title: p.title,
+    type: (p.type || p.name || '').includes('code') ? 'code_style' as const : 
+          (p.type || p.name || '').includes('workflow') ? 'workflow_pattern' as const : 'component_preference' as const,
+    title: p.title || p.name,
     description: p.description,
     confidence: p.confidence,
     examples: p.examples,

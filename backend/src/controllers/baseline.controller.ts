@@ -59,30 +59,62 @@ export class BaselineController {
         {
           id: 'baseline-button-001',
           component: 'Button',
-          path: 'src/common/components/Button/index.tsx',
+          path: 'src/common/components/Button/index.jsx',
           status: 'healthy',
-          usageCount: 8
+          usageCount: 55,
+          version: '68bb4f50',  // commit hash前8位
+          branch: 'develop',
+          commit: '68bb4f50',  // commit hash前8位
+          snapshotCount: 15,   // 快照数量
+          propsVariations: 12, // props组合数量
+          size: 150.0,         // 快照总大小KB
+          createdAt: '2024-09-25T17:56:47+0800',
+          lastUpdated: '2024-09-25T17:56:47+0800'
         },
         {
           id: 'baseline-createorderbutton-001',
           component: 'CreateOrderButton',
           path: 'src/business/CreateOrderButton/index.tsx',
           status: 'outdated',
-          usageCount: 25
+          usageCount: 25,
+          version: '0.1.0-beta',
+          branch: 'develop',
+          commit: 'a2d5c8f',
+          snapshotCount: 8,
+          propsVariations: 6,
+          size: 80.0,
+          createdAt: '2025-01-15T10:00:00',
+          lastUpdated: '2025-01-29T10:30:00'
         },
         {
           id: 'baseline-modal-001',
           component: 'Modal',
           path: 'src/common/components/Modal/index.tsx',
           status: 'corrupted',
-          usageCount: 15
+          usageCount: 15,
+          version: '0.1.0',
+          branch: 'develop',
+          commit: 'd4e5f6g',
+          snapshotCount: 6,
+          propsVariations: 4,
+          size: 60.0,
+          createdAt: '2025-01-15T10:00:00',
+          lastUpdated: '2025-01-20T09:45:00'
         },
         {
           id: 'baseline-input-001',
           component: 'Input',
           path: 'src/common/components/Input/index.tsx',
           status: 'healthy',
-          usageCount: 12
+          usageCount: 12,
+          version: '0.1.0',
+          branch: 'develop',
+          commit: 'a7f9d2c',
+          snapshotCount: 12,
+          propsVariations: 8,
+          size: 120.0,
+          createdAt: '2025-01-15T10:00:00',
+          lastUpdated: '2025-01-29T10:30:00'
         }
       ];
 
