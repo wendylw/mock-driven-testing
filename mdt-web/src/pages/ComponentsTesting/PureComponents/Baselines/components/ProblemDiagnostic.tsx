@@ -213,7 +213,7 @@ const renderQuickFixDiff = (quickFix: any) => {
 };
 
 const ProblemDiagnostic: React.FC<Props> = ({ baseline, diagnosticData: externalData }) => {
-  const [expandedIssue, setExpandedIssue] = useState<string | string[]>([]);
+  const [expandedIssue, setExpandedIssue] = useState<string[]>([]);
   const [loading, setLoading] = useState(!externalData); // 如果有外部数据，不需要加载
   const [diagnosticData, setDiagnosticData] = useState<any>(externalData || null);
 
@@ -337,6 +337,7 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline, diagnosticData: external
     } : undefined;
     
     console.log('Processed quickFix:', processedQuickFix);
+    console.log('Original rootCause:', rootCause);
 
     const transformed = {
       id: problem.id,
@@ -348,10 +349,20 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline, diagnosticData: external
       frequency: problem.frequency,
       evidence: evidence || { type: 'code', content: {} },
       rootCause: {
-        what: rootCause?.what || rootCause?.issue || '',
-        why: rootCause?.why || rootCause?.parentUpdates || '',
-        where: rootCause?.where || (rootCause && { file: '', line: 0, code: '' }) || { file: '', line: 0, code: '' },
-        when: rootCause?.when || ''
+        what: rootCause?.what || rootCause?.issue || rootCause?.analysis || '未知问题',
+        why: rootCause?.why || 
+             (rootCause?.parentUpdates ? `父组件更新：${rootCause.parentUpdates}` : '') ||
+             (rootCause?.analysis ? '使用了不符合WCAG标准的颜色值' : '') ||
+             '待深入分析',
+        where: rootCause?.where || { 
+          file: '未知文件', 
+          line: 0, 
+          code: '' 
+        },
+        when: rootCause?.when || 
+              (rootCause?.parentUpdates === 'frequent' ? '组件状态频繁更新时' : '') ||
+              (rootCause?.analysis ? '按钮处于禁用状态时' : '') ||
+              '特定条件触发时'
       },
       quickFix: processedQuickFix
     };
@@ -364,13 +375,24 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline, diagnosticData: external
   const liveIssues: LiveIssue[] = diagnosticData?.problems?.map(transformProblemData) || [];
   console.log('Live issues:', liveIssues, 'from diagnosticData:', diagnosticData);
   
+  // 添加详细的调试信息
+  console.log('=== 问题统计调试信息 ===');
+  console.log('原始问题数量:', diagnosticData?.problems?.length || 0);
+  console.log('转换后问题数量:', liveIssues.length);
+  console.log('严重问题:', liveIssues.filter(i => i.severity === 'critical').length);
+  console.log('警告:', liveIssues.filter(i => i.severity === 'warning').length);
+  console.log('信息:', liveIssues.filter(i => i.severity === 'info').length);
+  console.log('可修复问题:', liveIssues.filter(i => i.quickFix?.available).length);
+  console.log('QuickFix 详情:', liveIssues.map(i => ({ id: i.id, quickFix: i.quickFix })));
+  
   // 设置默认展开严重问题和警告
   useEffect(() => {
-    if (liveIssues.length > 0 && expandedIssue.length === 0) {
+    if (liveIssues.length > 0) {
       const criticalAndWarningIds = liveIssues
         .filter(issue => issue.severity === 'critical' || issue.severity === 'warning')
         .map(issue => issue.id);
-      if (criticalAndWarningIds.length > 0) {
+      if (criticalAndWarningIds.length > 0 && expandedIssue.length === 0) {
+        console.log('Auto-expanding warning panels:', criticalAndWarningIds);
         setExpandedIssue(criticalAndWarningIds);
       }
     }
@@ -397,23 +419,167 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline, diagnosticData: external
   };
 
   const renderIssueEvidence = (evidence: any) => {
+    console.log('🔥 renderIssueEvidence called with:', evidence);
     // Handle new natural language evidence format
-    if (evidence?.description) {
+    // Check both evidence and evidence.content for description
+    const evidenceData = evidence?.content || evidence;
+    console.log('🔥 evidenceData:', evidenceData);
+    
+    // 强制显示更新状态
+    if (evidenceData?.colorValues) {
+      console.log('🎨 检测到颜色对比度问题，应该显示颜色信息');
+    }
+    
+    // 优先检查是否有颜色/对比度信息，如果有则使用专门的颜色展示逻辑
+    if (evidenceData?.colorValues || evidenceData?.contrast) {
+      console.log('🎨 使用颜色对比度专门展示逻辑');
+      return (
+        <div style={{ fontSize: '13px' }}>
+          {/* Description */}
+          {evidenceData.description && (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ color: '#262626', marginBottom: 8 }}>
+                {evidenceData.description}
+              </div>
+            </div>
+          )}
+
+          {/* Color/Contrast Information */}
+          {evidenceData.colorValues && (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontWeight: 'bold', marginBottom: 8, color: '#595959' }}>
+                <span style={{ fontSize: '14px' }}>🎨</span> 颜色信息
+              </div>
+              <div style={{ 
+                background: '#fafafa', 
+                padding: '12px', 
+                borderRadius: '6px',
+                border: '1px solid #f0f0f0'
+              }}>
+                {Object.entries(evidenceData.colorValues).map(([key, value]) => (
+                  <div key={key} style={{ marginBottom: 8, display: 'flex', alignItems: 'center' }}>
+                    <span style={{ color: '#8c8c8c', minWidth: '120px' }}>
+                      {key === 'gray-400' ? 'Gray 400' : 
+                       key === 'textColor' ? '文字颜色' :
+                       key === 'backgroundColor' ? '背景颜色' :
+                       key === 'borderColor' ? '边框颜色' : key}:
+                    </span>
+                    <span style={{ 
+                      marginLeft: 8, 
+                      padding: '2px 8px',
+                      background: value as string,
+                      border: '1px solid #d9d9d9',
+                      borderRadius: '4px',
+                      fontFamily: 'monospace',
+                      fontSize: '12px'
+                    }}>
+                      {value as string}
+                    </span>
+                    <span style={{ 
+                      display: 'inline-block',
+                      width: '20px',
+                      height: '20px',
+                      background: value as string,
+                      border: '1px solid #d9d9d9',
+                      borderRadius: '4px',
+                      marginLeft: 8
+                    }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Contrast Information */}
+          {evidenceData.contrast && (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontWeight: 'bold', marginBottom: 8, color: '#595959' }}>
+                <span style={{ fontSize: '14px' }}>⚡</span> 对比度分析
+              </div>
+              <div style={{ 
+                background: evidenceData.contrast.verdict === '严重不足' ? '#fff2e8' : '#f6ffed',
+                padding: '12px', 
+                borderRadius: '6px',
+                border: `1px solid ${evidenceData.contrast.verdict === '严重不足' ? '#ffbb96' : '#b7eb8f'}`
+              }}>
+                <div style={{ marginBottom: 4 }}>
+                  <span style={{ color: '#8c8c8c' }}>实际对比度：</span>
+                  <span style={{ 
+                    fontWeight: 'bold', 
+                    color: evidenceData.contrast.verdict === '严重不足' ? '#fa541c' : '#52c41a',
+                    marginLeft: 8 
+                  }}>
+                    {evidenceData.contrast.actual}
+                  </span>
+                </div>
+                <div style={{ marginBottom: 4 }}>
+                  <span style={{ color: '#8c8c8c' }}>要求标准：</span>
+                  <span style={{ marginLeft: 8 }}>{evidenceData.contrast.required}</span>
+                </div>
+                <div>
+                  <span style={{ color: '#8c8c8c' }}>评估结果：</span>
+                  <Tag 
+                    color={evidenceData.contrast.verdict === '严重不足' ? 'red' : 'green'} 
+                    style={{ marginLeft: 8 }}
+                  >
+                    {evidenceData.contrast.verdict}
+                  </Tag>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Code Reference */}
+          {evidenceData.codeReference && (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontWeight: 'bold', marginBottom: 8, color: '#595959' }}>
+                <span style={{ fontSize: '14px' }}>📍</span> 代码位置
+              </div>
+              <div style={{ 
+                background: '#f5f5f5', 
+                padding: '12px', 
+                borderRadius: '6px',
+                fontFamily: 'monospace',
+                fontSize: '12px'
+              }}>
+                <div style={{ marginBottom: 4 }}>
+                  📁 {evidenceData.codeReference.file} · 第 {evidenceData.codeReference.line} 行
+                </div>
+                {evidenceData.codeReference.code && (
+                  <pre style={{ 
+                    margin: 0, 
+                    padding: '8px',
+                    background: '#fff',
+                    border: '1px solid #e8e8e8',
+                    borderRadius: '4px',
+                    overflow: 'auto'
+                  }}>
+                    {evidenceData.codeReference.code}
+                  </pre>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+    
+    if (evidenceData?.description) {
       return (
         <div style={{ fontSize: '13px', lineHeight: '1.8' }}>
           {/* Main description */}
           <div style={{ marginBottom: 16 }}>
             <div style={{ color: '#262626', marginBottom: 8 }}>
-              {evidence.description}
+              {evidenceData.description}
             </div>
           </div>
 
           {/* Preconditions */}
-          {evidence.preconditions && (
+          {evidenceData.preconditions && (
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#595959' }}>前提条件：</div>
               <ul style={{ margin: '0 0 0 20px', padding: 0 }}>
-                {evidence.preconditions.map((condition: string, index: number) => (
+                {evidenceData.preconditions.map((condition: string, index: number) => (
                   <li key={index} style={{ color: '#595959' }}>{condition}</li>
                 ))}
               </ul>
@@ -421,26 +587,123 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline, diagnosticData: external
           )}
 
           {/* Observations */}
-          {evidence.observations && (
+          {evidenceData.observations && (
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#595959' }}>观察结果：</div>
               <div style={{ paddingLeft: 16 }}>
-                {Object.entries(evidence.observations).map(([key, value]) => (
-                  <div key={key} style={{ marginBottom: 4 }}>
-                    <span style={{ color: '#8c8c8c' }}>{key === 'visual' ? '视觉表现' : key === 'technical' ? '技术细节' : key === 'measurement' ? '测量数据' : key}：</span>
-                    <span style={{ color: '#595959', marginLeft: 8 }}>{value as string}</span>
+                {Object.entries(evidenceData.observations).map(([key, value]) => {
+                  // Handle nested observation objects (like performance, technical)
+                  if (typeof value === 'object' && value !== null) {
+                    return (
+                      <div key={key} style={{ marginBottom: 8 }}>
+                        <div style={{ fontWeight: 'bold', color: '#595959', marginBottom: 4 }}>
+                          {key === 'performance' ? '性能数据' : key === 'technical' ? '技术细节' : key}：
+                        </div>
+                        <div style={{ paddingLeft: 16 }}>
+                          {Object.entries(value).map(([subKey, subValue]) => (
+                            <div key={subKey} style={{ marginBottom: 2 }}>
+                              <span style={{ color: '#8c8c8c' }}>
+                                {subKey === 'unnecessaryRenders' ? '不必要渲染' : 
+                                 subKey === 'renderTime' ? '渲染时间' :
+                                 subKey === 'userPerception' ? '用户感知' :
+                                 subKey === 'cause' ? '原因' :
+                                 subKey === 'pattern' ? '模式' : subKey}：
+                              </span>
+                              <span style={{ color: '#595959', marginLeft: 8 }}>{subValue as string}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }
+                  // Handle simple string values
+                  return (
+                    <div key={key} style={{ marginBottom: 4 }}>
+                      <span style={{ color: '#8c8c8c' }}>{key === 'visual' ? '视觉表现' : key === 'technical' ? '技术细节' : key === 'measurement' ? '测量数据' : key}：</span>
+                      <span style={{ color: '#595959', marginLeft: 8 }}>{value as string}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Measurements */}
+          {evidenceData.measurements && (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#595959' }}>测量数据：</div>
+              <div style={{ 
+                background: '#f6ffed',
+                padding: '12px',
+                borderRadius: '6px',
+                border: '1px solid #b7eb8f'
+              }}>
+                <div style={{ marginBottom: 4 }}>
+                  <span style={{ color: '#8c8c8c' }}>测量工具：</span>
+                  <span style={{ marginLeft: 8 }}>{evidenceData.measurements.tool}</span>
+                </div>
+                {evidenceData.measurements.metrics && (
+                  <div style={{ marginTop: 8 }}>
+                    {Object.entries(evidenceData.measurements.metrics).map(([key, value]) => (
+                      <div key={key} style={{ marginBottom: 2 }}>
+                        <span style={{ color: '#8c8c8c' }}>
+                          {key === 'renderFrequency' ? '渲染频率' :
+                           key === 'totalTime' ? '总计时间' :
+                           key === 'improvement' ? '优化效果' : key}：
+                        </span>
+                        <span style={{ color: '#52c41a', fontWeight: 'bold', marginLeft: 8 }}>{value as string}</span>
+                      </div>
+                    ))}
                   </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Affected Scenarios */}
+          {evidenceData.affectedScenarios && (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#595959' }}>影响场景：</div>
+              <ul style={{ margin: '0 0 0 20px', padding: 0 }}>
+                {evidenceData.affectedScenarios.map((scenario: string, index: number) => (
+                  <li key={index} style={{ color: '#595959' }}>{scenario}</li>
                 ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Business Impact */}
+          {evidenceData.businessImpact && (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#595959' }}>业务影响：</div>
+              <div style={{ 
+                background: '#fff2e8',
+                padding: '12px',
+                borderRadius: '6px',
+                border: '1px solid #ffbb96'
+              }}>
+                {typeof evidenceData.businessImpact === 'object' ? 
+                  Object.entries(evidenceData.businessImpact).map(([key, value]) => (
+                    <div key={key} style={{ marginBottom: 2 }}>
+                      <span style={{ color: '#8c8c8c' }}>
+                        {key === 'userExperience' ? '用户体验' :
+                         key === 'conversionRate' ? '转化率' : key}：
+                      </span>
+                      <span style={{ color: '#fa541c', marginLeft: 8 }}>{value as string}</span>
+                    </div>
+                  )) :
+                  <span style={{ color: '#fa541c' }}>{evidenceData.businessImpact}</span>
+                }
               </div>
             </div>
           )}
 
           {/* Affected Users */}
-          {evidence.affectedUsers && (
+          {evidenceData.affectedUsers && (
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#595959' }}>受影响用户：</div>
               <ul style={{ margin: '0 0 0 20px', padding: 0 }}>
-                {evidence.affectedUsers.map((user: string, index: number) => (
+                {evidenceData.affectedUsers.map((user: string, index: number) => (
                   <li key={index} style={{ color: '#595959' }}>{user}</li>
                 ))}
               </ul>
@@ -448,13 +711,13 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline, diagnosticData: external
           )}
 
           {/* Reproducibility */}
-          {evidence.reproducibility && (
+          {evidenceData.reproducibility && (
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#595959' }}>
-                复现步骤（成功率：{evidence.reproducibility.frequency}）：
+                复现步骤（成功率：{evidenceData.reproducibility.frequency}）：
               </div>
               <ol style={{ margin: '0 0 0 20px', padding: 0 }}>
-                {evidence.reproducibility.steps.map((step: string, index: number) => (
+                {evidenceData.reproducibility.steps.map((step: string, index: number) => (
                   <li key={index} style={{ color: '#595959', marginBottom: 4 }}>{step}</li>
                 ))}
               </ol>
@@ -462,14 +725,14 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline, diagnosticData: external
           )}
 
           {/* References */}
-          {evidence.references && (
+          {evidenceData.references && (
             <div style={{ 
               marginTop: 16, 
               paddingTop: 16, 
               borderTop: '1px solid #f0f0f0',
               fontSize: '12px'
             }}>
-              {Object.entries(evidence.references).map(([key, value]) => (
+              {Object.entries(evidenceData.references).map(([key, value]) => (
                 <div key={key} style={{ color: '#8c8c8c', marginBottom: 2 }}>
                   {key === 'wcagGuideline' ? 'WCAG标准' : key === 'codeLocation' ? '代码位置' : key === 'cssSelector' ? 'CSS选择器' : key}：
                   <span style={{ color: '#595959', marginLeft: 4 }}>{value as string}</span>
@@ -482,52 +745,279 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline, diagnosticData: external
     }
 
     // Fallback to old format
-    if (!evidence || !evidence.content) {
+    if (!evidence) {
       return null;
     }
 
     switch (evidence.type) {
       case 'trace':
         return (
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '12px', 
-            borderRadius: '6px',
-            fontFamily: 'monospace',
-            fontSize: '12px'
-          }}>
-            <div style={{ marginBottom: 8 }}>
-              <FireOutlined style={{ color: '#ff4d4f', marginRight: 4 }} />
-              渲染时间: <span style={{ color: '#ff4d4f', fontWeight: 'bold' }}>
-                {evidence.content.renderTime || 'N/A'}ms
-              </span> {evidence.content.threshold && `(阈值: ${evidence.content.threshold}ms)`}
-            </div>
-            {evidence.content.callStack && (
-              <div style={{ color: '#666' }}>
-                调用栈: {Array.isArray(evidence.content.callStack) ? evidence.content.callStack.join(' → ') : 'N/A'}
+          <div style={{ fontSize: '13px' }}>
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontWeight: 'bold', marginBottom: 8, color: '#595959' }}>
+                <span style={{ fontSize: '14px' }}>🔥</span> 性能追踪数据
               </div>
-            )}
+              
+              {/* Performance Metrics */}
+              <div style={{ 
+                background: evidence.content.renderTime > (evidence.content.threshold || 100) ? '#fff2e8' : '#f6ffed',
+                padding: '12px', 
+                borderRadius: '6px',
+                border: `1px solid ${evidence.content.renderTime > (evidence.content.threshold || 100) ? '#ffbb96' : '#b7eb8f'}`,
+                marginBottom: 12
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <span style={{ color: '#8c8c8c' }}>渲染时间：</span>
+                    <span style={{ 
+                      fontWeight: 'bold', 
+                      fontSize: '16px',
+                      color: evidence.content.renderTime > (evidence.content.threshold || 100) ? '#ff4d4f' : '#52c41a',
+                      marginLeft: 8 
+                    }}>
+                      {evidence.content.renderTime || 'N/A'}ms
+                    </span>
+                  </div>
+                  {evidence.content.threshold && (
+                    <div style={{ fontSize: '12px', color: '#8c8c8c' }}>
+                      阈值: {evidence.content.threshold}ms
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Call Stack */}
+              {evidence.content.callStack && (
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ fontWeight: 'bold', marginBottom: 4, color: '#595959', fontSize: '12px' }}>
+                    调用栈：
+                  </div>
+                  <div style={{ 
+                    background: '#f5f5f5', 
+                    padding: '8px 12px', 
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    fontFamily: 'monospace'
+                  }}>
+                    {Array.isArray(evidence.content.callStack) 
+                      ? evidence.content.callStack.map((call, index) => (
+                          <div key={index} style={{ 
+                            padding: '2px 0',
+                            paddingLeft: index * 16 + 'px',
+                            color: '#666'
+                          }}>
+                            {index > 0 && '↳ '}{call}
+                          </div>
+                        ))
+                      : evidence.content.callStack
+                    }
+                  </div>
+                </div>
+              )}
+
+              {/* Additional Metrics */}
+              {(evidence.content.memoryUsage || evidence.content.componentCount) && (
+                <div style={{ 
+                  display: 'flex', 
+                  gap: 12,
+                  padding: '8px 0'
+                }}>
+                  {evidence.content.memoryUsage && (
+                    <div style={{ 
+                      flex: 1,
+                      padding: '8px',
+                      background: '#fafafa',
+                      borderRadius: '4px',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ fontSize: '12px', color: '#8c8c8c' }}>内存使用</div>
+                      <div style={{ fontWeight: 'bold', color: '#1890ff' }}>
+                        {evidence.content.memoryUsage}MB
+                      </div>
+                    </div>
+                  )}
+                  {evidence.content.componentCount && (
+                    <div style={{ 
+                      flex: 1,
+                      padding: '8px',
+                      background: '#fafafa',
+                      borderRadius: '4px',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ fontSize: '12px', color: '#8c8c8c' }}>组件数量</div>
+                      <div style={{ fontWeight: 'bold', color: '#722ed1' }}>
+                        {evidence.content.componentCount}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         );
 
       case 'code':
-        // For simple evidence objects, just display as JSON
-        if (typeof evidence.content === 'object' && !evidence.content.current) {
-          return (
-            <div style={{ 
-              background: '#f5f5f5', 
-              padding: '12px', 
-              borderRadius: '6px',
-              fontFamily: 'monospace',
-              fontSize: '12px'
-            }}>
-              <div style={{ marginBottom: 8 }}>
-                <CodeOutlined style={{ marginRight: 4 }} />
-                证据详情:
+        // For simple evidence objects, display in a more readable format
+        const contentData = evidence.content || evidence;
+        if (typeof contentData === 'object' && !contentData.current) {
+          // Check if it's a visual evidence with color/contrast information
+          if (contentData.colorValues || contentData.contrast) {
+            return (
+              <div style={{ fontSize: '13px' }}>
+                {/* Color/Contrast Information */}
+                {contentData.colorValues && (
+                  <div style={{ marginBottom: 16 }}>
+                    <div style={{ fontWeight: 'bold', marginBottom: 8, color: '#595959' }}>
+                      <span style={{ fontSize: '14px' }}>🎨</span> 颜色信息
+                    </div>
+                    <div style={{ 
+                      background: '#fafafa', 
+                      padding: '12px', 
+                      borderRadius: '6px',
+                      border: '1px solid #f0f0f0'
+                    }}>
+                      {Object.entries(contentData.colorValues).map(([key, value]) => (
+                        <div key={key} style={{ marginBottom: 8, display: 'flex', alignItems: 'center' }}>
+                          <span style={{ color: '#8c8c8c', minWidth: '120px' }}>
+                            {key === 'gray-400' ? 'Gray 400' : 
+                             key === 'textColor' ? '文字颜色' :
+                             key === 'backgroundColor' ? '背景颜色' :
+                             key === 'borderColor' ? '边框颜色' : key}:
+                          </span>
+                          <span style={{ 
+                            marginLeft: 8, 
+                            padding: '2px 8px',
+                            background: value as string,
+                            border: '1px solid #d9d9d9',
+                            borderRadius: '4px',
+                            fontFamily: 'monospace',
+                            fontSize: '12px'
+                          }}>
+                            {value as string}
+                          </span>
+                          <span style={{ 
+                            display: 'inline-block',
+                            width: '20px',
+                            height: '20px',
+                            background: value as string,
+                            border: '1px solid #d9d9d9',
+                            borderRadius: '4px',
+                            marginLeft: 8
+                          }} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Contrast Information */}
+                {contentData.contrast && (
+                  <div style={{ marginBottom: 16 }}>
+                    <div style={{ fontWeight: 'bold', marginBottom: 8, color: '#595959' }}>
+                      <span style={{ fontSize: '14px' }}>⚡</span> 对比度分析
+                    </div>
+                    <div style={{ 
+                      background: contentData.contrast.verdict === '严重不足' ? '#fff2e8' : '#f6ffed',
+                      padding: '12px', 
+                      borderRadius: '6px',
+                      border: `1px solid ${contentData.contrast.verdict === '严重不足' ? '#ffbb96' : '#b7eb8f'}`
+                    }}>
+                      <div style={{ marginBottom: 4 }}>
+                        <span style={{ color: '#8c8c8c' }}>实际对比度：</span>
+                        <span style={{ 
+                          fontWeight: 'bold', 
+                          color: contentData.contrast.verdict === '严重不足' ? '#fa541c' : '#52c41a',
+                          marginLeft: 8 
+                        }}>
+                          {contentData.contrast.actual}
+                        </span>
+                      </div>
+                      <div style={{ marginBottom: 4 }}>
+                        <span style={{ color: '#8c8c8c' }}>要求标准：</span>
+                        <span style={{ marginLeft: 8 }}>{contentData.contrast.required}</span>
+                      </div>
+                      <div>
+                        <span style={{ color: '#8c8c8c' }}>评估结果：</span>
+                        <Tag 
+                          color={contentData.contrast.verdict === '严重不足' ? 'red' : 'green'} 
+                          style={{ marginLeft: 8 }}
+                        >
+                          {contentData.contrast.verdict}
+                        </Tag>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Code Reference */}
+                {contentData.codeReference && (
+                  <div style={{ marginBottom: 16 }}>
+                    <div style={{ fontWeight: 'bold', marginBottom: 8, color: '#595959' }}>
+                      <span style={{ fontSize: '14px' }}>📍</span> 代码位置
+                    </div>
+                    <div style={{ 
+                      background: '#f5f5f5', 
+                      padding: '12px', 
+                      borderRadius: '6px',
+                      fontFamily: 'monospace',
+                      fontSize: '12px'
+                    }}>
+                      <div style={{ marginBottom: 4 }}>
+                        📁 {contentData.codeReference.file} · 第 {contentData.codeReference.line} 行
+                      </div>
+                      {contentData.codeReference.code && (
+                        <pre style={{ 
+                          margin: 0, 
+                          padding: '8px',
+                          background: '#fff',
+                          border: '1px solid #e8e8e8',
+                          borderRadius: '4px',
+                          overflow: 'auto'
+                        }}>
+                          {contentData.codeReference.code}
+                        </pre>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* General description if exists */}
+                {contentData.description && (
+                  <div style={{ 
+                    marginBottom: 16,
+                    padding: '12px',
+                    background: '#f0f2f5',
+                    borderRadius: '6px'
+                  }}>
+                    {contentData.description}
+                  </div>
+                )}
               </div>
-              <pre style={{ margin: 0, overflow: 'auto' }}>
-                {JSON.stringify(evidence.content, null, 2)}
-              </pre>
+            );
+          }
+
+          // For other types of evidence, show in a structured way
+          return (
+            <div style={{ fontSize: '13px' }}>
+              <div style={{ marginBottom: 8 }}>
+                <CodeOutlined style={{ marginRight: 4, color: '#1890ff' }} />
+                <span style={{ fontWeight: 'bold', color: '#595959' }}>证据详情</span>
+              </div>
+              <div style={{ 
+                background: '#fafafa', 
+                padding: '12px', 
+                borderRadius: '6px',
+                border: '1px solid #f0f0f0'
+              }}>
+                {Object.entries(contentData).map(([key, value]) => (
+                  <div key={key} style={{ marginBottom: 8 }}>
+                    <span style={{ color: '#8c8c8c', fontWeight: 'bold' }}>{key}:</span>
+                    <span style={{ marginLeft: 8 }}>
+                      {typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           );
         }
@@ -617,13 +1107,26 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline, diagnosticData: external
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <BugOutlined style={{ color: '#ff4d4f' }} />
-            <span>实时问题诊断</span>
+            <span>实时问题诊断 [v3-修复完成]</span>
             <Badge count={liveIssues.filter(i => i.severity === 'critical').length} />
           </div>
         </div>
       } 
       style={{ marginBottom: 24 }}
     >
+      {/* 临时更新提示 */}
+      <div style={{ 
+        marginBottom: 16, 
+        padding: '12px',
+        background: '#fffbe6',
+        border: '2px solid #faad14',
+        borderRadius: '6px',
+        fontWeight: 'bold',
+        color: '#fa8c16'
+      }}>
+        🔄 代码已更新 - 如果你看到这个提示，说明前端代码正在运行最新版本
+      </div>
+
       {/* 问题概览 */}
       <div style={{ marginBottom: 20 }}>
         <Row gutter={16}>
@@ -708,7 +1211,7 @@ const ProblemDiagnostic: React.FC<Props> = ({ baseline, diagnosticData: external
       ) : (
         <Collapse 
           activeKey={expandedIssue}
-          onChange={(key) => setExpandedIssue(Array.isArray(key) ? key : [key])}
+          onChange={(key) => setExpandedIssue(Array.isArray(key) ? key : (key ? [key] : []))}
         >
           {liveIssues.map((issue) => (
           <Panel

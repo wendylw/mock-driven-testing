@@ -61,8 +61,8 @@ const BaselineDetailModal: React.FC<BaselineDetailModalProps> = ({
     try {
       // 优先尝试从后端 API 获取真实数据
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/baselines/${baselineId}/details?t=${Date.now()}`);
+        // 使用相对路径，让 Vite 代理处理
+        const response = await fetch(`/api/baselines/${baselineId}/details?t=${Date.now()}`);
         
         if (response.ok) {
           const data = await response.json();

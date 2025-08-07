@@ -1,7 +1,7 @@
 import { StatusService } from './status.service';
 import { DiagnosticService } from './diagnostic.service';
 import { SuggestionService } from './suggestion.service';
-import { DatabaseService } from './database.service';
+import { DatabaseService } from './database-sqlite.service';
 import { CacheService } from './cache.service';
 import { analysisProgressService } from './analysis-progress.service';
 import { logger } from '../utils/logger';
