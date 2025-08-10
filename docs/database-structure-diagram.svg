@@ -1,0 +1,283 @@
+<svg viewBox="0 0 1400 1000" xmlns="http://www.w3.org/2000/svg">
+  <!-- 样式定义 -->
+  <defs>
+    <style>
+      .table-box { fill: #f8f9fa; stroke: #dee2e6; stroke-width: 2; }
+      .core-table { fill: #e3f2fd; stroke: #1976d2; }
+      .user-table { fill: #f3e5f5; stroke: #7b1fa2; }
+      .task-table { fill: #fff3e0; stroke: #f57c00; }
+      .design-table { fill: #e8f5e8; stroke: #388e3c; }
+      .version-table { fill: #fce4ec; stroke: #c2185b; }
+      
+      .table-title { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #333; }
+      .field-text { font-family: Arial, sans-serif; font-size: 12px; fill: #666; }
+      .pk-field { font-weight: bold; fill: #d32f2f; }
+      .fk-field { font-weight: bold; fill: #1976d2; }
+      
+      .relation-line { stroke: #666; stroke-width: 2; fill: none; }
+      .arrow { fill: #666; }
+      
+      .legend-text { font-family: Arial, sans-serif; font-size: 12px; fill: #333; }
+      .category-label { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #333; }
+    </style>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="700" y="30" text-anchor="middle" class="category-label" style="font-size: 20px;">MDT平台数据库结构图</text>
+
+  <!-- 核心业务表区域 -->
+  <text x="200" y="70" class="category-label" fill="#1976d2">核心业务表</text>
+  
+  <!-- baselines表 -->
+  <rect x="50" y="80" width="180" height="200" class="table-box core-table"/>
+  <text x="140" y="100" text-anchor="middle" class="table-title">baselines</text>
+  <line x1="60" y1="110" x2="220" y2="110" stroke="#1976d2"/>
+  <text x="60" y="125" class="field-text pk-field">id (PK)</text>
+  <text x="60" y="140" class="field-text">component_name</text>
+  <text x="60" y="155" class="field-text">component_path</text>
+  <text x="60" y="170" class="field-text">status</text>
+  <text x="60" y="185" class="field-text">usage_count</text>
+  <text x="60" y="200" class="field-text">last_analyzed</text>
+  <text x="60" y="215" class="field-text">version</text>
+  <text x="60" y="230" class="field-text">branch</text>
+  <text x="60" y="245" class="field-text">commit_hash</text>
+  <text x="60" y="260" class="field-text">file_size</text>
+
+  <!-- analysis_results表 -->
+  <rect x="250" y="80" width="180" height="160" class="table-box core-table"/>
+  <text x="340" y="100" text-anchor="middle" class="table-title">analysis_results</text>
+  <line x1="260" y1="110" x2="420" y2="110" stroke="#1976d2"/>
+  <text x="260" y="125" class="field-text pk-field">id (PK)</text>
+  <text x="260" y="140" class="field-text fk-field">baseline_id (FK)</text>
+  <text x="260" y="155" class="field-text">analysis_type</text>
+  <text x="260" y="170" class="field-text">result_data</text>
+  <text x="260" y="185" class="field-text">status_data</text>
+  <text x="260" y="200" class="field-text">diagnostic_data</text>
+  <text x="260" y="215" class="field-text">suggestion_data</text>
+  <text x="260" y="230" class="field-text">duration</text>
+
+  <!-- diagnostic_problems表 -->
+  <rect x="450" y="80" width="180" height="180" class="table-box core-table"/>
+  <text x="540" y="100" text-anchor="middle" class="table-title">diagnostic_problems</text>
+  <line x1="460" y1="110" x2="620" y2="110" stroke="#1976d2"/>
+  <text x="460" y="125" class="field-text pk-field">id (PK)</text>
+  <text x="460" y="140" class="field-text fk-field">baseline_id (FK)</text>
+  <text x="460" y="155" class="field-text">severity</text>
+  <text x="460" y="170" class="field-text">category</text>
+  <text x="460" y="185" class="field-text">impact</text>
+  <text x="460" y="200" class="field-text">evidence</text>
+  <text x="460" y="215" class="field-text">root_cause</text>
+  <text x="460" y="230" class="field-text">quick_fix</text>
+  <text x="460" y="245" class="field-text">resolved_at</text>
+
+  <!-- suggestions表 -->
+  <rect x="650" y="80" width="180" height="140" class="table-box core-table"/>
+  <text x="740" y="100" text-anchor="middle" class="table-title">suggestions</text>
+  <line x1="660" y1="110" x2="820" y2="110" stroke="#1976d2"/>
+  <text x="660" y="125" class="field-text pk-field">id (PK)</text>
+  <text x="660" y="140" class="field-text fk-field">baseline_id (FK)</text>
+  <text x="660" y="155" class="field-text">suggestion_type</text>
+  <text x="660" y="170" class="field-text">content</text>
+  <text x="660" y="185" class="field-text">applied</text>
+  <text x="660" y="200" class="field-text">applied_at</text>
+
+  <!-- 用户管理表区域 -->
+  <text x="200" y="320" class="category-label" fill="#7b1fa2">用户管理</text>
+  
+  <!-- users表 -->
+  <rect x="50" y="330" width="160" height="140" class="table-box user-table"/>
+  <text x="130" y="350" text-anchor="middle" class="table-title">users</text>
+  <line x1="60" y1="360" x2="200" y2="360" stroke="#7b1fa2"/>
+  <text x="60" y="375" class="field-text pk-field">id (PK)</text>
+  <text x="60" y="390" class="field-text">username</text>
+  <text x="60" y="405" class="field-text">email</text>
+  <text x="60" y="420" class="field-text">password_hash</text>
+  <text x="60" y="435" class="field-text">role</text>
+  <text x="60" y="450" class="field-text">created_at</text>
+
+  <!-- interactive_sessions表 -->
+  <rect x="230" y="330" width="180" height="140" class="table-box user-table"/>
+  <text x="320" y="350" text-anchor="middle" class="table-title">interactive_sessions</text>
+  <line x1="240" y1="360" x2="400" y2="360" stroke="#7b1fa2"/>
+  <text x="240" y="375" class="field-text pk-field">id (PK)</text>
+  <text x="240" y="390" class="field-text fk-field">baseline_id (FK)</text>
+  <text x="240" y="405" class="field-text fk-field">user_id (FK)</text>
+  <text x="240" y="420" class="field-text">session_data</text>
+  <text x="240" y="435" class="field-text">expires_at</text>
+
+  <!-- learning_patterns表 -->
+  <rect x="430" y="330" width="160" height="140" class="table-box user-table"/>
+  <text x="510" y="350" text-anchor="middle" class="table-title">learning_patterns</text>
+  <line x1="440" y1="360" x2="580" y2="360" stroke="#7b1fa2"/>
+  <text x="440" y="375" class="field-text pk-field">id (PK)</text>
+  <text x="440" y="390" class="field-text fk-field">user_id (FK)</text>
+  <text x="440" y="405" class="field-text">pattern_type</text>
+  <text x="440" y="420" class="field-text">pattern_data</text>
+  <text x="440" y="435" class="field-text">confidence</text>
+
+  <!-- 任务管理表区域 -->
+  <text x="850" y="320" class="category-label" fill="#f57c00">任务管理</text>
+  
+  <!-- analysis_queue表 -->
+  <rect x="750" y="330" width="160" height="160" class="table-box task-table"/>
+  <text x="830" y="350" text-anchor="middle" class="table-title">analysis_queue</text>
+  <line x1="760" y1="360" x2="900" y2="360" stroke="#f57c00"/>
+  <text x="760" y="375" class="field-text pk-field">id (PK)</text>
+  <text x="760" y="390" class="field-text fk-field">baseline_id (FK)</text>
+  <text x="760" y="405" class="field-text">priority</text>
+  <text x="760" y="420" class="field-text">status</text>
+  <text x="760" y="435" class="field-text">progress</text>
+  <text x="760" y="450" class="field-text">current_step</text>
+  <text x="760" y="465" class="field-text">error_message</text>
+  <text x="760" y="480" class="field-text">started_at</text>
+
+  <!-- analysis_progress表 -->
+  <rect x="930" y="330" width="160" height="160" class="table-box task-table"/>
+  <text x="1010" y="350" text-anchor="middle" class="table-title">analysis_progress</text>
+  <line x1="940" y1="360" x2="1080" y2="360" stroke="#f57c00"/>
+  <text x="940" y="375" class="field-text pk-field">analysis_id (PK)</text>
+  <text x="940" y="390" class="field-text fk-field">baseline_id (FK)</text>
+  <text x="940" y="405" class="field-text">status</text>
+  <text x="940" y="420" class="field-text">progress</text>
+  <text x="940" y="435" class="field-text">steps</text>
+  <text x="940" y="450" class="field-text">estimated_time</text>
+  <text x="940" y="465" class="field-text">start_time</text>
+  <text x="940" y="480" class="field-text">end_time</text>
+
+  <!-- 版本控制表 -->
+  <text x="200" y="550" class="category-label" fill="#c2185b">版本控制</text>
+  
+  <!-- version_history表 -->
+  <rect x="50" y="560" width="180" height="160" class="table-box version-table"/>
+  <text x="140" y="580" text-anchor="middle" class="table-title">version_history</text>
+  <line x1="60" y1="590" x2="220" y2="590" stroke="#c2185b"/>
+  <text x="60" y="605" class="field-text pk-field">id (PK)</text>
+  <text x="60" y="620" class="field-text fk-field">baseline_id (FK)</text>
+  <text x="60" y="635" class="field-text">commit_hash</text>
+  <text x="60" y="650" class="field-text">author</text>
+  <text x="60" y="665" class="field-text">message</text>
+  <text x="60" y="680" class="field-text">lines_added</text>
+  <text x="60" y="695" class="field-text">lines_deleted</text>
+  <text x="60" y="710" class="field-text">change_type</text>
+
+  <!-- 设计系统表区域 -->
+  <text x="550" y="550" class="category-label" fill="#388e3c">设计系统</text>
+  
+  <!-- design_systems表 -->
+  <rect x="250" y="560" width="160" height="120" class="table-box design-table"/>
+  <text x="330" y="580" text-anchor="middle" class="table-title">design_systems</text>
+  <line x1="260" y1="590" x2="400" y2="590" stroke="#388e3c"/>
+  <text x="260" y="605" class="field-text pk-field">id (PK)</text>
+  <text x="260" y="620" class="field-text">project_name</text>
+  <text x="260" y="635" class="field-text">project_path</text>
+  <text x="260" y="650" class="field-text">config_file_path</text>
+  <text x="260" y="665" class="field-text">preprocessor</text>
+
+  <!-- component_design_tokens表 -->
+  <rect x="430" y="560" width="180" height="160" class="table-box design-table"/>
+  <text x="520" y="580" text-anchor="middle" class="table-title">component_design_tokens</text>
+  <line x1="440" y1="590" x2="600" y2="590" stroke="#388e3c"/>
+  <text x="440" y="605" class="field-text pk-field">id (PK)</text>
+  <text x="440" y="620" class="field-text fk-field">baseline_id (FK)</text>
+  <text x="440" y="635" class="field-text fk-field">design_system_id (FK)</text>
+  <text x="440" y="650" class="field-text">component_name</text>
+  <text x="440" y="665" class="field-text">font_family</text>
+  <text x="440" y="680" class="field-text">color_palette</text>
+  <text x="440" y="695" class="field-text">padding_values</text>
+  <text x="440" y="710" class="field-text">component_variants</text>
+
+  <!-- component_style_rules表 -->
+  <rect x="630" y="560" width="180" height="140" class="table-box design-table"/>
+  <text x="720" y="580" text-anchor="middle" class="table-title">component_style_rules</text>
+  <line x1="640" y1="590" x2="800" y2="590" stroke="#388e3c"/>
+  <text x="640" y="605" class="field-text pk-field">id (PK)</text>
+  <text x="640" y="620" class="field-text fk-field">component_token_id (FK)</text>
+  <text x="640" y="635" class="field-text">selector</text>
+  <text x="640" y="650" class="field-text">rule_type</text>
+  <text x="640" y="665" class="field-text">computed_styles</text>
+  <text x="640" y="680" class="field-text">specificity_score</text>
+
+  <!-- visual_problem_styles表 -->
+  <rect x="830" y="560" width="180" height="140" class="table-box design-table"/>
+  <text x="920" y="580" text-anchor="middle" class="table-title">visual_problem_styles</text>
+  <line x1="840" y1="590" x2="1000" y2="590" stroke="#388e3c"/>
+  <text x="840" y="605" class="field-text pk-field">id (PK)</text>
+  <text x="840" y="620" class="field-text fk-field">problem_id (FK)</text>
+  <text x="840" y="635" class="field-text fk-field">style_rule_id (FK)</text>
+  <text x="840" y="650" class="field-text">expected_styles</text>
+  <text x="840" y="665" class="field-text">actual_styles</text>
+  <text x="840" y="680" class="field-text">diff_details</text>
+
+  <!-- font_resources表 -->
+  <rect x="1030" y="560" width="160" height="140" class="table-box design-table"/>
+  <text x="1110" y="580" text-anchor="middle" class="table-title">font_resources</text>
+  <line x1="1040" y1="590" x2="1180" y2="590" stroke="#388e3c"/>
+  <text x="1040" y="605" class="field-text pk-field">id (PK)</text>
+  <text x="1040" y="620" class="field-text fk-field">design_system_id (FK)</text>
+  <text x="1040" y="635" class="field-text">font_name</text>
+  <text x="1040" y="650" class="field-text">font_source</text>
+  <text x="1040" y="665" class="field-text">font_url</text>
+  <text x="1040" y="680" class="field-text">preload</text>
+
+  <!-- 关系连接线 -->
+  <!-- baselines到其他表的连接 -->
+  <path d="M 230 180 L 250 180" class="relation-line"/>
+  <path d="M 230 180 L 450 180" class="relation-line"/>
+  <path d="M 230 180 L 650 180" class="relation-line"/>
+  <path d="M 140 280 L 320 330" class="relation-line"/>
+  <path d="M 140 280 L 830 330" class="relation-line"/>
+  <path d="M 140 280 L 1010 330" class="relation-line"/>
+  <path d="M 140 280 L 140 560" class="relation-line"/>
+  <path d="M 140 280 L 520 560" class="relation-line"/>
+
+  <!-- users到其他表的连接 -->
+  <path d="M 210 400 L 240 400" class="relation-line"/>
+  <path d="M 210 400 L 440 400" class="relation-line"/>
+
+  <!-- design_systems相关连接 -->
+  <path d="M 410 620 L 440 620" class="relation-line"/>
+  <path d="M 410 620 L 1040 620" class="relation-line"/>
+
+  <!-- component_design_tokens相关连接 -->
+  <path d="M 610 620 L 640 620" class="relation-line"/>
+
+  <!-- diagnostic_problems到visual_problem_styles -->
+  <path d="M 540 260 L 540 500 L 920 500 L 920 560" class="relation-line"/>
+
+  <!-- component_style_rules到visual_problem_styles -->
+  <path d="M 800 620 L 840 620" class="relation-line"/>
+
+  <!-- 箭头标记 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow"/>
+    </marker>
+  </defs>
+
+  <!-- 图例 -->
+  <rect x="50" y="750" width="1200" height="200" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1"/>
+  <text x="70" y="775" class="category-label">图例说明</text>
+  
+  <rect x="70" y="790" width="20" height="15" class="core-table"/>
+  <text x="100" y="802" class="legend-text">核心业务表 (4张) - 组件基准线、分析结果、问题诊断、建议</text>
+  
+  <rect x="70" y="815" width="20" height="15" class="user-table"/>
+  <text x="100" y="827" class="legend-text">用户管理表 (3张) - 用户信息、交互会话、学习模式</text>
+  
+  <rect x="70" y="840" width="20" height="15" class="task-table"/>
+  <text x="100" y="852" class="legend-text">任务管理表 (2张) - 分析队列、进度跟踪</text>
+  
+  <rect x="70" y="865" width="20" height="15" class="version-table"/>
+  <text x="100" y="877" class="legend-text">版本控制表 (1张) - Git版本历史</text>
+  
+  <rect x="70" y="890" width="20" height="15" class="design-table"/>
+  <text x="100" y="902" class="legend-text">设计系统表 (5张) - 设计令牌、样式规则、视觉问题映射、字体资源</text>
+
+  <text x="600" y="810" class="legend-text">总计：15张表，200+字段，9个外键关系</text>
+  <text x="600" y="830" class="legend-text">数据流：组件文件 → 基准线 → 分析任务 → 结果存储 → 问题诊断 → 优化建议</text>
+  <text x="600" y="850" class="legend-text">核心实体：baselines表是整个系统的中心，其他表都围绕它建立关系</text>
+  
+  <text x="600" y="880" class="legend-text" fill="#d32f2f">🔴 主要问题：analysis_queue和analysis_progress功能重叠</text>
+  <text x="600" y="900" class="legend-text" fill="#d32f2f">🔴 数据分散：analysis_results中多个JSON字段可以合并</text>
+  <text x="600" y="920" class="legend-text" fill="#f57c00">🟡 优化机会：缺少复合索引，部分外键约束缺失</text>
+</svg>

@@ -13,9 +13,17 @@
 
 ### 1.2 User Impact
 **Who is Affected:**
+- Team size: 30人团队，包括开发工程师、测试工程师、产品经理
 - Primary users: 前端开发工程师（需要编写React组件测试）、后端开发工程师（需要编写API测试）
 - Secondary users: 测试工程师（需要设计测试场景）、产品经理（需要验证功能）、设计师（需要查看不同状态）
+- Tech owners: 每个项目的tech owner负责项目导入和配置管理
 - Internal stakeholders: DevOps团队（CI/CD集成）、架构团队（测试策略制定）、管理层（质量保证）
+
+**Platform Access Model:**
+- 团队共享平台模式：https://mdt.company.com
+- 项目导入权限：仅tech owner可导入和配置项目
+- 查看权限：全团队可查看所有项目（无敏感数据，主要是组件分析和建议）
+- 操作权限：所有用户可应用建议、查看分析结果
 
 **How They're Affected:**
 - Current pain: 
