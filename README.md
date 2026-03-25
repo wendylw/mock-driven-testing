@@ -1,92 +1,123 @@
-# 🎯 Mock-Driven Testing
+# mockcontract-testing-platform (MCTP)
 
-A parameterized mock system that captures and replays real API responses with dynamic parameter-based data generation.
+The mock-contract testing platform that enables parallel frontend-backend development through unified API contracts and intelligent test automation.
+
+## 🎯 Core Value
+
+MCTP solves the critical problems in modern software development:
+- **Frontend-Backend Dependency** - Enable true parallel development with mock-driven contracts
+- **Missing Test Layers** - Automatically identify and fill testing gaps through intelligent analysis
+- **API Contract Management** - Mock as the single source of truth for API contracts
+
+## 🛡️ Core Principles
+
+**Non-Invasive Platform Rules:**
+1. **No Source Code Modification** - Never modify target project source code
+2. **Clean Temporary Files** - Always clean up temporary files after use
+3. **User-Controlled Integration** - Generated tests go to separate output directory for user decision
 
 ## 🚀 Quick Start
 
+### 1. Start Mock Service
 ```bash
-# Start the proxy server
-node proxy-final.js
-
-# Visit the application
-http://coffee.beep.local.shub.us:3001/
+npm install
+npm start
+# Mock service running at http://localhost:3001
 ```
 
-## ✨ Key Features
+### 2. Start Web UI (Phase 3)
+```bash
+cd mdt-web
+npm install
+npm run dev
+# Web UI at http://localhost:3000
+```
 
-- **Real API Capture**: Automatically captures live API responses
-- **Parameterized Mocks**: Generates different data based on request parameters  
-- **GraphQL Support**: Full support for GraphQL queries with variables
-- **Zero Dependencies**: Works out of the box with no external packages
-- **Live Integration**: Seamlessly integrates with existing proxy-final.js
+### 3. Run Component Analysis (Phase 4)
+```bash
+node src/analyzer/analyze-command.js /path/to/your/project
+```
+
+## 📊 Platform Architecture
+
+```
+MCTP Platform
+├── Phase 1: Core Mock Engine ✅
+│   ├── Mock Storage & Management
+│   ├── Scenario Switching
+│   └── SDK Integration
+├── Phase 2: Advanced Features ✅
+│   ├── Dynamic Mock Generation
+│   ├── Scenario Templates
+│   └── State Management
+├── Phase 3: Web UI ✅
+│   ├── Mock Management Dashboard
+│   ├── Scenario Configuration
+│   └── Real-time Monitoring
+└── Phase 4: Intelligent Analysis ✅
+    ├── Component Usage Analysis
+    ├── Test Coverage Detection
+    └── Automated Test Generation
+```
+
+## 🔑 Key Features
+
+1. **Mock Replay Mechanism**
+   - Configure once, replay forever
+   - 100% deterministic test results
+   - Seamless CI/CD integration
+
+2. **Intelligent Test Generation**
+   - Analyzes component usage patterns
+   - Identifies missing test coverage
+   - Generates test code with MDT integration
+
+3. **Contract-First Development**
+   - Mock defines the contract
+   - Frontend and backend develop in parallel
+   - Automatic contract validation
 
 ## 📁 Project Structure
 
 ```
 mock-driven-testing/
-├── proxy-final.js              # Main proxy server (port 3001)
-├── parameterized-patch.js      # Parameterized mock enhancement
-├── docs/                       # Documentation
-│   ├── MOCK-DRIVEN-TESTING-DOCUMENTATION.md
-│   └── FINAL-STRUCTURE.md
-├── parameterized-mocks/        # Mock system components
-│   ├── entities/
-│   │   ├── DataGenerator.js    # Data generation engine
-│   │   ├── DynamicIDHandler.js # ID handling utilities
-│   │   └── TemplateEngine.js   # Template processing
-│   └── README.md
-├── generated/                  # Auto-generated mocks
-│   └── beep-v1-webapp/
-│       └── api-mocks-realtime.js
-└── captured-data/              # API capture history
+├── src/
+│   ├── server/          # Mock server implementation
+│   ├── analyzer/        # Phase 4 intelligent analyzer
+│   └── integrations/    # Framework integrations
+├── mdt-web/            # Phase 3 Web UI
+├── docs/               # Comprehensive documentation
+└── examples/           # Usage examples and generated tests
 ```
 
 ## 📖 Documentation
 
-- **[Complete Documentation](docs/MOCK-DRIVEN-TESTING-DOCUMENTATION.md)** - Full feature guide and API reference
-- **[Project Structure](docs/FINAL-STRUCTURE.md)** - Detailed file organization and usage
+- [System Overview](docs/01-SYSTEM-OVERVIEW.md)
+- [Implementation Plan](docs/mdt-platform-plan/README.md)
+- [Developer Guide](docs/03-DEVELOPER-GUIDE.md)
+- [API Specification](docs/05-CONTRACT-SPECIFICATION.md)
 
-## 🎯 Usage Examples
+## 🛠 Technology Stack
 
-### Basic API Mocking
-```bash
-# Enable mock mode by adding ?_mock=1
-http://localhost:3001/api/users?_mock=1
-```
+- **Backend**: Node.js + Express
+- **Frontend**: React + TypeScript + Vite
+- **Analysis**: Babel AST Parser
+- **Storage**: JSON/SQLite (upgradeable to PostgreSQL)
 
-### GraphQL ProductDetail
-```bash
-curl -X POST "http://localhost:3001/api/gql/ProductDetail?_mock=1" \
-  -H "Content-Type: application/json" \
-  -d '{"variables":{"productId":"abc123","variationId":"var456"}}'
-```
+## 📊 Phase 4 Analysis Results
 
-### Demo Mode
-```bash
-# View parameterized mock capabilities
-http://localhost:3001/api/demo?_demo=1
-```
+The intelligent analyzer successfully identified key components in the BEEP project:
+- **Button**: 27 usages across the application
+- **CreateOrderButton**: 7 usages (high-risk business component)
+- **Modal**: 10 usages
+- **Input**: 4 usages
 
-## 🔍 Monitoring
+Generated test files integrate seamlessly with MDT mock scenarios.
 
-- **Statistics**: `http://localhost:3001/__mock_stats`
-- **Patch Info**: `http://localhost:3001/__parameterized_info`
-- **Logs**: `proxy.log`
+## 🤝 Contributing
 
-## ✅ Core Functionality
+This project follows a phased implementation approach. See the [implementation plan](docs/mdt-platform-plan/MDT-PHASED-IMPLEMENTATION-PLAN.md) for details.
 
-1. **Live API Capture**: Automatically records real API responses
-2. **Parameter Detection**: Recognizes GraphQL variables, REST path params, and query parameters
-3. **Deterministic Generation**: Same input parameters always generate consistent data
-4. **Universal Support**: Works with any API endpoint pattern
-5. **Non-invasive**: Existing functionality remains completely unchanged
+## 📄 License
 
-## 🛠️ Technical Features
-
-- **Smart Parameter Recognition**: Automatically detects IDs in GraphQL variables, URL paths, and query strings
-- **Stable Data Generation**: Uses hash functions to ensure consistent responses for same parameters  
-- **Map-based Lookups**: Elegant parameter mapping instead of if-else chains
-- **Real-time Mock Updates**: Captured data automatically generates mock handlers
-- **Zero External Dependencies**: Self-contained with no npm package requirements
-
-The system seamlessly captures live API data during normal usage and makes it available as parameterized mocks, enabling comprehensive testing with realistic data patterns.
+MIT

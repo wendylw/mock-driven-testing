@@ -1,0 +1,17 @@
+{
+  "component": "Input",
+  "scenarios": {
+    "input.typing": {
+      "name": "输入文本",
+      "description": "测试输入功能",
+      "mockData": {},
+      "apiMocks": []
+    },
+    "input.validation": {
+      "name": "输入验证",
+      "description": "测试输入验证",
+      "mockData": {},
+      "apiMocks": []
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "totalFiles": 94,
+  "totalUsages": 242,
+  "patterns": {
+    "byType": {
+      "primary": 168,
+      "secondary": 56,
+      "text": 18
+    },
+    "byTheme": {
+      "default": 200,
+      "danger": 28,
+      "info": 10,
+      "ghost": 4
+    },
+    "bySize": {
+      "normal": 220,
+      "small": 22
+    },
+    "features": {
+      "withLoading": 45,
+      "withIcon": 32,
+      "isBlock": 120,
+      "isDisabled": 28,
+      "withCustomClass": 89
+    }
+  },
+  "commonUseCases": [
+    "Form Submit Buttons (Continue, Save, Submit)",
+    "Add to Cart / Order Actions",
+    "Modal Actions (Confirm, Cancel)",
+    "Navigation Actions (View Details, Go Back)",
+    "Authentication (Login, Sign Up)",
+    "Profile Actions (Edit, Save, Update)"
+  ],
+  "accessibility": {
+    "dataTestId": "common.button.btn",
+    "ariaLabels": "Sometimes provided via props spread",
+    "keyboardSupport": "Native button element"
+  }
+}

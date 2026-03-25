@@ -1,0 +1,23 @@
+{
+  "component": "Button",
+  "scenarios": {
+    "button.default": {
+      "name": "默认按钮",
+      "description": "测试按钮的默认渲染",
+      "mockData": {},
+      "apiMocks": []
+    },
+    "button.loading": {
+      "name": "加载状态",
+      "description": "测试按钮的加载状态",
+      "mockData": {},
+      "apiMocks": []
+    },
+    "button.click": {
+      "name": "点击事件",
+      "description": "测试按钮点击事件",
+      "mockData": {},
+      "apiMocks": []
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "summary": {
+    "totalComponents": 4,
+    "analyzedComponents": [
+      {
+        "name": "Button",
+        "usage": 27,
+        "risk": "low"
+      },
+      {
+        "name": "CreateOrderButton",
+        "usage": 7,
+        "risk": "high"
+      },
+      {
+        "name": "Modal",
+        "usage": 10,
+        "risk": "low"
+      },
+      {
+        "name": "Input",
+        "usage": 4,
+        "risk": "low"
+      }
+    ]
+  },
+  "components": {
+    "Button": {
+      "name": "Button",
+      "definedIn": null,
+      "usageCount": 27,
+      "usedIn": [
+        "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/Result/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/Input/Search.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/DownloadBanner/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/Confirm/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/Alert/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/components/TimeSlotDrawer/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/site/components/OptionSelectors/MultipleChoiceSelector.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/order-status/containers/StoreReview/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/PaxDrawer/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/ProductDetailDrawer/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/MiniCart/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/MiniCart/CartItem.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/MenuFooter/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/MenuFooter/MenuViewOrderBar.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/MenuProductList/SearchProductsBanner.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/MenuProductList/CategoryDropdown.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/AddSpecialNotes/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/AlcoholModal/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/PageLogin/components/GuestModeButton/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/order-status/containers/StoreReview/components/WarningModal/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/order-status/containers/StoreReview/components/ThankYouModal/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/order-status/containers/ThankYou/components/MemberRewards/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/rewards/containers/RewardDetail/components/RewardDetailFooter/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/rewards/containers/RewardList/components/TicketList/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/rewards/containers/RewardList/components/RewardListFooter/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/PaxDrawer/components/PaxNumberButtons/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/PaxDrawer/components/PaxDrawerFooter/index.jsx"
+      ],
+      "riskLevel": "low",
+      "testingNeeded": true
+    },
+    "CreateOrderButton": {
+      "name": "CreateOrderButton",
+      "definedIn": null,
+      "usageCount": 7,
+      "usedIn": [
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/shopping-cart/containers/Cart/PayFirst.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/payments/containers/SavedCards/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/payments/containers/Stripe/CheckoutForm.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/payments/containers/Payment/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/payments/containers/OnlineBanking/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/payments/containers/CreditCard/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Customer/containers/CustomerInfo/index.jsx"
+      ],
+      "riskLevel": "high",
+      "testingNeeded": true
+    },
+    "Modal": {
+      "name": "Modal",
+      "definedIn": "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/Modal/index.jsx",
+      "usageCount": 10,
+      "usedIn": [
+        "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/Confirm/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/Alert/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/components/MessageModal/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/payments/components/PayByCash.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Menu/components/AlcoholModal/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/Customer/components/AddressChangeModal/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/order-status/containers/ThankYou/components/SelfPickup.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/order-status/containers/ThankYou/components/RiderInfo.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/order-status/containers/StoreReview/components/WarningModal/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/ordering/containers/order-status/containers/StoreReview/components/ThankYouModal/index.jsx"
+      ],
+      "riskLevel": "low",
+      "testingNeeded": true
+    },
+    "Input": {
+      "name": "Input",
+      "definedIn": "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/Input/Input.jsx",
+      "usageCount": 4,
+      "usedIn": [
+        "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/Input/Number/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/Input/Text/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/Input/Birthday/index.jsx",
+        "/Users/wendylin/workspace/beep-v1-webapp/src/common/components/Input/Email/index.jsx"
+      ],
+      "riskLevel": "low",
+      "testingNeeded": true
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "component": "Modal",
+  "scenarios": {
+    "modal.open": {
+      "name": "打开模态框",
+      "description": "测试模态框打开功能",
+      "mockData": {},
+      "apiMocks": []
+    },
+    "modal.close": {
+      "name": "关闭模态框",
+      "description": "测试模态框关闭功能",
+      "mockData": {},
+      "apiMocks": []
+    }
+  }
+}

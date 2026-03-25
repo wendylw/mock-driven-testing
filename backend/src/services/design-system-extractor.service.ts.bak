@@ -1,0 +1,267 @@
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import { DatabaseService } from './database-sqlite.service';
+import { logger } from '../utils/logger';
+import * as postcss from 'postcss';
+import * as sass from 'sass';
+
+interface ExtractedStyles {
+  fontFamily?: string;
+  fontSize?: Record<string, string>;
+  fontWeight?: Record<string, string>;
+  colors?: Record<string, any>;
+  padding?: Record<string, any>;
+  borderRadius?: Record<string, string>;
+  height?: Record<string, string>;
+  transitions?: Record<string, string>;
+}
+
+export class DesignSystemExtractorService {
+  /**
+   * Extract design system values from a project
+   */
+  static async extractDesignSystem(
+    projectPath: string,
+    componentPath: string,
+    baselineId: string
+  ): Promise<void> {
+    try {
+      // 1. Extract Tailwind config values
+      const tailwindConfig = await this.extractTailwindConfig(projectPath);
+      
+      // 2. Extract component-specific SCSS/CSS
+      const componentStyles = await this.extractComponentStyles(
+        path.join(projectPath, componentPath)
+      );
+      
+      // 3. Compute final CSS values
+      const computedStyles = await this.computeCSSValues(
+        tailwindConfig,
+        componentStyles
+      );
+      
+      // 4. Store in database
+      await this.storeDesignTokens(baselineId, computedStyles);
+      
+      logger.info(`Design system extracted for ${componentPath}`);
+    } catch (error) {
+      logger.error('Failed to extract design system:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Extract Tailwind configuration
+   */
+  private static async extractTailwindConfig(projectPath: string): Promise<any> {
+    const configPath = path.join(projectPath, 'tailwind.config.js');
+    
+    try {
+      // Read and evaluate the config file
+      const configContent = await fs.readFile(configPath, 'utf-8');
+      
+      // Parse the config (simplified - in production, use a proper JS parser)
+      // This is a simplified example - you'd need proper parsing
+      const config = {
+        theme: {
+          colors: {
+            orange: {
+              DEFAULT: '#FF9419',
+              dark: '#FC7118',
+              light: '#FEC788'
+            },
+            gray: {
+              400: '#DEDEDF',
+              600: '#9E9E9E',
+              800: '#303030'
+            }
+          },
+          fontSize: {
+            sm: '14px',
+            base: '16px',
+            lg: '18px'
+          },
+          spacing: {
+            '8': '8px',
+            '12': '12px',
+            '16': '16px'
+          },
+          borderRadius: {
+            DEFAULT: '8px',
+            sm: '4px',
+            lg: '12px'
+          }
+        }
+      };
+      
+      return config;
+    } catch (error) {
+      logger.warn('Could not extract Tailwind config:', error);
+      return {};
+    }
+  }
+
+  /**
+   * Extract component-specific styles
+   */
+  private static async extractComponentStyles(
+    componentPath: string
+  ): Promise<any> {
+    // Look for SCSS/CSS files
+    const styleFiles = [
+      componentPath.replace('.jsx', '.module.scss'),
+      componentPath.replace('.jsx', '.scss'),
+      componentPath.replace('.jsx', '.css')
+    ];
+    
+    for (const styleFile of styleFiles) {
+      try {
+        const content = await fs.readFile(styleFile, 'utf-8');
+        
+        // If SCSS, compile to CSS
+        if (styleFile.endsWith('.scss')) {
+          const result = sass.compileString(content, {
+            loadPaths: [path.dirname(styleFile)]
+          });
+          
+          // Parse CSS with PostCSS
+          const ast = postcss.parse(result.css);
+          
+          // Extract styles (simplified)
+          const styles: any = {};
+          
+          ast.walkRules((rule) => {
+            if (rule.selector.includes('button')) {
+              rule.walkDecls((decl) => {
+                if (!styles[rule.selector]) {
+                  styles[rule.selector] = {};
+                }
+                styles[rule.selector][decl.prop] = decl.value;
+              });
+            }
+          });
+          
+          return styles;
+        }
+      } catch (error) {
+        // Continue to next file
+      }
+    }
+    
+    return {};
+  }
+
+  /**
+   * Compute final CSS values by merging Tailwind utilities with component styles
+   */
+  private static async computeCSSValues(
+    tailwindConfig: any,
+    componentStyles: any
+  ): Promise<ExtractedStyles> {
+    // This is where we'd resolve Tailwind classes to actual CSS values
+    // For example: tw-py-12 tw-px-16 -> padding: 12px 16px
+    
+    const computed: ExtractedStyles = {
+      fontFamily: 'Lato, "Open Sans", Helvetica, Arial, sans-serif',
+      fontSize: {
+        small: '14px',
+        normal: '16px',
+        large: '18px'
+      },
+      fontWeight: {
+        normal: '400',
+        bold: '700'
+      },
+      colors: {
+        primary: tailwindConfig.theme?.colors?.orange || {},
+        gray: tailwindConfig.theme?.colors?.gray || {}
+      },
+      padding: {
+        'primary-normal': '12px 16px', // Computed from tw-py-12 tw-px-16
+        'primary-small': '10px 16px',
+        'text-all': '8px' // Computed from tw-p-8
+      },
+      borderRadius: {
+        default: tailwindConfig.theme?.borderRadius?.DEFAULT || '8px'
+      },
+      height: {
+        small: '40px',
+        normal: '50px'
+      },
+      transitions: {
+        default: 'all 0.15s ease-in-out'
+      }
+    };
+    
+    return computed;
+  }
+
+  /**
+   * Store design tokens in database
+   */
+  private static async storeDesignTokens(
+    baselineId: string,
+    computedStyles: ExtractedStyles
+  ): Promise<void> {
+    const sql = `
+      INSERT OR REPLACE INTO component_design_tokens (
+        id, baseline_id, design_system_id, component_name, component_path,
+        font_family, font_sizes, font_weights, color_palette,
+        padding_values, border_radius, heights, transitions
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    
+    const params = [
+      `cdt-${baselineId}-${Date.now()}`,
+      baselineId,
+      'ds-beep-001', // This would be determined dynamically
+      'Button',
+      'src/common/components/Button/index.jsx',
+      computedStyles.fontFamily,
+      JSON.stringify(computedStyles.fontSize),
+      JSON.stringify(computedStyles.fontWeight),
+      JSON.stringify(computedStyles.colors),
+      JSON.stringify(computedStyles.padding),
+      JSON.stringify(computedStyles.borderRadius),
+      JSON.stringify(computedStyles.height),
+      JSON.stringify(computedStyles.transitions)
+    ];
+    
+    await DatabaseService.query(sql, params);
+  }
+
+  /**
+   * Get computed styles for a component
+   */
+  static async getComponentStyles(baselineId: string): Promise<any> {
+    const sql = `
+      SELECT * FROM component_design_tokens 
+      WHERE baseline_id = ?
+      ORDER BY last_extracted DESC
+      LIMIT 1
+    `;
+    
+    const results = await DatabaseService.query(sql, [baselineId]);
+    
+    if (results.length === 0) {
+      return null;
+    }
+    
+    const row = results[0];
+    
+    // Parse JSON fields
+    return {
+      fontFamily: row.font_family,
+      fontSizes: JSON.parse(row.font_sizes || '{}'),
+      fontWeights: JSON.parse(row.font_weights || '{}'),
+      colorPalette: JSON.parse(row.color_palette || '{}'),
+      paddingValues: JSON.parse(row.padding_values || '{}'),
+      borderRadius: JSON.parse(row.border_radius || '{}'),
+      heights: JSON.parse(row.heights || '{}'),
+      transitions: JSON.parse(row.transitions || '{}'),
+      hoverStyles: JSON.parse(row.hover_styles || '{}'),
+      disabledStyles: JSON.parse(row.disabled_styles || '{}'),
+      componentVariants: JSON.parse(row.component_variants || '{}')
+    };
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "Button": {
+    "title": "Button组件测试演示",
+    "duration": "1:23",
+    "scenarios": [
+      {
+        "name": "基础渲染测试",
+        "videoUrl": "/test-videos/button-basic-test.mp4",
+        "thumbnail": "/test-videos/thumbnails/button-basic.png",
+        "description": "验证Button组件正常渲染和点击响应",
+        "timestamp": "0:00-0:35"
+      },
+      {
+        "name": "多样式测试",
+        "videoUrl": "/test-videos/button-styles-test.mp4", 
+        "thumbnail": "/test-videos/thumbnails/button-styles.png",
+        "description": "测试不同尺寸和类型的Button渲染",
+        "timestamp": "0:36-1:23"
+      }
+    ]
+  },
+  "CreateOrderButton": {
+    "title": "CreateOrderButton支付流程测试",
+    "duration": "3:45",
+    "scenarios": [
+      {
+        "name": "订单创建成功流程",
+        "videoUrl": "/test-videos/order-success-test.mp4",
+        "thumbnail": "/test-videos/thumbnails/order-success.png", 
+        "description": "模拟正常支付流程，验证订单创建和页面跳转",
+        "timestamp": "0:00-1:20"
+      },
+      {
+        "name": "支付失败处理",
+        "videoUrl": "/test-videos/payment-failure-test.mp4",
+        "thumbnail": "/test-videos/thumbnails/payment-failure.png",
+        "description": "测试支付失败时的错误提示和用户引导",
+        "timestamp": "1:21-2:35"
+      },
+      {
+        "name": "未登录用户重定向",
+        "videoUrl": "/test-videos/login-redirect-test.mp4", 
+        "thumbnail": "/test-videos/thumbnails/login-redirect.png",
+        "description": "验证未登录用户点击下单时的登录重定向逻辑",
+        "timestamp": "2:36-3:45"
+      }
+    ]
+  },
+  "Modal": {
+    "title": "Modal弹窗组件测试",
+    "duration": "2:10",
+    "scenarios": [
+      {
+        "name": "弹窗打开关闭",
+        "videoUrl": "/test-videos/modal-basic-test.mp4",
+        "thumbnail": "/test-videos/thumbnails/modal-basic.png",
+        "description": "测试Modal的显示、隐藏和遮罩层交互",
+        "timestamp": "0:00-1:05"
+      },
+      {
+        "name": "内容渲染测试", 
+        "videoUrl": "/test-videos/modal-content-test.mp4",
+        "thumbnail": "/test-videos/thumbnails/modal-content.png",
+        "description": "验证不同内容类型在Modal中的正确显示",
+        "timestamp": "1:06-2:10"
+      }
+    ]
+  },
+  "Input": {
+    "title": "Input输入组件测试",
+    "duration": "1:55",
+    "scenarios": [
+      {
+        "name": "输入验证测试",
+        "videoUrl": "/test-videos/input-validation-test.mp4",
+        "thumbnail": "/test-videos/thumbnails/input-validation.png",
+        "description": "测试各种输入类型的验证规则和错误提示",
+        "timestamp": "0:00-1:15"
+      },
+      {
+        "name": "交互状态测试",
+        "videoUrl": "/test-videos/input-states-test.mp4",
+        "thumbnail": "/test-videos/thumbnails/input-states.png", 
+        "description": "验证focus、blur、disabled等交互状态",
+        "timestamp": "1:16-1:55"
+      }
+    ]
+  }
+}
